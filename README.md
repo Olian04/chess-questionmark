@@ -11,7 +11,7 @@
 * Win / Loose / Draw.
 
 
-## Extended Featureset
+## Extended Featureset (Streach goals)
 
 * Game timer (stop to end turn).
 * Watch along chat / aka spectators
