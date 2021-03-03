@@ -18,3 +18,8 @@
 * Clip functionality, like twich. Generate a gif from a set of FEN strings using a firebase cloud function, store the FEN string in firebase, and return a URL for the gif.
 * Feature new clips on the front page.
 * Replay matches (replay sequence of FEN strings).
+
+
+## Resources
+
+Figma project: https://www.figma.com/file/3iUKHHol5BU6zsU5zE5wP7/prototype
