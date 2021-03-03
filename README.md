@@ -1,6 +1,6 @@
 # iprog-project
 
-**App name:** TBD <br>
+**App name:** Chess? <br>
 **Short description:** Setting up and playing chess matches online <br>
 **Framework(s):** React, Recoil <br>
 **API(s):** https://chessblunders.org/ <br>
