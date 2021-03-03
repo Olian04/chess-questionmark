@@ -22,4 +22,9 @@
 
 ## Resources
 
-Figma project: https://www.figma.com/file/3iUKHHol5BU6zsU5zE5wP7/prototype
+Forsyth-Edwards Notation (FEN): https://www.chess.com/terms/fen-chess <br>
+Chess board component: https://www.chessboardjsx.com/ <br>
+Chess logic: https://github.com/jhlywa/chess.js <br>
+Chess AI: https://github.com/nmrugg/stockfish.js <br>
+
+Figma project: https://www.figma.com/file/3iUKHHol5BU6zsU5zE5wP7/prototype <br>
