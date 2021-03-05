@@ -2,6 +2,13 @@
 
 Setting up and playing chess matches online
 
+**Technologies:** React, Recoil, Typescript, Firebase, Vitejs, Chessboardjsx, Chess.js, Stockfish <br>
+**API(s):** https://chessblunders.org/ <br>
+**Data:** FEN strings from ChessBlunders will be hydrated into a live playable chess game. Any changes made to the board, will generate a new FEN string, and store it in firebase.<br>
+**Prototype:** <br>
+
+![](./prototype/mobile.png)
+
 ## Minimal Viable Product Featureset
 
 * Login with google.
@@ -21,7 +28,12 @@ Setting up and playing chess matches online
 * Feature new clips on the front page.
 * Replay matches (replay sequence of FEN strings).
 
-**Technologies:** React, Recoil, Typescript, Firebase, Vitejs, Chessboardjsx, Chess.js, Stockfish <br>
-**API(s):** https://chessblunders.org/ <br>
-**Data:** FEN strings from ChessBlunders will be hydrated into a live playable chess game. Any changes made to the board, will generate a new FEN string, and store it in firebase.<br>
-**Prototype:** <br> ![](./prototype/board.png)
+
+## Resources
+
+Forsyth-Edwards Notation (FEN): https://www.chess.com/terms/fen-chess <br>
+Chess board component: https://www.chessboardjsx.com/ <br>
+Chess logic: https://github.com/jhlywa/chess.js <br>
+Chess AI: https://github.com/nmrugg/stockfish.js <br>
+
+Figma project: https://www.figma.com/file/3iUKHHol5BU6zsU5zE5wP7/prototype <br>
