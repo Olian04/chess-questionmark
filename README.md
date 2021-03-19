@@ -62,5 +62,6 @@ Chess board component: https://www.chessboardjsx.com/ <br>
 Chess logic: https://github.com/jhlywa/chess.js <br>
 Chess AI: https://github.com/nmrugg/stockfish.js <br>
 Random starting board states: https://chessblunders.org/ <br>
+Profile pictures: https://en.gravatar.com/
 
 Figma project: https://www.figma.com/file/3iUKHHol5BU6zsU5zE5wP7/prototype <br>
