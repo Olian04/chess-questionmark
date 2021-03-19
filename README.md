@@ -1,7 +1,5 @@
 # iprog-project
 
-![](./prototype/mobile.png)
-
 ## Usage Sequence
 
 1. Register/Login screen
