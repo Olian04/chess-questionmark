@@ -12,27 +12,27 @@
 
 ### Login Screen
 
-![](./prototype/login_design.png)
+![](./prototype/login_design.PNG)
 
 ### Register Screen
 
-![](./prototype/register_design.png)
+![](./prototype/register_design.PNG)
 
 ### Profile Page
 
-![](./prototype/profile_design.png)
+![](./prototype/profile_design.PNG)
 
 ### Play Screen
 
-![](./prototype/play_design.png)
+![](./prototype/play_design.PNG)
 
 ### Game Screen
 
-![](./prototype/game_design.png)
+![](./prototype/game_design.PNG)
 
 ### Replay Screen
 
-![](./prototype/replay_design.png)
+![](./prototype/replay_design.PNG)
 
 
 ## Minimal Viable Product Featureset
