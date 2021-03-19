@@ -2,6 +2,41 @@
 
 ![](./prototype/mobile.png)
 
+## Usage Sequence
+
+1. Register/Login screen
+2. Profile Page
+3. Play Screen
+4. Game Screen
+5. Replay Screen
+
+## Screens
+
+### Login Screen
+
+![](./prototype/login_design.png)
+
+### Register Screen
+
+![](./prototype/register_design.png)
+
+### Profile Page
+
+![](./prototype/profile_design.png)
+
+### Play Screen
+
+![](./prototype/play_design.png)
+
+### Game Screen
+
+![](./prototype/game_design.png)
+
+### Replay Screen
+
+![](./prototype/replay_design.png)
+
+
 ## Minimal Viable Product Featureset
 
 * Login with google.
