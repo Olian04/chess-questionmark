@@ -54,7 +54,6 @@
 * Feature new clips on the front page.
 * Replay matches (replay sequence of FEN strings).
 
-
 ## Resources
 
 Forsyth-Edwards Notation (FEN): https://www.chess.com/terms/fen-chess <br>
@@ -63,5 +62,7 @@ Chess logic: https://github.com/jhlywa/chess.js <br>
 Chess AI: https://github.com/nmrugg/stockfish.js <br>
 Random starting board states: https://chessblunders.org/ <br>
 Profile pictures: https://en.gravatar.com/ <br>
+
+Maybe look into Lichess (might be overkill): https://lichess.org/api#section/Authentication
 
 Figma project: https://www.figma.com/file/3iUKHHol5BU6zsU5zE5wP7/prototype <br>
