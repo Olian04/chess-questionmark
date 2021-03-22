@@ -10,17 +10,17 @@
 
 ## Screens
 
-### Login Screen
+### Login/Register Screen
 
 ![](./prototype/login_design.PNG)
-
-### Register Screen
-
-![](./prototype/register_design.PNG)
 
 ### Profile Page
 
 ![](./prototype/profile_design.PNG)
+
+### Settings Page
+
+![](./prototype/settings_design.PNG)
 
 ### Play Screen
 
