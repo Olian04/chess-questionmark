@@ -14,11 +14,11 @@
 
 ![](./prototype/login_design.PNG)
 
-### Profile Page
+### Profile Screen
 
 ![](./prototype/profile_design.PNG)
 
-### Settings Page
+### Settings Screen
 
 ![](./prototype/settings_design.PNG)
 
