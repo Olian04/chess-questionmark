@@ -1,5 +1,16 @@
 # iprog-project
 
+## Dev Locally
+
+1. Clone this repo
+2. Checkout your own branch
+3. Install nodejs
+4. Navigate to the repo
+5. Natigate to the `app` folder
+6. Intstall deps: `npm install`
+7. Run dev server: `npm run dev`
+8. Open browser to `localhost:3000` 
+
 ## Usage Sequence
 
 1. Register/Login screen
