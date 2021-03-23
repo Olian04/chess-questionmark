@@ -10,6 +10,23 @@ import { colorTheme } from '../state/colorTheme';
 const darkTheme = createMuiTheme({
   palette: {
     type: 'dark',
+    primary: {
+      main: 'rgba(84,60,82,1)',
+      contrastText: 'rgba(247,246,244,1)',
+    },
+    secondary: {
+      main: 'rgba(237,210,203,1)',
+      contrastText: 'rgba(63, 62, 67, 1)',
+    },
+    info: {
+      main: 'rgba(63,62,67,1)',
+    },
+    background: {
+      default: 'rgba(40,38,47,1)',
+    },
+    text: {
+      primary: 'rgba(247,246,244,1)',
+    },
   },
 });
 
