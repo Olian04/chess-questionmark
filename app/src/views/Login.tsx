@@ -22,6 +22,9 @@ export const LoginView = (props: Props) => {
   const handleSignUp = () => {
     history.push('/sign-up'), [history];
   };
+  const handleSignIn = () => {
+    history.push('/sign-in'), [history];
+  };
 
   return (
     <div
@@ -72,7 +75,12 @@ export const LoginView = (props: Props) => {
             <Typography variant="h5">Already a member?</Typography>
           </Grid>
           <Grid item>
-            <LinkButton color="secondary" width="100%" padding="1.25em">
+            <LinkButton
+              color="secondary"
+              width="100%"
+              padding="1.25em"
+              onClick={handleSignIn}
+            >
               Login
             </LinkButton>
           </Grid>

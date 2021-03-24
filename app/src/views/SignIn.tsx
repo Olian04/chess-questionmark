@@ -15,11 +15,9 @@ import { LeftCircle } from '../components/common/Circle';
 import { ArrowForwardIosRounded } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 
-import Logo from '/sign-up-logo.svg';
-
 interface Props {}
 
-export const SignUpView = (props: Props) => {
+export const SignInView = (props: Props) => {
   const theme = useTheme();
   const palette = theme.palette;
   return (
@@ -42,33 +40,14 @@ export const SignUpView = (props: Props) => {
           alignItems="center"
           style={{ height: '100%' }}
         >
-          <Grid item>
-            <img src={Logo}></img>
-          </Grid>
-          <Grid item style={{ marginBottom: '1.25em' }}>
+          <Grid item style={{ marginBottom: '2em' }}>
             <Typography variant="h4" align="center">
-              Create an account
+              Sign in
             </Typography>
           </Grid>
           <Grid item>
             <form noValidate>
               <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <TextField
-                    color="secondary"
-                    autoComplete="name"
-                    name="name"
-                    variant="filled"
-                    required
-                    fullWidth
-                    id="ingameName"
-                    label="In-game Name"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                    autoFocus
-                  />
-                </Grid>
                 <Grid item xs={12}>
                   <TextField
                     color="secondary"
@@ -82,6 +61,7 @@ export const SignUpView = (props: Props) => {
                     InputProps={{
                       disableUnderline: true,
                     }}
+                    autoFocus
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -100,20 +80,7 @@ export const SignUpView = (props: Props) => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <FormGroup row>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={false}
-                          onChange={() => {}}
-                          name="checked"
-                        />
-                      }
-                      label={'I agree to the Terms and Privacy Policy'}
-                    />
-                  </FormGroup>
-                </Grid>
+
                 <Grid item xs={12} style={{ marginTop: '2em' }}>
                   {/* Should be able to incorporate this to "LinkButton" */}
                   <Button
@@ -129,21 +96,21 @@ export const SignUpView = (props: Props) => {
                     }}
                     endIcon={<ArrowForwardIosRounded />}
                   >
-                    Sign Up
+                    Take me to battle
                   </Button>
                 </Grid>
                 <Grid item>
                   <Typography variant="subtitle1">
-                    Already got an account?{' '}
+                    Don't have an account with us yet?{' '}
                     <Link
-                      to="/sign-in"
+                      to="/sign-up"
                       style={{
                         textDecoration: 'none',
                         display: 'inline-block',
                         color: palette.secondary.main,
                       }}
                     >
-                      Sign in
+                      Sign up!
                     </Link>
                   </Typography>
                 </Grid>

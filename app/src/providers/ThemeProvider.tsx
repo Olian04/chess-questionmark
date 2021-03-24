@@ -28,6 +28,18 @@ const darkTheme = createMuiTheme({
       primary: 'rgba(247,246,244,1)',
     },
   },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'Poppins',
+      'sans-serif',
+      'Segoe UI Emoji',
+    ].join(','),
+    fontSize: 12,
+    h4: {
+      fontWeight: 500,
+    },
+  },
 });
 
 const lightTheme = createMuiTheme({
