@@ -10,20 +10,14 @@ import {
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { LinkButton } from '../components/common/LinkButton';
-import { LeftCircle } from '../components/common/Circle';
 import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 interface Props {}
 
-const useStyles = makeStyles((theme: Theme) => {
-  return createStyles({
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
     container: {
-      backgroundColor: theme.palette.background.default,
-      color: theme.palette.text.primary,
       height: '100vh',
-      position: 'relative',
-      overflow: 'hidden',
-      padding: '0em 2em 0em 2em',
     },
     gridBase: {
       zIndex: 1,
@@ -35,8 +29,8 @@ const useStyles = makeStyles((theme: Theme) => {
     gridBottom: {
       minHeight: '20%',
     },
-  });
-});
+  })
+);
 
 export const LoginView = (props: Props) => {
   const classes = useStyles();
@@ -94,7 +88,6 @@ export const LoginView = (props: Props) => {
           </LinkButton>
         </Grid>
       </Grid>
-      <LeftCircle />
     </Container>
   );
 };

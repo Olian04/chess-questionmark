@@ -1,29 +1,17 @@
 import React from 'react';
-import { Box, Container, Grid, Typography } from '@material-ui/core';
+import { Container, Grid, Typography } from '@material-ui/core';
 
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  useTheme,
-} from '@material-ui/core/styles';
-import { LeftCircle } from '../components/common/Circle';
-import { Link } from 'react-router-dom';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { RoundedTextField } from '../components/common/RoundedTextField';
 import { LinkButton } from '../components/common/LinkButton';
 import { StyledLink } from '../components/common/CustomLink';
 
 interface Props {}
 
-const useStyles = makeStyles((theme: Theme) => {
-  return createStyles({
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
     container: {
-      backgroundColor: theme.palette.background.default,
-      color: theme.palette.text.primary,
       height: '100vh',
-      position: 'relative',
-      overflow: 'hidden',
-      padding: '2em 2em 0em 2em',
       display: 'flex',
       justifyContent: 'center',
     },
@@ -31,8 +19,8 @@ const useStyles = makeStyles((theme: Theme) => {
       zIndex: 1,
       position: 'relative',
     },
-  });
-});
+  })
+);
 
 export const SignInView = (props: Props) => {
   const classes = useStyles();
@@ -102,7 +90,6 @@ export const SignInView = (props: Props) => {
           </form>
         </Grid>
       </Grid>
-      <LeftCircle />
     </Container>
   );
 };

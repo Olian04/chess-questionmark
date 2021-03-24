@@ -1,17 +1,14 @@
 import React from 'react';
 import {
-  Box,
   Checkbox,
   Container,
   FormControlLabel,
   FormGroup,
   Grid,
-  TextField,
   Typography,
 } from '@material-ui/core';
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { LeftCircle } from '../components/common/Circle';
 import { RoundedTextField } from '../components/common/RoundedTextField';
 import Logo from '/sign-up-logo.svg';
 import { LinkButton } from '../components/common/LinkButton';
@@ -19,22 +16,19 @@ import { StyledLink } from '../components/common/CustomLink';
 
 interface Props {}
 
-const useStyles = makeStyles((theme: Theme) => {
-  return createStyles({
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
     container: {
-      backgroundColor: theme.palette.background.default,
-      color: theme.palette.text.primary,
+      display: 'flex',
+      justifyContent: 'center',
       height: '100vh',
-      position: 'relative',
-      overflow: 'hidden',
-      padding: '2em 2em 0em 2em',
     },
     gridBase: {
       zIndex: 1,
       position: 'relative',
     },
-  });
-});
+  })
+);
 
 export const SignUpView = (props: Props) => {
   const classes = useStyles();
@@ -137,7 +131,6 @@ export const SignUpView = (props: Props) => {
           </form>
         </Grid>
       </Grid>
-      <LeftCircle />
     </Container>
   );
 };
