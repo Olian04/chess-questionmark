@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '60px',
     },
     error: {
-      backgroundColor: theme.palette.error.dark,
+      backgroundColor: theme.palette.error.main,
     },
     arrowIcon: {
       color: theme.palette.text.primary,

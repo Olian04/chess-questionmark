@@ -10,12 +10,41 @@ import { colorTheme } from '../state/colorTheme';
 const darkTheme = createMuiTheme({
   palette: {
     type: 'dark',
+    background: {
+      default: '#28262F',
+      paper: '#3F3E43',
+    },
+    error: {
+      main: '#DF5049',
+    },
+    primary: {
+      main: '#543C52',
+    },
+    secondary: {
+      main: '#361D32',
+    },
+  },
+  shape: {
+    borderRadius: 12,
+  },
+  typography: {
+    button: {
+      textTransform: 'none',
+    },
   },
 });
 
 const lightTheme = createMuiTheme({
   palette: {
     type: 'light',
+  },
+  shape: {
+    borderRadius: 12,
+  },
+  typography: {
+    button: {
+      textTransform: 'none',
+    },
   },
 });
 
