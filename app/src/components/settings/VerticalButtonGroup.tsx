@@ -60,53 +60,38 @@ export const VerticalButtonGroup = (props: Props) => {
       className={classes.buttonGroup}
       aria-label="vertical contained primary button group"
     >
-      {props.buttonData.map(({ title, subTitle, icon, specialRole, onClick }, i) => (
-        <MaterialButton
-          key={i}
-          m={0.1}
-          variant="contained"
-          className={
-            specialRole
-              ? clsx(classes.button, classes[specialRole])
-              : classes.button
-          }
-          onClick={onClick}
-        >
-          <Grid
-            container
-            direction="row"
-            justify="space-between"
-            alignItems="center"
+      {props.buttonData.map(
+        ({ title, subTitle, icon, specialRole, onClick }, i) => (
+          <MaterialButton
+            key={i}
+            m={0.1}
+            variant="contained"
+            startIcon={icon ? icon : null}
+            endIcon={<ArrowIcon className={classes.arrowIcon} />}
+            className={
+              specialRole
+                ? clsx(classes.button, classes[specialRole])
+                : classes.button
+            }
+            onClick={onClick}
           >
-            {/* Main Layout */}
-            <Grid item container direction="row" justify="flex-start" xs>
-              {/* Icon Layout */}
-              {icon ? (
-                <Grid item xs={2}>
-                  {icon}
-                </Grid>
-              ) : null}
-              <Grid item container direction="column" xs>
+            <Grid item container direction="column" xs>
+              <Grid item container alignItems="flex-start" xs>
+                <Typography variant="button" color="textPrimary">
+                  <b>{title}</b>
+                </Typography>
+              </Grid>
+              {subTitle ? (
                 <Grid item container alignItems="flex-start" xs>
-                  <Typography variant="button" color="textPrimary">
-                    <b>{title}</b>
+                  <Typography variant="caption" color="textPrimary">
+                    {subTitle}
                   </Typography>
                 </Grid>
-                {subTitle ? (
-                  <Grid item container alignItems="flex-start" xs>
-                    <Typography variant="caption" color="textPrimary">
-                      {subTitle}
-                    </Typography>
-                  </Grid>
-                ) : null}
-              </Grid>
+              ) : null}
             </Grid>
-            <Grid item container direction="column" alignItems="center" xs={1}>
-              <ArrowIcon className={classes.arrowIcon} />
-            </Grid>
-          </Grid>
-        </MaterialButton>
-      ))}
+          </MaterialButton>
+        )
+      )}
     </MaterialButtonGroup>
   );
 };
