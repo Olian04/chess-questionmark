@@ -12,6 +12,7 @@ import {
 
 import { useTheme } from '@material-ui/core/styles';
 import { LeftCircle } from '../components/common/Circle';
+import { RoundedTextField } from '../components/common/RoundedTextField';
 import { ArrowForwardIosRounded } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 
@@ -54,7 +55,7 @@ export const SignUpView = (props: Props) => {
             <form noValidate>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
-                  <TextField
+                  <RoundedTextField
                     color="secondary"
                     autoComplete="name"
                     name="name"
@@ -63,14 +64,11 @@ export const SignUpView = (props: Props) => {
                     fullWidth
                     id="ingameName"
                     label="In-game Name"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
                     autoFocus
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
+                  <RoundedTextField
                     color="secondary"
                     autoComplete="email"
                     name="name"
@@ -79,13 +77,10 @@ export const SignUpView = (props: Props) => {
                     fullWidth
                     id="email"
                     label="Email"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
+                  <RoundedTextField
                     color="secondary"
                     variant="filled"
                     required
@@ -95,9 +90,6 @@ export const SignUpView = (props: Props) => {
                     type="password"
                     id="password"
                     autoComplete="current-password"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>

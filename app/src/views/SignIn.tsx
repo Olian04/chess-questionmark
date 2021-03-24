@@ -14,6 +14,7 @@ import { useTheme } from '@material-ui/core/styles';
 import { LeftCircle } from '../components/common/Circle';
 import { ArrowForwardIosRounded } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
+import { RoundedTextField } from '../components/common/RoundedTextField';
 
 interface Props {}
 
@@ -49,23 +50,20 @@ export const SignInView = (props: Props) => {
             <form noValidate>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
-                  <TextField
+                  <RoundedTextField
                     color="secondary"
                     autoComplete="email"
-                    name="name"
+                    name="email"
                     variant="filled"
                     required
                     fullWidth
                     id="email"
                     label="Email"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
                     autoFocus
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
+                  <RoundedTextField
                     color="secondary"
                     variant="filled"
                     required
@@ -75,9 +73,6 @@ export const SignInView = (props: Props) => {
                     type="password"
                     id="password"
                     autoComplete="current-password"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
                   />
                 </Grid>
 

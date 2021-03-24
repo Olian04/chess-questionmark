@@ -40,6 +40,13 @@ const darkTheme = createMuiTheme({
       fontWeight: 500,
     },
   },
+  overrides: {
+    MuiInputBase: {
+      input: {
+        background: 'rgba(63, 62, 67, 1)',
+      },
+    },
+  },
 });
 
 const lightTheme = createMuiTheme({
