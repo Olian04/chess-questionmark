@@ -10,6 +10,7 @@ export const LeftCircle = () => {
     width: '80vh',
     height: '80vh',
     borderRadius: '50%',
+    zIndex: 0,
     backgroundColor: 'rgba(84, 60, 82, 1)',
   };
 

@@ -8,15 +8,38 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { useTheme } from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { LinkButton } from '../components/common/LinkButton';
 import { LeftCircle } from '../components/common/Circle';
 import { useHistory } from 'react-router-dom';
+import clsx from 'clsx';
 interface Props {}
 
+const useStyles = makeStyles((theme: Theme) => {
+  return createStyles({
+    container: {
+      backgroundColor: theme.palette.background.default,
+      color: theme.palette.text.primary,
+      height: '100vh',
+      position: 'relative',
+      overflow: 'hidden',
+      padding: '0em 2em 0em 2em',
+    },
+    gridBase: {
+      zIndex: 1,
+      position: 'relative',
+    },
+    gridTop: {
+      minHeight: '80%',
+    },
+    gridBottom: {
+      minHeight: '20%',
+    },
+  });
+});
+
 export const LoginView = (props: Props) => {
-  const theme = useTheme();
-  const palette = theme.palette;
+  const classes = useStyles();
 
   const history = useHistory();
   const handleSignUp = () => {
@@ -27,66 +50,51 @@ export const LoginView = (props: Props) => {
   };
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        padding: '0em 2em 0em 2em',
-        backgroundColor: palette.background.default,
-        color: palette.text.primary,
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      <Box zIndex={1} height="100%" position="relative">
-        <Grid
-          container
-          direction="column"
-          justify="center"
-          style={{
-            minHeight: '80%',
-          }}
-          spacing={1}
-          alignItems="flex-start"
-        >
-          <Grid item>
-            <Typography variant="h4">Lets start!</Typography>
-          </Grid>
-          <Grid item xs={10}>
-            <Typography variant="subtitle1">
-              Reshape your chess skills by playing against <b>others</b> and
-              aswell as our <b>blunderAI</b>.
-            </Typography>
-          </Grid>
-          <Grid item>
-            <LinkButton color="primary" width="160px" onClick={handleSignUp}>
-              Sign up!
-            </LinkButton>
-          </Grid>
+    <Container maxWidth="sm" className={classes.container}>
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        className={clsx(classes.gridBase, classes.gridTop)}
+        spacing={1}
+      >
+        <Grid item>
+          <Typography variant="h4">Lets start!</Typography>
         </Grid>
-        <Grid
-          container
-          direction="column"
-          style={{
-            minHeight: '20%',
-          }}
-          spacing={1}
-        >
-          <Grid item>
-            <Typography variant="h5">Already a member?</Typography>
-          </Grid>
-          <Grid item>
-            <LinkButton
-              color="secondary"
-              width="100%"
-              padding="1.25em"
-              onClick={handleSignIn}
-            >
-              Login
-            </LinkButton>
-          </Grid>
+        <Grid item xs={10}>
+          <Typography variant="subtitle1">
+            Reshape your chess skills by playing against <b>others</b> and
+            aswell as our <b>blunderAI</b>.
+          </Typography>
         </Grid>
-      </Box>
+        <Grid item>
+          <LinkButton color="primary" width="160px" onClick={handleSignUp}>
+            Sign up!
+          </LinkButton>
+        </Grid>
+      </Grid>
+      <Grid
+        container
+        className={clsx(classes.gridBase, classes.gridBottom)}
+        direction="column"
+        justify="center"
+        spacing={1}
+      >
+        <Grid item>
+          <Typography variant="h5">Already a member?</Typography>
+        </Grid>
+        <Grid item>
+          <LinkButton
+            color="secondary"
+            fullWidth
+            padding="1.25em"
+            onClick={handleSignIn}
+          >
+            Login
+          </LinkButton>
+        </Grid>
+      </Grid>
       <LeftCircle />
-    </div>
+    </Container>
   );
 };
