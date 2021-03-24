@@ -1,17 +1,14 @@
 import React from 'react';
-import {
-  BaseTextFieldProps,
-  TextField as BaseTextField,
-} from '@material-ui/core';
+import { TextFieldProps, TextField as BaseTextField } from '@material-ui/core';
 
-export const RoundedTextField = (props: BaseTextFieldProps) => {
+export const RoundedTextField = (props: TextFieldProps) => {
   return (
     <BaseTextField
-      {...props}
       InputProps={{
         disableUnderline: true,
       }}
       style={{ borderRadius: 7, overflow: 'hidden' }}
+      {...props}
     />
   );
 };
