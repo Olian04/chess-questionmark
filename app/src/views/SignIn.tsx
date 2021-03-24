@@ -15,6 +15,7 @@ import { LeftCircle } from '../components/common/Circle';
 import { ArrowForwardIosRounded } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import { RoundedTextField } from '../components/common/RoundedTextField';
+import { LinkButton } from '../components/common/LinkButton';
 
 interface Props {}
 
@@ -77,22 +78,14 @@ export const SignInView = (props: Props) => {
                 </Grid>
 
                 <Grid item xs={12} style={{ marginTop: '2em' }}>
-                  {/* Should be able to incorporate this to "LinkButton" */}
-                  <Button
+                  <LinkButton
                     type="submit"
-                    fullWidth
-                    variant="contained"
                     color="secondary"
-                    style={{
-                      paddingTop: '1em',
-                      paddingBottom: '1em',
-                      justifyContent: 'space-between',
-                      textTransform: 'none',
-                    }}
-                    endIcon={<ArrowForwardIosRounded />}
+                    padding="1em"
+                    fullWidth
                   >
                     Take me to battle
-                  </Button>
+                  </LinkButton>
                 </Grid>
                 <Grid item>
                   <Typography variant="subtitle1">

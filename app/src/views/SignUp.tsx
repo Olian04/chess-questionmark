@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Box,
-  Button,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -13,16 +12,25 @@ import {
 import { useTheme } from '@material-ui/core/styles';
 import { LeftCircle } from '../components/common/Circle';
 import { RoundedTextField } from '../components/common/RoundedTextField';
-import { ArrowForwardIosRounded } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
-
 import Logo from '/sign-up-logo.svg';
+import { LinkButton } from '../components/common/LinkButton';
+import { StyledLink } from '../components/common/CustomLink';
 
 interface Props {}
 
 export const SignUpView = (props: Props) => {
   const theme = useTheme();
   const palette = theme.palette;
+
+  const handleTermAndPrivacy = () => {
+    return (
+      <Typography>
+        I agree to the <StyledLink to="#">Terms</StyledLink> and <br />
+        <StyledLink to="#">Privacy Policy</StyledLink>
+      </Typography>
+    );
+  };
   return (
     <div
       style={{
@@ -102,41 +110,24 @@ export const SignUpView = (props: Props) => {
                           name="checked"
                         />
                       }
-                      label={'I agree to the Terms and Privacy Policy'}
+                      label={handleTermAndPrivacy()}
                     />
                   </FormGroup>
                 </Grid>
                 <Grid item xs={12} style={{ marginTop: '2em' }}>
-                  {/* Should be able to incorporate this to "LinkButton" */}
-                  <Button
+                  <LinkButton
                     type="submit"
                     fullWidth
-                    variant="contained"
                     color="secondary"
-                    style={{
-                      paddingTop: '1em',
-                      paddingBottom: '1em',
-                      justifyContent: 'space-between',
-                      textTransform: 'none',
-                    }}
-                    endIcon={<ArrowForwardIosRounded />}
+                    padding="1em"
                   >
-                    Sign Up
-                  </Button>
+                    Sign up
+                  </LinkButton>
                 </Grid>
                 <Grid item>
                   <Typography variant="subtitle1">
                     Already got an account?{' '}
-                    <Link
-                      to="/sign-in"
-                      style={{
-                        textDecoration: 'none',
-                        display: 'inline-block',
-                        color: palette.secondary.main,
-                      }}
-                    >
-                      Sign in
-                    </Link>
+                    <StyledLink to="/sign-in">Sign in</StyledLink>
                   </Typography>
                 </Grid>
               </Grid>
