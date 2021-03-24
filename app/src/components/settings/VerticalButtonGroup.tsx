@@ -45,6 +45,7 @@ interface Props {
     subTitle?: string;
     icon?: JSX.Element;
     specialRole?: 'error';
+    onClick: () => void;
   }[];
 }
 
@@ -59,7 +60,7 @@ export const VerticalButtonGroup = (props: Props) => {
       className={classes.buttonGroup}
       aria-label="vertical contained primary button group"
     >
-      {props.buttonData.map(({ title, subTitle, icon, specialRole }, i) => (
+      {props.buttonData.map(({ title, subTitle, icon, specialRole, onClick }, i) => (
         <MaterialButton
           key={i}
           m={0.1}
@@ -69,6 +70,7 @@ export const VerticalButtonGroup = (props: Props) => {
               ? clsx(classes.button, classes[specialRole])
               : classes.button
           }
+          onClick={onClick}
         >
           <Grid
             container
