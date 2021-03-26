@@ -36,7 +36,6 @@ export const PlayView = () => {
                 direction="column"
                 justify="space-evenly"
                 className={classes.fillHeight}
-                spacing={1}
             >
                 <Grid item>
                     <Typography variant="h4" color="textPrimary">Lets see what you go for Bob!</Typography>
