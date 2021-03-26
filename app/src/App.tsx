@@ -10,6 +10,7 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 import { NavigationBar } from './components/navigation/NavigationBar';
 import { SettingsRoute } from './routes/SettingsRoute';
+import { PlayRoute } from './routes/PlayRoute';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,6 +39,7 @@ export const App = () => {
         <Container maxWidth="sm" className={classes.container}>
           <Switch>
             <Route exact path="/settings" component={SettingsRoute} />
+            <Route exact path="/play" component={PlayRoute} />
             <Route path="/">
               <Redirect to="/demo" />
             </Route>
