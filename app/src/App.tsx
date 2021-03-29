@@ -5,12 +5,17 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import { DemoRoute } from './routes/DemoRoute';
-import { BottomNavBar } from './components/navigation/BottomNavBar';
+import { Container } from '@material-ui/core';
+import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
+
+import { NavigationBar } from './components/navigation/NavigationBar';
 import { LoginRoute } from './routes/LoginRoute';
 import { SignUpRoute } from './routes/SignUpRoute';
 import { SignInRoute } from './routes/SignInRoute';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { PlayRoute } from './routes/PlayRoute';
+import { GameRoute } from './routes/GameRoute';
+import { ReplayRoute } from './routes/ReplayRoute';
+import { SettingsRoute } from './routes/SettingsRoute';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,7 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100vh',
       position: 'relative',
       overflow: 'hidden',
-      padding: '0em 2em 0em 2em',
+    },
+    container: {
+      height: 'calc(100vh - 60px)',
     },
   })
 );
@@ -30,16 +37,28 @@ export const App = () => {
   return (
     <Router>
       <div className={classes.background}>
-        <Switch>
-          <Route exact path="/login" component={LoginRoute} />
-          <Route exact path="/sign-up" component={SignUpRoute} />
-          <Route exact path="/sign-in" component={SignInRoute} />
-          <Route path="/">
-            <Redirect to="/login" />
-          </Route>
-        </Switch>
+        <NavigationBar
+          menuItems={[
+            { title: 'Play', active: false },
+            { title: 'Profile', active: false },
+            { title: 'Settings', active: true },
+          ]}
+        />
+        <Container maxWidth="sm" className={classes.container}>
+          <Switch>
+            <Route exact path="/login" component={LoginRoute} />
+            <Route exact path="/sign-up" component={SignUpRoute} />
+            <Route exact path="/sign-in" component={SignInRoute} />
+            <Route exact path="/game" component={GameRoute} />
+            <Route exact path="/replay" component={ReplayRoute} />
+            <Route exact path="/settings" component={SettingsRoute} />
+            <Route exact path="/play" component={PlayRoute} />
+            <Route path="/">
+              <Redirect to="/demo" />
+            </Route>
+          </Switch>
+        </Container>
       </div>
-      {/* <BottomNavBar /> */}
     </Router>
   );
 };

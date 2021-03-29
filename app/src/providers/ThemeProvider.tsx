@@ -10,8 +10,13 @@ import { colorTheme } from '../state/colorTheme';
 const darkTheme = createMuiTheme({
   palette: {
     type: 'dark',
+    background: {
+      default: '#28262F',
+      paper: '#3F3E43',
+    },
     primary: {
-      main: 'rgba(84,60,82,1)',
+      main: '#543C52',
+      dark: '#361D32',
       contrastText: 'rgba(247,246,244,1)',
     },
     secondary: {
@@ -20,9 +25,6 @@ const darkTheme = createMuiTheme({
     },
     info: {
       main: 'rgba(63,62,67,1)',
-    },
-    background: {
-      default: 'rgba(40,38,47,1)',
     },
     text: {
       primary: 'rgba(247,246,244,1)',
@@ -39,6 +41,9 @@ const darkTheme = createMuiTheme({
     h4: {
       fontWeight: 500,
     },
+    button: {
+      textTransform: 'none',
+    },
   },
   overrides: {
     MuiInputBase: {
@@ -47,11 +52,22 @@ const darkTheme = createMuiTheme({
       },
     },
   },
+  shape: {
+    borderRadius: 12,
+  },
 });
 
 const lightTheme = createMuiTheme({
   palette: {
     type: 'light',
+  },
+  shape: {
+    borderRadius: 12,
+  },
+  typography: {
+    button: {
+      textTransform: 'none',
+    },
   },
 });
 
