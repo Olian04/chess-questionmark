@@ -10,6 +10,7 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 import { NavigationBar } from './components/navigation/NavigationBar';
 import { SettingsRoute } from './routes/SettingsRoute';
+import { PlayRoute } from './routes/PlayRoute';
 import { GameView } from './views/GameView.tsx';
 import { ReplayView } from './views/ReplayView.tsx';
 
@@ -42,6 +43,7 @@ export const App = () => {
             <Route exact path="/game" component={GameView} />
             <Route exact path="/replay" component={ReplayView} />
             <Route exact path="/settings" component={SettingsRoute} />
+            <Route exact path="/play" component={PlayRoute} />
             <Route path="/">
               <Redirect to="/demo" />
             </Route>
