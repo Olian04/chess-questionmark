@@ -1,13 +1,5 @@
-import React from 'react';
-import {
-  Container,
-  Avatar,
-  Grid,
-  ListItem,
-  List,
-  Box,
-  Slider,
-} from '@material-ui/core';
+import React, { useEffect, useRef, useState } from 'react';
+import { Grid } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 import { PlayerBar } from '../components/game/PlayerBar';
@@ -26,22 +18,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const GameView = () => {
   const classes = useStyles();
+
   return (
-    <Grid
-      container
-      spacing={4}
-      justify="space-between"
-      className={classes.container}
-    >
+    <Grid container justify="space-between" className={classes.container}>
       <Grid item xs={12}>
-        <PlayerBar name="Player 1" rating="1900" icon="/assets/cat.jpg"/>
+        <PlayerBar name="Player 1" rating="1900" icon="/assets/cat.jpg" />
       </Grid>
       <Grid item xs={12}>
-        <GameBoard position="start"/>
+        <GameBoard position="start" />
       </Grid>
       <Grid item xs={12}>
-        <PlayerBar name="Player 2" rating="2000" icon="/assets/cat.jpg"/>
+        <PlayerBar name="Player 2" rating="2000" icon="/assets/cat.jpg" />
       </Grid>
     </Grid>
   );
-}
+};

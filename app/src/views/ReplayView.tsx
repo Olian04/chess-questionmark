@@ -1,15 +1,11 @@
 import React from 'react';
+import { Grid, Slider } from '@material-ui/core';
 import {
-  Container,
-  Avatar,
-  Grid,
-  ListItem,
-  List,
-  Box,
-  Slider,
-  Typography,
-} from '@material-ui/core';
-import { Theme, makeStyles, createStyles, withStyles } from '@material-ui/core/styles';
+  Theme,
+  makeStyles,
+  createStyles,
+  withStyles,
+} from '@material-ui/core/styles';
 import { PlayArrow, SkipNext, SkipPrevious } from '@material-ui/icons';
 
 import { PlayerBar } from '../components/game/PlayerBar';
@@ -48,31 +44,22 @@ const ReplaySlider = withStyles({
 export const ReplayView = () => {
   const classes = useStyles();
   return (
-    <Grid
-      container
-      spacing={4}
-      justify="space-between"
-      className={classes.container}
-    >
+    <Grid container justify="space-between" className={classes.container}>
       <Grid item xs={12}>
-        <PlayerBar name="Player 1" rating="1900" icon="/assets/cat.jpg"/>
+        <PlayerBar name="Player 1" rating="1900" icon="/assets/cat.jpg" />
       </Grid>
       <Grid item xs={12}>
-        <GameBoard position="start"/>
+        <GameBoard position="start" />
       </Grid>
       <Grid item container xs={12} justify="center">
-        <SkipPrevious fontSize="large" color="action"/>
-        <PlayArrow fontSize="large" color="action"/>
-        <SkipNext fontSize="large" color="action"/>
+        <SkipPrevious fontSize="large" color="action" />
+        <PlayArrow fontSize="large" color="action" />
+        <SkipNext fontSize="large" color="action" />
       </Grid>
-      <ReplaySlider
-        marks={true}
-        min={1}
-        max={20}
-      />
+      <ReplaySlider marks={true} min={1} max={20} />
       <Grid item xs={12}>
-        <PlayerBar name="Player 2" rating="2000" icon="/assets/cat.jpg"/>
+        <PlayerBar name="Player 2" rating="2000" icon="/assets/cat.jpg" />
       </Grid>
     </Grid>
   );
-}
+};

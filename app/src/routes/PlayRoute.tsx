@@ -5,7 +5,7 @@ import { PlayView } from '../views/PlayView';
 export const PlayRoute = () => {
   return (
     <>
-      <BackgroundCircle side="bottom" />
+      {/* <BackgroundCircle side="bottom" /> */}
       <PlayView />
     </>
   );

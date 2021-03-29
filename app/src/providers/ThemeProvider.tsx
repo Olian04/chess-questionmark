@@ -14,14 +14,15 @@ const darkTheme = createMuiTheme({
       default: '#28262F',
       paper: '#3F3E43',
     },
-    error: {
-      main: '#DF5049',
-    },
     primary: {
       main: '#543C52',
+      dark: '#361D32',
     },
     secondary: {
-      main: '#361D32',
+      main: '#EDD2CB',
+    },
+    error: {
+      main: '#DF5049',
     },
   },
   shape: {

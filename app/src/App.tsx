@@ -9,10 +9,10 @@ import { Container } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 import { NavigationBar } from './components/navigation/NavigationBar';
-import { SettingsRoute } from './routes/SettingsRoute';
 import { PlayRoute } from './routes/PlayRoute';
-import { GameView } from './views/GameView.tsx';
-import { ReplayView } from './views/ReplayView.tsx';
+import { GameRoute } from './routes/GameRoute';
+import { ReplayRoute } from './routes/ReplayRoute';
+import { SettingsRoute } from './routes/SettingsRoute';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,8 +40,8 @@ export const App = () => {
         />
         <Container maxWidth="sm" className={classes.container}>
           <Switch>
-            <Route exact path="/game" component={GameView} />
-            <Route exact path="/replay" component={ReplayView} />
+            <Route exact path="/game" component={GameRoute} />
+            <Route exact path="/replay" component={ReplayRoute} />
             <Route exact path="/settings" component={SettingsRoute} />
             <Route exact path="/play" component={PlayRoute} />
             <Route path="/">

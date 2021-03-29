@@ -1,14 +1,6 @@
 import React from 'react';
-import {
-  Avatar,
-  Grid,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-  Box,
-} from '@material-ui/core';
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import { Avatar, Typography, Box } from '@material-ui/core';
+import { AccessTime as AccessTimeIcon } from '@material-ui/icons';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,23 +26,15 @@ interface Props {
 export const PlayerBar = (props: Props) => {
   const classes = useStyles();
   return (
-    <Box
-      display="flex"
-      p={1}
-      my={2}
-      alignItems="center"
-      bgcolor="transparent"
-    >
+    <Box display="flex" p={1} my={2} alignItems="center" bgcolor="transparent">
       <Box display="flex" width="100%">
         <Box p={1}>
-          <Avatar alt={props.name} variant="circular" src={props.icon}/>
+          <Avatar alt={props.name} variant="circular" src={props.icon} />
         </Box>
         <Box p={1}>
-          <Typography color="textPrimary">
-            {props.name}
-          </Typography>
+          <Typography color="textPrimary">{props.name}</Typography>
           <Typography variant="caption" color="textPrimary">
-            {'Rating: ' + props.rating}
+            Rating: {props.rating}
           </Typography>
         </Box>
       </Box>
@@ -60,10 +44,8 @@ export const PlayerBar = (props: Props) => {
         flexShrink={1}
         display="flex"
       >
-        <AccessTimeIcon color="action"/>
-        <Typography color="textPrimary">
-          15:00
-        </Typography>
+        <AccessTimeIcon color="action" />
+        <Typography color="textPrimary">15:00</Typography>
       </Box>
     </Box>
   );

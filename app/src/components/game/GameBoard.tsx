@@ -1,27 +1,41 @@
-import React from 'react';
-import {
-  Grid,
-  Typography,
-  Box,
-} from '@material-ui/core';
+import React, { useEffect, useRef, useState } from 'react';
 import Chessboard from 'chessboardjsx';
+import { useTheme } from '@material-ui/core/styles';
+import { Box } from '@material-ui/core';
+import { useWindowWidth } from '@react-hook/window-size/throttled';
 
 interface Props {
-  lightSquare: string;
-  darkSquare: string;
   position: string;
 }
 
 export const GameBoard = (props: Props) => {
+  const theme = useTheme();
+  const windowWidth = useWindowWidth();
+  const boardContainerRef = useRef<HTMLDivElement>(null);
+  const [boardWidth, setBoardWidth] = useState(0);
+
+  useEffect(() => {
+    if (boardContainerRef.current === null) return;
+    const { width } = boardContainerRef.current.getBoundingClientRect();
+
+    console.log(width);
+    setBoardWidth(width);
+  }, [boardContainerRef, windowWidth]);
+
   return (
-    <Chessboard
-      position={props.position}
-      boardStyle={{
-        borderRadius: '5px',
-        boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`
-      }}
-      lightSquareStyle={{ backgroundColor: '#EDD2CB' }}
-      darkSquareStyle={{ backgroundColor: '#543C52' }}
-    />
+    <Box
+      /*@ts-ignore*/
+      ref={boardContainerRef}
+    >
+      <Chessboard
+        position={props.position}
+        boardStyle={{
+          boxShadow: theme.shadows[10],
+        }}
+        calcWidth={() => boardWidth}
+        lightSquareStyle={{ backgroundColor: theme.palette.secondary.main }}
+        darkSquareStyle={{ backgroundColor: theme.palette.primary.main }}
+      />
+    </Box>
   );
-}
+};

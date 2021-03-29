@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Avatar, Grid, ListItem, List } from '@material-ui/core';
+import { Avatar, Grid, ListItem, List } from '@material-ui/core';
 import {
   Settings as SettingsIcon,
   AlternateEmail as AtIcon,

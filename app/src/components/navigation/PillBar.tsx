@@ -6,14 +6,14 @@ import clsx from 'clsx';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     background: {
-      backgroundColor: theme.palette.secondary.main,
-      borderColor: theme.palette.secondary.main,
+      backgroundColor: theme.palette.primary.dark,
+      borderColor: theme.palette.primary.dark,
       borderWidth: '2px',
       borderStyle: 'solid',
       borderRadius: theme.shape.borderRadius,
     },
     button: {
-      backgroundColor: theme.palette.secondary.main,
+      backgroundColor: theme.palette.primary.dark,
       width: '100%',
     },
     active: {
