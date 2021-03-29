@@ -38,9 +38,6 @@ export const App = () => {
     <Router>
       <div className={classes.background}>
         <Switch>
-          <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
           <Route path="/login">
             <Container maxWidth="sm" className={classes.container}>
               <Switch>
@@ -64,6 +61,9 @@ export const App = () => {
                 <Route exact path="/replay" component={ReplayRoute} />
                 <Route exact path="/settings" component={SettingsRoute} />
                 <Route exact path="/play" component={PlayRoute} />
+                <Route>
+                  <Redirect to="/login" />
+                </Route>
               </Switch>
             </Container>
           </Route>
