@@ -17,21 +17,43 @@ const darkTheme = createMuiTheme({
     primary: {
       main: '#543C52',
       dark: '#361D32',
+      contrastText: 'rgba(247,246,244,1)',
     },
     secondary: {
-      main: '#EDD2CB',
+      main: 'rgba(237,210,203,1)',
+      contrastText: 'rgba(63, 62, 67, 1)',
     },
-    error: {
-      main: '#DF5049',
+    info: {
+      main: 'rgba(63,62,67,1)',
+    },
+    text: {
+      primary: 'rgba(247,246,244,1)',
+    },
+  },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'Poppins',
+      'sans-serif',
+      'Segoe UI Emoji',
+    ].join(','),
+    fontSize: 12,
+    h4: {
+      fontWeight: 500,
+    },
+    button: {
+      textTransform: 'none',
+    },
+  },
+  overrides: {
+    MuiInputBase: {
+      input: {
+        background: 'rgba(63, 62, 67, 1)',
+      },
     },
   },
   shape: {
     borderRadius: 12,
-  },
-  typography: {
-    button: {
-      textTransform: 'none',
-    },
   },
 });
 

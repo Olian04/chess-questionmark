@@ -2,8 +2,8 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import React from 'react';
 
-const circleDiameter = '712px';
-const circleOffsetPercentage = '0.83';
+const circleDiameter = '80vh';
+const circleOffsetPercentage = '0.75';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
