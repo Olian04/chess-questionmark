@@ -37,27 +37,37 @@ export const App = () => {
   return (
     <Router>
       <div className={classes.background}>
-        <NavigationBar
-          menuItems={[
-            { title: 'Play', active: false },
-            { title: 'Profile', active: false },
-            { title: 'Settings', active: true },
-          ]}
-        />
-        <Container maxWidth="sm" className={classes.container}>
-          <Switch>
-            <Route exact path="/login" component={LoginRoute} />
-            <Route exact path="/sign-up" component={SignUpRoute} />
-            <Route exact path="/sign-in" component={SignInRoute} />
-            <Route exact path="/game" component={GameRoute} />
-            <Route exact path="/replay" component={ReplayRoute} />
-            <Route exact path="/settings" component={SettingsRoute} />
-            <Route exact path="/play" component={PlayRoute} />
-            <Route path="/">
-              <Redirect to="/demo" />
-            </Route>
-          </Switch>
-        </Container>
+        <Switch>
+          <Route exact path="/">
+            <Redirect to="/login" />
+          </Route>
+          <Route path="/login">
+            <Container maxWidth="sm" className={classes.container}>
+              <Switch>
+                <Route exact path="/login" component={LoginRoute} />
+                <Route exact path="/login/sign-up" component={SignUpRoute} />
+                <Route exact path="/login/sign-in" component={SignInRoute} />
+              </Switch>
+            </Container>
+          </Route>
+          <Route path="/">
+            <NavigationBar
+              menuItems={[
+                { title: 'Play', active: false },
+                { title: 'Profile', active: false },
+                { title: 'Settings', active: true },
+              ]}
+            />
+            <Container maxWidth="sm" className={classes.container}>
+              <Switch>
+                <Route exact path="/game" component={GameRoute} />
+                <Route exact path="/replay" component={ReplayRoute} />
+                <Route exact path="/settings" component={SettingsRoute} />
+                <Route exact path="/play" component={PlayRoute} />
+              </Switch>
+            </Container>
+          </Route>
+        </Switch>
       </div>
     </Router>
   );

@@ -37,10 +37,10 @@ export const LoginView = (props: Props) => {
 
   const history = useHistory();
   const handleSignUp = () => {
-    history.push('/sign-up'), [history];
+    history.push('/login/sign-up'), [history];
   };
   const handleSignIn = () => {
-    history.push('/sign-in'), [history];
+    history.push('/login/sign-in'), [history];
   };
 
   return (

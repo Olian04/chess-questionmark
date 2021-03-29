@@ -1,8 +1,16 @@
 import React from 'react';
-import { Container, Grid, Typography } from '@material-ui/core';
+import {
+  Checkbox,
+  Container,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { RoundedTextField } from '../components/common/RoundedTextField';
+import Logo from '/sign-up-logo.svg';
 import { LinkButton } from '../components/common/LinkButton';
 import { StyledLink } from '../components/common/CustomLink';
 
@@ -11,9 +19,9 @@ interface Props {}
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      height: '100vh',
       display: 'flex',
       justifyContent: 'center',
+      height: '100vh',
     },
     gridBase: {
       zIndex: 1,
@@ -22,9 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const SignInView = (props: Props) => {
+export const SignUpView = (props: Props) => {
   const classes = useStyles();
-
   return (
     <Container maxWidth="sm" className={classes.container}>
       <Grid
@@ -35,9 +42,12 @@ export const SignInView = (props: Props) => {
         alignItems="center"
         className={classes.gridBase}
       >
-        <Grid item style={{ marginBottom: '2em' }}>
+        <Grid item>
+          <img src={Logo}></img>
+        </Grid>
+        <Grid item style={{ marginBottom: '1.25em' }}>
           <Typography variant="h4" align="center">
-            Sign in
+            Create an account
           </Typography>
         </Grid>
         <Grid item>
@@ -46,14 +56,26 @@ export const SignInView = (props: Props) => {
               <Grid item xs={12}>
                 <RoundedTextField
                   color="secondary"
+                  autoComplete="name"
+                  name="name"
+                  variant="filled"
+                  required
+                  fullWidth
+                  id="ingameName"
+                  label="In-game Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <RoundedTextField
+                  color="secondary"
                   autoComplete="email"
-                  name="email"
+                  name="name"
                   variant="filled"
                   required
                   fullWidth
                   id="email"
                   label="Email"
-                  autoFocus
                 />
               </Grid>
               <Grid item xs={12}>
@@ -69,21 +91,40 @@ export const SignInView = (props: Props) => {
                   autoComplete="current-password"
                 />
               </Grid>
-
+              <Grid item xs={12}>
+                <FormGroup row>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={false}
+                        onChange={() => {}}
+                        name="checked"
+                      />
+                    }
+                    label={
+                      <Typography>
+                        I agree to the <StyledLink to="#">Terms</StyledLink> and{' '}
+                        <br />
+                        <StyledLink to="#">Privacy Policy</StyledLink>
+                      </Typography>
+                    }
+                  />
+                </FormGroup>
+              </Grid>
               <Grid item xs={12} style={{ marginTop: '2em' }}>
                 <LinkButton
                   type="submit"
+                  fullWidth
                   color="secondary"
                   padding="1em"
-                  fullWidth
                 >
-                  Take me to battle
+                  Sign up
                 </LinkButton>
               </Grid>
               <Grid item>
                 <Typography variant="subtitle1">
-                  Don't have an account with us yet?{' '}
-                  <StyledLink to="sign-up">Sign up</StyledLink>
+                  Already got an account?{' '}
+                  <StyledLink to="/login/sign-in">Sign in</StyledLink>
                 </Typography>
               </Grid>
             </Grid>

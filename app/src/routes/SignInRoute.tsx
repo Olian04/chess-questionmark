@@ -1,6 +1,6 @@
 import React from 'react';
 import { BackgroundCircle } from '../components/common/BackgroundCircle';
-import { SignInView } from '../views/SignIn';
+import { SignInView } from '../views/SignInView';
 
 export const SignInRoute = () => {
   return (
