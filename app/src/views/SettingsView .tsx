@@ -18,6 +18,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+// TODO: Center the settings buttons vertically
+
 export const SettingsView = () => {
   const classes = useStyles();
   const [modal, setModal] = useState({
