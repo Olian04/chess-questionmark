@@ -16,6 +16,8 @@ import { PlayRoute } from './routes/PlayRoute';
 import { GameRoute } from './routes/GameRoute';
 import { ReplayRoute } from './routes/ReplayRoute';
 import { SettingsRoute } from './routes/SettingsRoute';
+import { useRecoilState } from 'recoil';
+import { globalNavBar } from './state/navbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,6 +36,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const App = () => {
   const classes = useStyles();
+  const [_, setPosition] = useRecoilState(globalNavBar);
+  const renderComponent = (component: React.ReactElement, position: number) => {
+    setPosition(position);
+    return component;
+  };
   return (
     <Router>
       <div className={classes.background}>
@@ -50,17 +57,33 @@ export const App = () => {
           <Route path="/">
             <NavigationBar
               menuItems={[
-                { title: 'Play', active: false },
-                { title: 'Profile', active: false },
-                { title: 'Settings', active: true },
+                { title: 'Play', active: false, path: '/play' },
+                { title: 'Profile', active: false, path: '/profile' },
+                { title: 'Settings', active: true, path: '/settings' },
               ]}
             />
             <Container maxWidth="sm" className={classes.container}>
               <Switch>
-                <Route exact path="/game" component={GameRoute} />
-                <Route exact path="/replay" component={ReplayRoute} />
-                <Route exact path="/settings" component={SettingsRoute} />
-                <Route exact path="/play" component={PlayRoute} />
+                <Route
+                  exact
+                  path="/game"
+                  render={() => renderComponent(<GameRoute />, -1)}
+                />
+                <Route
+                  exact
+                  path="/replay"
+                  render={() => renderComponent(<ReplayRoute />, -1)}
+                />
+                <Route
+                  exact
+                  path="/settings"
+                  render={() => renderComponent(<SettingsRoute />, 2)}
+                />
+                <Route
+                  exact
+                  path="/play"
+                  render={() => renderComponent(<PlayRoute />, 0)}
+                />
                 <Route>
                   <Redirect to="/login" />
                 </Route>

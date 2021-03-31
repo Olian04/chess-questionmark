@@ -4,8 +4,10 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    background: {
-      padding: '10px',
+    paper: {
+      textAlign: 'center',
+      backgroundColor: theme.palette.background.paper,
+      padding: theme.spacing(2),
     },
   })
 );
@@ -19,19 +21,11 @@ export const Tile = (props: Props) => {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.background}>
-      <Grid container direction="column" xs>
-        <Grid item container justify="center" alignItems="center" xs>
-          <Typography variant="h4" color="textPrimary">
-            {props.text}
-          </Typography>
-        </Grid>
-        <Grid item container justify="center" alignItems="center" xs>
-          <Typography variant="button" color="textPrimary">
-            <b>{props.subText}</b>
-          </Typography>
-        </Grid>
-      </Grid>
-    </Paper>
+    <Grid item xs>
+      <Paper className={classes.paper}>
+        <Typography variant="h4">{props.text}</Typography>
+        <Typography variant="subtitle2">{props.subText}</Typography>
+      </Paper>
+    </Grid>
   );
 };

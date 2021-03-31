@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
     button: {
       backgroundColor: theme.palette.background.paper,
       height: '60px',
+      marginBottom: '1px',
     },
     error: {
       backgroundColor: theme.palette.error.main,
@@ -64,7 +65,6 @@ export const VerticalButtonGroup = (props: Props) => {
         ({ title, subTitle, icon, specialRole, onClick }, i) => (
           <MaterialButton
             key={i}
-            m={0.1}
             variant="contained"
             startIcon={icon ? icon : null}
             endIcon={<ArrowIcon className={classes.arrowIcon} />}

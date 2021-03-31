@@ -4,40 +4,40 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    button: {
+    paperButton: {
+      textAlign: 'left',
       backgroundColor: theme.palette.background.paper,
-      width: '100%',
+      color: theme.palette.primary.contrastText,
+      padding: theme.spacing(2),
+      '&:focus': {
+        color: theme.palette.secondary.contrastText,
+      },
     },
   })
 );
 
 interface Props {
-  icon: JSX.Element;
+  icon: any;
   text: string;
-  subText: string;
+  subText: string | JSX.Element;
 }
 
 export const Button = (props: Props) => {
   const classes = useStyles();
 
   return (
-    <MaterialButton className={classes.button} endIcon={props.icon}>
-      <Grid item container direction="column" justify="space-between">
-        <Grid item container alignItems="flex-start" xs>
-          <Typography variant="h5" color="textPrimary">
-            <b>{props.text}</b>
-          </Typography>
+    <Grid xs item>
+      <MaterialButton className={classes.paperButton} variant="contained">
+        <Grid container>
+          <Grid xs={8} item>
+            <Typography variant="h5">{props.text}</Typography>
+            <Typography variant="subtitle2">{props.subText}</Typography>
+          </Grid>
+          <Grid xs={4} item>
+            <img src={props.icon} width="100%" />
+          </Grid>
         </Grid>
-        <Grid item container alignItems="flex-start" xs>
-          <Typography
-            variant="caption"
-            color="textPrimary"
-            dangerouslySetInnerHTML={{
-              __html: props.subText,
-            }}
-          />
-        </Grid>
-      </Grid>
-    </MaterialButton>
+      </MaterialButton>
+    </Grid>
   );
 };

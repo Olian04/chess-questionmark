@@ -12,6 +12,8 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100vw',
       borderBottomLeftRadius: theme.shape.borderRadius,
       borderBottomRightRadius: theme.shape.borderRadius,
+      zIndex: 1,
+      position: 'relative',
     },
   })
 );
@@ -20,11 +22,13 @@ interface Props {
   menuItems: {
     title: string;
     active: boolean;
+    path: string;
   }[];
 }
 
 export const NavigationBar = (props: Props) => {
   const classes = useStyles();
+
   return (
     <Container className={classes.banner}>
       <List>
