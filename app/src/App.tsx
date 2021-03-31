@@ -44,15 +44,18 @@ export const App = () => {
                 <Route exact path="/login" component={LoginRoute} />
                 <Route exact path="/login/sign-up" component={SignUpRoute} />
                 <Route exact path="/login/sign-in" component={SignInRoute} />
+                <Route>
+                  <Redirect to="/login" />
+                </Route>
               </Switch>
             </Container>
           </Route>
           <Route path="/">
             <NavigationBar
               menuItems={[
-                { title: 'Play', active: false },
-                { title: 'Profile', active: false },
-                { title: 'Settings', active: true },
+                { title: 'Play', to: '/play' },
+                { title: 'Profile', to: '/profile' },
+                { title: 'Settings', to: '/settings' },
               ]}
             />
             <Container maxWidth="sm" className={classes.container}>
