@@ -14,8 +14,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
       backgroundColor: theme.palette.background.paper,
-    },
-    arrowIcon: {
       color: theme.palette.text.primary,
     },
   })
@@ -32,13 +30,7 @@ const LinkButton__Internal = (props: Props) => {
   return (
     <BaseButton
       variant={variant ? variant : 'contained'}
-      endIcon={
-        endIcon ? (
-          endIcon
-        ) : (
-          <ArrowForwardIosRounded className={classes.arrowIcon} />
-        )
-      }
+      endIcon={endIcon ? endIcon : <ArrowForwardIosRounded />}
       style={{
         minWidth: innerProps?.width,
         paddingTop: innerProps?.padding,
