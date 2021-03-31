@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Icon,
-  Typography,
-} from '@material-ui/core';
+import { Container, Grid, Typography } from '@material-ui/core';
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { LinkButton } from '../components/common/LinkButton';

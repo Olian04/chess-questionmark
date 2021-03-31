@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Grid, Typography } from '@material-ui/core';
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { RoundedTextField } from '../components/common/RoundedTextField';
 import { LinkButton } from '../components/common/LinkButton';
 import { StyledLink } from '../components/common/CustomLink';
+import { UserCredentials } from '../types/UserCredentials';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,8 +21,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const SignInView = () => {
+interface Props {
+  onLoginAttempt: (credentials: UserCredentials) => void;
+}
+
+export const SignInView = (props: Props) => {
   const classes = useStyles();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
     <Container maxWidth="sm" className={classes.container}>
@@ -52,6 +59,7 @@ export const SignInView = () => {
                   id="email"
                   label="Email"
                   autoFocus
+                  onChange={(ev) => setEmail(ev.currentTarget.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -65,6 +73,7 @@ export const SignInView = () => {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  onChange={(ev) => setPassword(ev.currentTarget.value)}
                 />
               </Grid>
 
@@ -74,6 +83,13 @@ export const SignInView = () => {
                   color="secondary"
                   padding="1em"
                   fullWidth
+                  onClickCapture={() => {
+                    // TODO: Add sanity checks for input fields
+                    props.onLoginAttempt({
+                      email,
+                      password,
+                    });
+                  }}
                 >
                   Take me to battle
                 </LinkButton>

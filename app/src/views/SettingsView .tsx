@@ -10,6 +10,7 @@ import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
 import { SectionHeading } from '../components/settings/SectionHeading';
 import { UpdateFieldModal } from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
+import { User } from '../types/User';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,7 +24,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const SettingsView = () => {
+interface Props {
+  user: User;
+}
+
+export const SettingsView = (props: Props) => {
   const classes = useStyles();
   const [modal, setModal] = useState({
     open: false,
@@ -56,7 +61,7 @@ export const SettingsView = () => {
           <ListItem>
             <VerticalButtonGroup>
               <TwoRowButton
-                title="Bob"
+                title={props.user.name}
                 subTitle="Team DH2642"
                 startIcon={
                   <Avatar alt="Bob" variant="rounded" src="/assets/cat.jpg" />
@@ -64,7 +69,7 @@ export const SettingsView = () => {
               />
               <TwoRowButton
                 title="Email"
-                subTitle="bob@kth.se"
+                subTitle={props.user.email}
                 onClick={() =>
                   setModal({
                     open: true,
