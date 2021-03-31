@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const LoadingGif = styled.div`
+export const LoadingAnimation = styled.div`
   background: ${({ theme }) => theme.text.high};
   -webkit-animation: load1 1s infinite ease-in-out;
   animation: load1 1s infinite ease-in-out;
