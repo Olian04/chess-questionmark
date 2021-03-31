@@ -1,10 +1,12 @@
 import React from 'react';
 import {
+  Box,
   Checkbox,
   Container,
   FormControlLabel,
   FormGroup,
   Grid,
+  Hidden,
   Typography,
 } from '@material-ui/core';
 
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export const SignUpView = (props: Props) => {
   const classes = useStyles();
   return (
-    <Container maxWidth="sm" className={classes.container}>
+    <Container className={classes.container}>
       <Grid
         container
         direction="column"
@@ -43,16 +45,24 @@ export const SignUpView = (props: Props) => {
         className={classes.gridBase}
       >
         <Grid item>
-          <img src={Logo}></img>
-        </Grid>
-        <Grid item style={{ marginBottom: '1.25em' }}>
-          <Typography variant="h4" align="center">
-            Create an account
-          </Typography>
-        </Grid>
-        <Grid item>
           <form noValidate>
             <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  flexDirection="column"
+                >
+                  <Hidden only="xs">
+                    <img src={Logo} />
+                  </Hidden>
+
+                  <Typography variant="h4" align="center">
+                    Create an account
+                  </Typography>
+                </Box>
+              </Grid>
               <Grid item xs={12}>
                 <RoundedTextField
                   color="secondary"

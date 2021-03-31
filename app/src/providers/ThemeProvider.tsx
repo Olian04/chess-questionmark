@@ -8,6 +8,15 @@ import { useRecoilValue } from 'recoil';
 import { colorTheme } from '../state/colorTheme';
 
 const darkTheme = createMuiTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 350,
+      md: 960,
+      lg: 1280,
+      xl: 1920,
+    },
+  },
   palette: {
     type: 'dark',
     background: {
