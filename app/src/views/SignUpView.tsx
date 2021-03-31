@@ -14,8 +14,6 @@ import Logo from '/sign-up-logo.svg';
 import { LinkButton } from '../components/common/LinkButton';
 import { StyledLink } from '../components/common/CustomLink';
 
-interface Props {}
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
@@ -30,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const SignUpView = (props: Props) => {
+export const SignUpView = () => {
   const classes = useStyles();
   return (
     <Container maxWidth="sm" className={classes.container}>

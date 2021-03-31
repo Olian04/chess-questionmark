@@ -6,6 +6,7 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
+  ListItemProps,
 } from '@material-ui/core';
 
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
@@ -29,27 +30,28 @@ interface Props {
 
 export const SectionHeading = (props: Props) => {
   const classes = useStyles();
+  const { title, subTitle, icon } = props;
   return (
     <ListItem style={{ width: '100%' }}>
       <ListItemAvatar>
         <Avatar
-          alt={`${props.title} Icon`}
+          alt={`${title} Icon`}
           variant="rounded"
           className={classes.avatar}
         >
-          {props.icon}
+          {icon}
         </Avatar>
       </ListItemAvatar>
       <ListItemText>
         <Grid item container direction="column" xs>
           <Grid item container alignItems="flex-start" xs>
             <Typography variant="button" color="textPrimary">
-              <b>{props.title}</b>
+              <b>{title}</b>
             </Typography>
           </Grid>
           <Grid item container alignItems="flex-start" xs>
             <Typography variant="caption" color="textPrimary">
-              {props.subTitle}
+              {subTitle}
             </Typography>
           </Grid>
         </Grid>

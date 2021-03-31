@@ -26,6 +26,7 @@ interface Props {
   items: {
     title: string;
     active: boolean;
+    onClick: () => void;
   }[];
 }
 
@@ -49,6 +50,7 @@ export const PillBar = (props: Props) => {
                 ? clsx(classes.button, classes.active)
                 : classes.button
             }
+            onClick={item.onClick}
           >
             <Typography variant="caption" color="textPrimary">
               {item.title}

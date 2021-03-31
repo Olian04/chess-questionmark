@@ -1,18 +1,10 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Icon,
-  Typography,
-} from '@material-ui/core';
+import { Container, Grid, Typography } from '@material-ui/core';
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { LinkButton } from '../components/common/LinkButton';
 import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
-interface Props {}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,18 +21,22 @@ const useStyles = makeStyles((theme: Theme) =>
     gridBottom: {
       minHeight: '20%',
     },
+    loginButton: {
+      backgroundColor: theme.palette.secondary.main,
+      color: theme.palette.common.black,
+    },
   })
 );
 
-export const LoginView = (props: Props) => {
+export const LoginView = () => {
   const classes = useStyles();
-
   const history = useHistory();
+
   const handleSignUp = () => {
-    history.push('/login/sign-up'), [history];
+    history.push('/login/sign-up');
   };
   const handleSignIn = () => {
-    history.push('/login/sign-in'), [history];
+    history.push('/login/sign-in');
   };
 
   return (
@@ -79,7 +75,7 @@ export const LoginView = (props: Props) => {
         </Grid>
         <Grid item>
           <LinkButton
-            color="secondary"
+            className={classes.loginButton}
             fullWidth
             padding="1.25em"
             onClick={handleSignIn}
