@@ -27,14 +27,18 @@ export const Button = (props: Props) => {
 
   return (
     <Grid xs item>
-      <MaterialButton className={classes.paperButton} variant="contained">
+      <MaterialButton
+        className={classes.paperButton}
+        variant="contained"
+        fullWidth
+      >
         <Grid container>
           <Grid xs={8} item>
             <Typography variant="h5">{props.text}</Typography>
             <Typography variant="subtitle2">{props.subText}</Typography>
           </Grid>
           <Grid xs={4} item>
-            <img src={props.icon} width="100%" />
+            <img src={props.icon} height="100vh" width="100vw" />
           </Grid>
         </Grid>
       </MaterialButton>
