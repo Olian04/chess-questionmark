@@ -6,8 +6,6 @@ import { RoundedTextField } from '../components/common/RoundedTextField';
 import { LinkButton } from '../components/common/LinkButton';
 import { StyledLink } from '../components/common/CustomLink';
 
-interface Props {}
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
@@ -22,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const SignInView = (props: Props) => {
+export const SignInView = () => {
   const classes = useStyles();
 
   return (
