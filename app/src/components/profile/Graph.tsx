@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme: Theme) =>
             backgroundColor: theme.palette.background.paper,
             border: "0px ",
             borderRadius: "5px",
+            overflow:"scroll",
         },
     })
 );
