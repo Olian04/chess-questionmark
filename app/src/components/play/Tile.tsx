@@ -20,7 +20,7 @@ export const Tile = (props: Props) => {
 
   return (
     <Paper className={classes.background}>
-      <Grid container direction="column" xs>
+      <Grid container direction="column">
         <Grid item container justify="center" alignItems="center" xs>
           <Typography variant="h4" color="textPrimary">
             {props.text}

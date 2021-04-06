@@ -16,6 +16,7 @@ import { PlayRoute } from './routes/PlayRoute';
 import { GameRoute } from './routes/GameRoute';
 import { ReplayRoute } from './routes/ReplayRoute';
 import { SettingsRoute } from './routes/SettingsRoute';
+import { ProfileRoute } from './routes/ProfileRoute';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -64,6 +65,7 @@ export const App = () => {
                 <Route exact path="/replay" component={ReplayRoute} />
                 <Route exact path="/settings" component={SettingsRoute} />
                 <Route exact path="/play" component={PlayRoute} />
+                <Route exact path="/profile" component={ProfileRoute} />
                 <Route>
                   <Redirect to="/login" />
                 </Route>
