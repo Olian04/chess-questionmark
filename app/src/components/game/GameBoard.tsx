@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Chessboard from 'chessboardjsx';
+import Chessboard, { Props as cbjsxProps } from 'chessboardjsx';
 import { useTheme } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 import { useWindowWidth } from '@react-hook/window-size/throttled';
 
-interface Props {
-  position: string;
-}
+interface Props extends cbjsxProps {}
 
 export const GameBoard = (props: Props) => {
   const theme = useTheme();
@@ -28,7 +26,7 @@ export const GameBoard = (props: Props) => {
       ref={boardContainerRef}
     >
       <Chessboard
-        position={props.position}
+        {...props}
         boardStyle={{
           boxShadow: theme.shadows[10],
         }}
