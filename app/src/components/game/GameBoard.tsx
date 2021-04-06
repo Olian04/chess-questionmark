@@ -6,6 +6,15 @@ import { useWindowWidth } from '@react-hook/window-size/throttled';
 
 interface Props {
   position: string;
+  onDrop: Function;
+  onMouseOverSquare: Function;
+  onMouseOutSquare: Function;
+  squareStyles: object;
+  dropSquareStyle: object;
+  onDragOverSquare: Function;
+  onSquareClick: Function;
+  draggable: boolean;
+  orientation: string;
 }
 
 export const GameBoard = (props: Props) => {
@@ -35,6 +44,15 @@ export const GameBoard = (props: Props) => {
         calcWidth={() => boardWidth}
         lightSquareStyle={{ backgroundColor: theme.palette.secondary.main }}
         darkSquareStyle={{ backgroundColor: theme.palette.primary.main }}
+        onDrop={props.onDrop}
+        onMouseOverSquare={props.onMouseOverSquare}
+        onMouseOutSquare={props.onMouseOutSquare}
+        squareStyles={props.squareStyles}
+        dropSquareStyle={props.dropSquareStyle}
+        onDragOverSquare={props.onDragOverSquare}
+        onSquareClick={props.onSquareClick}
+        draggable={props.draggable}
+        orientation={props.orientation}
       />
     </Box>
   );
