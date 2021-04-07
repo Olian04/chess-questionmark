@@ -8,8 +8,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     banner: {
       backgroundColor: theme.palette.primary.main,
-      height: '60px',
-      width: '100vw',
+      height: theme.measurements.navbar.height,
+      width: theme.measurements.navbar.width,
       borderBottomLeftRadius: theme.shape.borderRadius,
       borderBottomRightRadius: theme.shape.borderRadius,
       zIndex: 1,

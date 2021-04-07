@@ -5,7 +5,39 @@ import {
 } from '@material-ui/core/styles';
 import { useRecoilValue } from 'recoil';
 
+declare module '@material-ui/core/styles/createMuiTheme' {
+  interface Theme {
+    measurements: {
+      navbar: {
+        height: React.CSSProperties['height'];
+        width: React.CSSProperties['width'];
+        breakpoint: Breakpoint;
+      };
+      playerbar: {
+        height: React.CSSProperties['height'];
+        width: React.CSSProperties['width'];
+        breakpoint: Breakpoint;
+      };
+    };
+  }
+  interface ThemeOptions {
+    measurements?: {
+      navbar?: {
+        height?: React.CSSProperties['height'];
+        width?: React.CSSProperties['width'];
+        breakpoint?: Breakpoint;
+      };
+      playerbar: {
+        height?: React.CSSProperties['height'];
+        width?: React.CSSProperties['width'];
+        breakpoint?: Breakpoint;
+      };
+    };
+  }
+}
+
 import { colorTheme } from '../state/colorTheme';
+import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 
 const darkTheme = createMuiTheme({
   breakpoints: {
@@ -63,6 +95,16 @@ const darkTheme = createMuiTheme({
   },
   shape: {
     borderRadius: 12,
+  },
+  measurements: {
+    navbar: {
+      height: 60,
+      width: '100vw',
+    },
+    playerbar: {
+      height: 25,
+      width: '100vw',
+    },
   },
 });
 

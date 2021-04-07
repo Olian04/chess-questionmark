@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     fillHeight: {
       height: '100%',
+      flexWrap: 'nowrap',
     },
   })
 );
@@ -106,20 +107,28 @@ export const SettingsView = () => {
             </ListItem>
           </List>
         </Grid>
-        <Grid item container direction="column" justify="flex-end" xs>
-          <List>
-            <ListItem>
-              <VerticalButtonGroup
-                buttonData={[
-                  {
-                    title: 'Logout',
-                    specialRole: 'error',
-                    onClick: () => {},
-                  },
-                ]}
-              />
-            </ListItem>
-          </List>
+        <Grid item xs style={{ height: '100%' }}>
+          <Grid
+            container
+            direction="column"
+            justify="flex-end"
+            xs
+            className={classes.fillHeight}
+          >
+            <List>
+              <ListItem>
+                <VerticalButtonGroup
+                  buttonData={[
+                    {
+                      title: 'Logout',
+                      specialRole: 'error',
+                      onClick: () => {},
+                    },
+                  ]}
+                />
+              </ListItem>
+            </List>
+          </Grid>
         </Grid>
       </Grid>
       <UpdateFieldModal

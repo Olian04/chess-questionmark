@@ -2,7 +2,6 @@ import React from 'react';
 import Chessboard from 'chessboardjsx';
 import { useTheme } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
-import { useWindowWidth } from '@react-hook/window-size';
 
 interface Props {
   position: string;
@@ -11,10 +10,14 @@ interface Props {
 
 export const GameBoard = (props: Props) => {
   const theme = useTheme();
+  const navHeight = theme.measurements.navbar.height
+    ? parseInt(theme.measurements.navbar.height.toString())
+    : 60;
+  const playerBarHeight = theme.measurements.playerbar.height
+    ? parseInt(theme.measurements.playerbar.height.toString())
+    : 25;
 
-  const navHeight = 60;
-  const playerBarHeight = 25;
-  const difference = 50 + navHeight + 2 * playerBarHeight;
+  const difference = navHeight + 2 * playerBarHeight;
 
   return (
     <Box display="flex" justifyContent="center">
@@ -25,7 +28,7 @@ export const GameBoard = (props: Props) => {
         }}
         calcWidth={({ screenHeight, screenWidth }) =>
           Math.min(screenHeight - difference, screenWidth) *
-          (props.size ? props.size : 0.9)
+          (props.size ? props.size : 0.8)
         }
         lightSquareStyle={{ backgroundColor: theme.palette.secondary.main }}
         darkSquareStyle={{ backgroundColor: theme.palette.primary.main }}

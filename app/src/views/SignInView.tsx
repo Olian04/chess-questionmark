@@ -26,7 +26,7 @@ export const SignInView = (props: Props) => {
   const classes = useStyles();
 
   return (
-    <Container maxWidth="sm" className={classes.container}>
+    <Container className={classes.container}>
       <Grid
         container
         direction="column"
@@ -35,7 +35,13 @@ export const SignInView = (props: Props) => {
         alignItems="center"
         className={classes.gridBase}
       >
-        <Grid item style={{ marginBottom: '2em' }}>
+        <Grid
+          item
+          style={{
+            marginBottom: '2em',
+            width: '100%',
+          }}
+        >
           <Typography variant="h4" align="center">
             Sign in
           </Typography>

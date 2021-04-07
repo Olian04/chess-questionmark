@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'left',
       backgroundColor: theme.palette.background.paper,
       color: theme.palette.primary.contrastText,
-      padding: theme.spacing(2),
+      padding: theme.spacing(1),
       '&:focus': {
         color: theme.palette.secondary.contrastText,
       },
@@ -38,7 +38,7 @@ export const Button = (props: Props) => {
             <Typography variant="subtitle2">{props.subText}</Typography>
           </Grid>
           <Grid xs={4} item>
-            <img src={props.icon} height="100vh" width="100vw" />
+            <img src={props.icon} height="100%" width="100%" />
           </Grid>
         </Grid>
       </MaterialButton>

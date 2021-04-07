@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100%',
       paddingLeft: '15px',
       paddingRight: '15px',
+      flexWrap: 'nowrap',
     },
     button: {
       backgroundColor: theme.palette.background.paper,
@@ -44,20 +45,21 @@ export const PlayView = () => {
       container
       direction="column"
       className={classes.fillHeight}
-      justify="center"
+      spacing={1}
+      justify="flex-start"
     >
-      <Grid xs item style={{ height: '25%' }}>
+      <Grid xs item>
         <Grid
           container
+          alignItems="center"
           justify="center"
           style={{ height: '100%' }}
-          alignContent="center"
         >
-          <Typography variant="h4">Lets see what you go for Bob!</Typography>
+          <Typography variant="h5">Lets see what you go for Bob!</Typography>
         </Grid>
       </Grid>
       <Grid xs item>
-        <Grid container direction="column" spacing={3}>
+        <Grid container direction="column" spacing={1}>
           <Button
             text="Create a match"
             subText="Start a regular match"
@@ -79,16 +81,20 @@ export const PlayView = () => {
           />
         </Grid>
       </Grid>
-      <Grid xs item style={{ height: '25%', zIndex: 1 }}>
+      <Grid xs item style={{ zIndex: 1 }}>
         <Grid
           container
           justify="space-between"
-          spacing={3}
-          style={{ height: '100%', paddingBottom: '10px' }}
+          spacing={1}
+          style={{ height: '100%' }}
           alignContent="flex-end"
         >
-          <Tile text="104291" subText="Players" />
-          <Tile text="41665" subText="Games in play" />
+          <Grid item xs={12} sm={6}>
+            <Tile text="104291" subText="Players" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Tile text="41665" subText="Games in play" />
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme: Theme) =>
       borderColor: '#F7F6F4',
       border: 'solid',
     },
+    container: {
+      height: theme.measurements.playerbar.height,
+    },
   })
 );
 
@@ -41,7 +44,13 @@ interface Props {
 export const PlayerBar = (props: Props) => {
   const classes = useStyles();
   return (
-    <Box display="flex" px={1} my={1} alignItems="center">
+    <Box
+      display="flex"
+      px={1}
+      my={1}
+      alignItems="center"
+      className={classes.container}
+    >
       <Box display="flex" width="100%">
         <Box p={1}>
           <Avatar
