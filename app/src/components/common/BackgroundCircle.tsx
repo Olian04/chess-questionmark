@@ -23,11 +23,11 @@ const useStyles = makeStyles((theme: Theme) =>
       top: `calc(50% - ${circleDiameter} * 0.5)`,
     },
     top: {
-      top: `calc(-${circleOffsetPercentage} * ${circleDiameter})`,
+      top: `calc(-${circleOffsetPercentage-0.25} * ${circleDiameter})`,
       right: `calc(50% - ${circleDiameter} * 0.5)`,
     },
     bottom: {
-      bottom: `calc(-${circleOffsetPercentage} * ${circleDiameter})`,
+      bottom: `calc(-${circleOffsetPercentage-0.25} * ${circleDiameter})`,
       right: `calc(50% - ${circleDiameter} * 0.5)`,
     },
   })
