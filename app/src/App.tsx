@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.primary,
       backgroundColor: theme.palette.background.default,
       height: '100vh',
+      width: '100vw',
       position: 'relative',
       overflow: 'hidden',
     },
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const App = () => {
   const classes = useStyles();
+
   return (
     <Router>
       <div className={classes.background}>

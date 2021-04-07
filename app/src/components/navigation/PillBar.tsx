@@ -2,6 +2,9 @@ import React from 'react';
 import { Button as MaterialButton, Grid, Typography } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
+import { globalNavBar } from '../../state/navbar';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,6 +18,12 @@ const useStyles = makeStyles((theme: Theme) =>
     button: {
       backgroundColor: theme.palette.primary.dark,
       width: '100%',
+      '&:focus': {
+        backgroundColor: theme.palette.primary.main,
+      },
+      '&:active': {
+        backgroundColor: theme.palette.primary.main,
+      },
     },
     active: {
       backgroundColor: theme.palette.primary.main,
@@ -32,6 +41,15 @@ interface Props {
 
 export const PillBar = (props: Props) => {
   const classes = useStyles();
+
+  const position = useRecoilValue(globalNavBar);
+
+  const history = useHistory();
+
+  const handleClick = (path: string) => {
+    history.push(path);
+  };
+
   return (
     <Grid
       container

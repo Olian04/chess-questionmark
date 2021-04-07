@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       height: '100%',
       overflowY: 'scroll',
+      flexWrap: 'nowrap',
     },
     error: {
       backgroundColor: theme.palette.error.main,

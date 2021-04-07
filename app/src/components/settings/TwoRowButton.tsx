@@ -23,7 +23,7 @@ export const TwoRowButton = (props: Props) => {
   const { title, subTitle, className, ...innerProps } = props;
   return (
     <LinkButton
-      m={0.1}
+      margin={0.1}
       className={clsx(className || '', classes.button)}
       {...innerProps}
     >

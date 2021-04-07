@@ -2,35 +2,33 @@ import React, { useEffect, useRef, useState } from 'react';
 import Chessboard, { Props as cbjsxProps } from 'chessboardjsx';
 import { useTheme } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
-import { useWindowWidth } from '@react-hook/window-size/throttled';
 
-interface Props extends cbjsxProps {}
+interface Props extends cbjsxProps {
+  size?: number;
+}
 
 export const GameBoard = (props: Props) => {
   const theme = useTheme();
-  const windowWidth = useWindowWidth();
-  const boardContainerRef = useRef<HTMLDivElement>(null);
-  const [boardWidth, setBoardWidth] = useState(0);
+  const navHeight = theme.measurements.navbar.height
+    ? parseInt(theme.measurements.navbar.height.toString())
+    : 60;
+  const playerBarHeight = theme.measurements.playerbar.height
+    ? parseInt(theme.measurements.playerbar.height.toString())
+    : 25;
 
-  useEffect(() => {
-    if (boardContainerRef.current === null) return;
-    const { width } = boardContainerRef.current.getBoundingClientRect();
-
-    console.log(width);
-    setBoardWidth(width);
-  }, [boardContainerRef, windowWidth]);
+  const difference = navHeight + 2 * playerBarHeight;
 
   return (
-    <Box
-      /*@ts-ignore*/
-      ref={boardContainerRef}
-    >
+    <Box display="flex" justifyContent="center">
       <Chessboard
         {...props}
         boardStyle={{
           boxShadow: theme.shadows[10],
         }}
-        calcWidth={() => boardWidth}
+        calcWidth={({ screenHeight, screenWidth }) =>
+          Math.min(screenHeight - difference, screenWidth) *
+          (props.size ? props.size : 0.8)
+        }
         lightSquareStyle={{ backgroundColor: theme.palette.secondary.main }}
         darkSquareStyle={{ backgroundColor: theme.palette.primary.main }}
       />
