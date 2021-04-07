@@ -3,7 +3,8 @@ import clsx from 'clsx';
 import React from 'react';
 
 const circleDiameter = '80vh';
-const circleOffsetPercentage = '0.75';
+const circleOffsetPercentageX = '0.75';
+const circleOffsetPercentageY = '1';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,19 +16,19 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '50%',
     },
     left: {
-      left: `calc(-${circleOffsetPercentage} * ${circleDiameter})`,
+      left: `calc(-${circleOffsetPercentageX} * ${circleDiameter})`,
       top: `calc(50% - ${circleDiameter} * 0.5)`,
     },
     right: {
-      right: `calc(-${circleOffsetPercentage} * ${circleDiameter})`,
+      right: `calc(-${circleOffsetPercentageX} * ${circleDiameter})`,
       top: `calc(50% - ${circleDiameter} * 0.5)`,
     },
     top: {
-      top: `calc(-${circleOffsetPercentage-0.25} * ${circleDiameter})`,
+      top: `calc(-${circleOffsetPercentageY} * ${circleDiameter})`,
       right: `calc(50% - ${circleDiameter} * 0.5)`,
     },
     bottom: {
-      bottom: `calc(-${circleOffsetPercentage-0.25} * ${circleDiameter})`,
+      bottom: `calc(-${circleOffsetPercentageY} * ${circleDiameter})`,
       right: `calc(50% - ${circleDiameter} * 0.5)`,
     },
   })
