@@ -71,7 +71,8 @@ Forsyth-Edwards Notation (FEN): https://www.chess.com/terms/fen-chess <br>
 Chess board component: https://www.chessboardjsx.com/ <br>
 Chess logic: https://github.com/jhlywa/chess.js <br>
 Chess AI: https://github.com/nmrugg/stockfish.js <br>
-Random starting board states: https://chessblunders.org/ <br>
+~~Random starting board states: https://chessblunders.org/ <br>~~
+Puzzle based starting board state: https://www.chess.com/news/view/published-data-api#pubapi-daily-puzzle
 Profile pictures: https://en.gravatar.com/ <br>
 
 Maybe look into Lichess (might be overkill): https://lichess.org/api#section/Authentication
