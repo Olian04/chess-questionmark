@@ -36,7 +36,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
   }
 }
 
-import { colorTheme } from '../state/colorTheme';
+import { colorThemeState } from '../state/colorTheme';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 
 const darkTheme = createMuiTheme({
@@ -123,7 +123,7 @@ const lightTheme = createMuiTheme({
 });
 
 const useTheme = () => {
-  const theme = useRecoilValue(colorTheme);
+  const theme = useRecoilValue(colorThemeState);
 
   switch (theme) {
     case 'dark':
