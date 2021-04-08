@@ -1,37 +1,65 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
-import { LoadingAnimation } from '../components/common/LoadingAnimation';
-import { userData, userCredentials } from '../state/user';
+import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
+
+import { userState } from '../state/user';
+import {
+  loginStatusState,
+  loginCredentialsState,
+} from '../state/authentication';
 import { SignInView } from '../views/SignInView';
+import { signInWithEmailAndPassword } from '../services/firebase/auth';
 
 export const SignInPresenter = () => {
-  const setUserCredentials = useSetRecoilState(userCredentials);
-  const loadableUser = useRecoilValueLoadable(userData);
-  const [loginAttempt, setLoginAttempt] = useState(false);
+  const setLoginCredentials = useSetRecoilState(loginCredentialsState);
+  const loginStatus = useRecoilValue(loginStatusState);
   const history = useHistory();
 
-  useEffect(() => {
-    if (loadableUser.state !== 'hasValue') return;
-    if (!loginAttempt) return;
-    if (!loadableUser.contents.isAuthenticated) return;
-    history.push('/settings');
-  }, [loadableUser.state]);
+  const loginUser = useRecoilCallback(({ snapshot, set }) => async () => {
+    set(loginStatusState, 'pending');
 
-  switch (loadableUser.state) {
-    case 'loading':
-      return <LoadingAnimation />;
-    case 'hasValue':
-      return (
-        <SignInView
-          onLoginAttempt={(credentials) => {
-            setLoginAttempt(true);
-            setUserCredentials(credentials);
-          }}
-        />
-      );
-    case 'hasError':
-      // TODO: Add error handling
-      return null;
-  }
+    const credentials = await snapshot.getPromise(loginCredentialsState);
+    if (
+      credentials === null ||
+      credentials.email.trim() === '' ||
+      credentials.password.trim() === ''
+    ) {
+      set(loginStatusState, 'fail');
+      return;
+    }
+
+    const loginResponse = await signInWithEmailAndPassword(credentials).catch(
+      () => {
+        set(loginStatusState, 'fail');
+      }
+    );
+    if (!loginResponse || loginResponse.user === null) {
+      set(loginStatusState, 'fail');
+      return;
+    }
+    set(loginStatusState, 'success');
+    set(userState, {
+      id: loginResponse.user?.uid as string,
+      email: loginResponse.user?.email as string,
+      name: loginResponse.user?.displayName as string,
+    });
+  });
+
+  useEffect(() => {
+    if (loginStatus === 'success') {
+      history.push('/settings');
+    }
+  }, [loginStatus]);
+
+  return (
+    <>
+      <SignInView
+        loginFailed={loginStatus === 'fail'}
+        onLoginAttempt={(credentials) => {
+          setLoginCredentials(credentials);
+          loginUser();
+        }}
+      />
+    </>
+  );
 };

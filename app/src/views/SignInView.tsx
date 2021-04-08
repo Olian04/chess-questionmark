@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   onLoginAttempt: (credentials: UserCredentials) => void;
+  loginFailed: boolean;
 }
 
 export const SignInView = (props: Props) => {
@@ -66,6 +67,7 @@ export const SignInView = (props: Props) => {
                   label="Email"
                   autoFocus
                   onChange={(ev) => setEmail(ev.currentTarget.value)}
+                  error={props.loginFailed}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -80,6 +82,7 @@ export const SignInView = (props: Props) => {
                   id="password"
                   autoComplete="current-password"
                   onChange={(ev) => setPassword(ev.currentTarget.value)}
+                  error={props.loginFailed}
                 />
               </Grid>
 
@@ -89,7 +92,8 @@ export const SignInView = (props: Props) => {
                   color="secondary"
                   padding="1em"
                   fullWidth
-                  onClickCapture={() => {
+                  onClickCapture={(ev) => {
+                    ev.preventDefault();
                     // TODO: Add sanity checks for input fields
                     props.onLoginAttempt({
                       email,

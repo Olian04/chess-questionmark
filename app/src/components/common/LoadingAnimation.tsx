@@ -1,4 +1,8 @@
 import React from 'react';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Grid } from '@material-ui/core';
 
-export const LoadingAnimation = () => <CircularProgress color="secondary" />;
+export const LoadingAnimation = () => (
+  <Grid container justify="center" alignItems="center" alignContent="center">
+    <CircularProgress color="secondary" />
+  </Grid>
+);

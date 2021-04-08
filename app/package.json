@@ -11,6 +11,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "*",
     "@material-ui/system": "^4.11.3",
     "@react-hook/window-size": "^3.0.7",
     "@types/chess.js": "^0.10.1",

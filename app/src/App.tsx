@@ -8,6 +8,7 @@ import {
 import { Container } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
+import { LoadingAnimation } from './components/common/LoadingAnimation';
 import { NavigationBar } from './components/navigation/NavigationBar';
 import { LoginRoute } from './routes/LoginRoute';
 import { SignUpRoute } from './routes/SignUpRoute';
@@ -43,14 +44,16 @@ export const App = () => {
         <Switch>
           <Route path="/login">
             <Container maxWidth="sm" className={classes.container}>
-              <Switch>
-                <Route exact path="/login" component={LoginRoute} />
-                <Route exact path="/login/sign-up" component={SignUpRoute} />
-                <Route exact path="/login/sign-in" component={SignInRoute} />
-                <Route>
-                  <Redirect to="/login" />
-                </Route>
-              </Switch>
+              <React.Suspense fallback={<LoadingAnimation />}>
+                <Switch>
+                  <Route exact path="/login" component={LoginRoute} />
+                  <Route exact path="/login/sign-up" component={SignUpRoute} />
+                  <Route exact path="/login/sign-in" component={SignInRoute} />
+                  <Route>
+                    <Redirect to="/login" />
+                  </Route>
+                </Switch>
+              </React.Suspense>
             </Container>
           </Route>
           <Route path="/">
@@ -62,16 +65,18 @@ export const App = () => {
               ]}
             />
             <Container maxWidth="sm" className={classes.container}>
-              <Switch>
-                <Route exact path="/game" component={GameRoute} />
-                <Route exact path="/replay" component={ReplayRoute} />
-                <Route exact path="/settings" component={SettingsRoute} />
-                <Route exact path="/play" component={PlayRoute} />
-                <Route exact path="/profile" component={ProfileRoute} />
-                <Route>
-                  <Redirect to="/login" />
-                </Route>
-              </Switch>
+              <React.Suspense fallback={<LoadingAnimation />}>
+                <Switch>
+                  <Route exact path="/game" component={GameRoute} />
+                  <Route exact path="/replay" component={ReplayRoute} />
+                  <Route exact path="/settings" component={SettingsRoute} />
+                  <Route exact path="/play" component={PlayRoute} />
+                  <Route exact path="/profile" component={ProfileRoute} />
+                  <Route>
+                    <Redirect to="/login" />
+                  </Route>
+                </Switch>
+              </React.Suspense>
             </Container>
           </Route>
         </Switch>

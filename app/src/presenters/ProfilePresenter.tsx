@@ -1,11 +1,10 @@
 import React from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
-import { LoadingAnimation } from '../components/common/LoadingAnimation';
-import { userData } from '../state/user';
+import { useRecoilValue } from 'recoil';
+import { userState } from '../state/user';
 import { ProfileView } from '../views/ProfileView';
 
 export const ProfileProvider = () => {
-  const user = useRecoilValue(userData);
+  const user = useRecoilValue(userState);
 
   return <ProfileView user={user} />;
 };
