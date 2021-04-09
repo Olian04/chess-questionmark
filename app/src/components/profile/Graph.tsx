@@ -32,7 +32,7 @@ export const Graph = (props: Props) => {
   const classes = useStyles();
 
   return (
-    <Grid item direction="column" xs className={classes.background}>
+    <Grid item xs className={classes.background}>
       <Box>
         <Typography variant="h5" color="textPrimary">
           <b>Ranking</b>

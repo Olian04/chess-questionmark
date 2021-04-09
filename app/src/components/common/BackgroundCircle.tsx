@@ -4,7 +4,7 @@ import React from 'react';
 
 const circleDiameter = '80vh';
 const circleOffsetPercentageX = '0.75';
-const circleOffsetPercentageY = '1';
+const circleOffsetPercentageY = '0.5';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
