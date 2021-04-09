@@ -8,6 +8,19 @@ export const userCredentials = atom<UserCredentials | null>({
   default: null,
 });
 
+export const userState = atom<User | null>({
+  key: 'USER',
+  default: null,
+});
+
+export const getAuth = selector({
+  key: 'USER_AUTHENTICATED',
+  get: ({ get }) => {
+    const _userState = get(userState);
+    return _userState?.isAuthenticated;
+  },
+});
+
 export const userData = selector<User>({
   key: 'USER_DATA',
   get: ({ get }) => {

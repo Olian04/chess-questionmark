@@ -11,6 +11,7 @@ import { SectionHeading } from '../components/settings/SectionHeading';
 import { UpdateFieldModal } from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
 import { User } from '../types/User';
+import { signOut } from '../services/firebase/auth';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,6 +38,14 @@ export const SettingsView = (props: Props) => {
     description: '...',
     hint: '...',
   });
+
+  const handleSignout = async () => {
+    try {
+      await signOut();
+    } catch ({ code, message }) {
+      console.log(code, message);
+    }
+  };
 
   return (
     <>
@@ -108,7 +117,11 @@ export const SettingsView = (props: Props) => {
           </ListItem>
           <ListItem>
             <VerticalButtonGroup>
-              <TwoRowButton className={classes.error} title="Logout" />
+              <TwoRowButton
+                className={classes.error}
+                title="Logout"
+                onClick={handleSignout}
+              />
             </VerticalButtonGroup>
           </ListItem>
         </List>

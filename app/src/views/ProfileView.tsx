@@ -55,36 +55,42 @@ export const ProfileView = (props: Props) => {
         </Grid>
       </Grid>
 
-      <Grid item xs container direction="column" justify="space-evenly">
-        <Typography
-          className={classes.padding}
-          variant="button"
-          color="textPrimary"
-        >
-          Recent Matches
-        </Typography>
-        <List>
-          <VerticalButtonGroup>
-            <ThreeRowButton
-              name="Alice"
-              rank="Ranking title"
-              delta="+12 points"
-              avatar={<img src={BlankAvatar} width="80%" height="80%" />}
-            />
-            <ThreeRowButton
-              name="Celine"
-              rank="Ranking title"
-              delta="+8 points"
-              avatar={<img src={BlankAvatar} width="80%" height="80%" />}
-            />
-            <ThreeRowButton
-              name="Alice"
-              rank="Ranking title"
-              delta="-24 points"
-              avatar={<img src={BlankAvatar} width="80%" height="80%" />}
-            />
-          </VerticalButtonGroup>
-        </List>
+      <Grid item xs>
+        <Grid container direction="column" justify="space-evenly">
+          <Grid item xs>
+            <Typography
+              className={classes.padding}
+              variant="button"
+              color="textPrimary"
+            >
+              Recent Matches
+            </Typography>
+          </Grid>
+          <Grid item xs>
+            <List>
+              <VerticalButtonGroup>
+                <ThreeRowButton
+                  name="Alice"
+                  rank="Ranking title"
+                  delta="+12 points"
+                  avatar={<img src={BlankAvatar} width="80%" height="80%" />}
+                />
+                <ThreeRowButton
+                  name="Celine"
+                  rank="Ranking title"
+                  delta="+8 points"
+                  avatar={<img src={BlankAvatar} width="80%" height="80%" />}
+                />
+                <ThreeRowButton
+                  name="Alice"
+                  rank="Ranking title"
+                  delta="-24 points"
+                  avatar={<img src={BlankAvatar} width="80%" height="80%" />}
+                />
+              </VerticalButtonGroup>
+            </List>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );
