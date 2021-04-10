@@ -20,6 +20,7 @@ interface Props {
   icon: any;
   text: string;
   subText: string | JSX.Element;
+  onClick: Function;
 }
 
 export const Button = (props: Props) => {
@@ -28,6 +29,7 @@ export const Button = (props: Props) => {
   return (
     <Grid xs item>
       <MaterialButton
+        onClick={props.onClick}
         className={classes.paperButton}
         variant="contained"
         fullWidth
