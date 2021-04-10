@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   user: User;
+  onLogoutAttempt: () => void;
 }
 
 export const SettingsView = (props: Props) => {
@@ -39,16 +40,6 @@ export const SettingsView = (props: Props) => {
     description: '...',
     hint: '...',
   });
-
-  const history = useHistory();
-  const handleSignout = async () => {
-    try {
-      await signOut();
-    } catch ({ code, message }) {
-      console.log(code, message);
-    }
-    history.push('/');
-  };
 
   return (
     <>
@@ -123,7 +114,7 @@ export const SettingsView = (props: Props) => {
               <TwoRowButton
                 className={classes.error}
                 title="Logout"
-                onClick={handleSignout}
+                onClick={props.onLogoutAttempt}
               />
             </VerticalButtonGroup>
           </ListItem>

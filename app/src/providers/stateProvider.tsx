@@ -11,7 +11,6 @@ export const RecoilRoute = (props: RecoilRouteProps) => {
   const { children, guarded, ...baseProps } = props;
 
   const [user, loading, error] = useAuthState();
-
   const ShowRoute = (children: ReactNode) => (
     <BaseRoute {...baseProps}>{children}</BaseRoute>
   );

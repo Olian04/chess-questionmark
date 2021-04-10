@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   CircularProgress,
   Container,
@@ -16,10 +16,8 @@ import { UserCredentials } from '../types/UserCredentials';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { green } from '@material-ui/core/colors';
-import { loginUser, signInWithEmailAndPassword } from '../services/firebase/auth';
-import { useSetRecoilState } from 'recoil';
-import { userState } from '../state/user';
-import { useHistory } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { loginStatusState } from '../state/authentication';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -62,22 +60,30 @@ const Alert = (props: AlertProps) => {
 export const SignInView = (props: Props) => {
   const classes = useStyles();
 
-  const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
     severity: 'information',
-    duration: 6000,
+    duration: 3000,
     message: '',
   });
 
-  const setCredentials = useSetRecoilState(userState);
+  const loginStatus = useRecoilValue(loginStatusState);
 
   const handleOnClose = (event: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') return;
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const history = useHistory();
+  useEffect(() => {
+    if (props.loginFailed) {
+      setSnackbar({
+        ...snackbar,
+        open: true,
+        message: 'Login failed',
+        severity: 'error',
+      });
+    }
+  }, [props.loginFailed]);
 
   return (
     <>
@@ -115,32 +121,10 @@ export const SignInView = (props: Props) => {
             <Formik
               initialValues={{ email: '', password: '' }}
               onSubmit={async (values, actions) => {
-                if (!loading) {
-                  try {
-                    setLoading(true);
-                    const {user} = await signInWithEmailAndPassword({
-                      email: values.email,
-                      password: values.password,
-                    });
-                    if (user) {
-
-                      setCredentials({id: user.uid, name: user.displayName, email: user.email, isAuthenticated: true})
-                      history.push('/profile');
-                    }
-                    
-                  } catch ({ code, message }) {
-                    switch (code) {
-                      case 'auth/user-not-found':
-                        setSnackbar({
-                          ...snackbar,
-                          message: 'No user found with the provided email',
-                          severity: 'error',
-                          open: true,
-                        });
-                    }
-                  }
-                  setLoading(false);
-                }
+                await props.onLoginAttempt({
+                  email: values.email,
+                  password: values.password,
+                });
               }}
               validationSchema={SigninSchema}
             >
@@ -192,12 +176,12 @@ export const SignInView = (props: Props) => {
                         type="submit"
                         color="secondary"
                         padding="1em"
-                        disabled={loading}
+                        disabled={loginStatus in ['success', 'pending']}
                         fullWidth
                       >
                         Take me to battle
                       </LinkButton>
-                      {loading && (
+                      {loginStatus === 'pending' && (
                         <CircularProgress
                           size={24}
                           className={classes.buttonProgress}

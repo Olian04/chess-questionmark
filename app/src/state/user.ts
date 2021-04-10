@@ -11,12 +11,3 @@ export const userState = atom<User>({
     name: notApplicable,
   },
 });
-
-export const getAuth = selector({
-  key: 'USER_AUTHENTICATED',
-  get: ({ get }) => {
-    const _userState = get(userState);
-    return _userState?.isAuthenticated;
-  },
-});
-

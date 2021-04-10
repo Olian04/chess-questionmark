@@ -1,6 +1,5 @@
 export interface User {
   id: string;
-  name: string | null;
-  email: string | null;
-  isAuthenticated: boolean;
+  name: string;
+  email: string;
 }
