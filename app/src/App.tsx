@@ -13,7 +13,7 @@ import { GameRoute } from './routes/GameRoute';
 import { ReplayRoute } from './routes/ReplayRoute';
 import { SettingsRoute } from './routes/SettingsRoute';
 import { ProfileRoute } from './routes/ProfileRoute';
-import { RecoilRoute, RecoilSwitch } from './providers/stateProvider';
+import { RecoilRoute } from './providers/stateProvider';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,7 +37,7 @@ export const App = () => {
   return (
     <Router>
       <div className={classes.background}>
-        <RecoilSwitch>
+        <Switch>
           <RecoilRoute path="/login">
             <Container maxWidth="sm" className={classes.container}>
               <React.Suspense fallback={<LoadingAnimation />}>
@@ -60,7 +60,7 @@ export const App = () => {
               </React.Suspense>
             </Container>
           </RecoilRoute>
-          <RecoilRoute path="/" needAuth>
+          <RecoilRoute guarded path="/">
             <NavigationBar
               menuItems={[
                 { title: 'Play', to: '/play' },
@@ -80,14 +80,11 @@ export const App = () => {
                   />
                   <RecoilRoute exact path="/play" component={PlayRoute} />
                   <RecoilRoute exact path="/profile" component={ProfileRoute} />
-                  <RecoilRoute>
-                    <Redirect to="/login" />
-                  </RecoilRoute>
                 </Switch>
               </React.Suspense>
             </Container>
           </RecoilRoute>
-        </RecoilSwitch>
+        </Switch>
       </div>
     </Router>
   );

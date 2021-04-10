@@ -11,11 +11,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
-<<<<<<< HEAD
-    "@material-ui/lab": "*",
-=======
     "@material-ui/lab": "^4.0.0-alpha.57",
->>>>>>> authentication
     "@material-ui/system": "^4.11.3",
     "@react-hook/window-size": "^3.0.7",
     "@types/chess.js": "^0.10.1",
@@ -28,6 +24,7 @@
     "formik": "^2.2.6",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-firebase-hooks": "^3.0.3",
     "react-router-dom": "^5.2.0",
     "recoil": "^0.1.2",
     "recoilize": "^1.0.0",

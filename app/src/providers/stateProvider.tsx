@@ -1,46 +1,23 @@
-import React from 'react';
-import {
-  Redirect,
-  Route as BaseRoute,
-  RouteProps,
-  Switch as BaseSwitch,
-  SwitchProps,
-} from 'react-router-dom';
-import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
-import { getCurrentUser } from '../services/firebase/auth';
-import { getAuth, userState } from '../state/user';
+import React, { ReactNode } from 'react';
+import { Redirect, Route as BaseRoute, RouteProps } from 'react-router-dom';
+import { useAuthState } from '../services/firebase/auth';
+import { LoadingView } from '../views/LoadingView';
 
 interface RecoilRouteProps extends RouteProps {
-  needAuth?: boolean;
+  guarded?: boolean;
 }
 
-interface RecoilSwitchProps extends SwitchProps {}
-
 export const RecoilRoute = (props: RecoilRouteProps) => {
-  const { children, needAuth, ...baseProps } = props;
+  const { children, guarded, ...baseProps } = props;
 
-  const isAuthenticated = useRecoilValue(getAuth);
-  console.log(baseProps.path, isAuthenticated);
-  if (needAuth && !isAuthenticated) {
-    return (
-      <BaseRoute>
-        <Redirect to="/login" />
-      </BaseRoute>
-    );
-  }
-  return <BaseRoute {...baseProps}>{children}</BaseRoute>;
-};
+  const [user, loading, error] = useAuthState();
 
-export const RecoilSwitch = (props: RecoilSwitchProps) => {
-  const { children, ...baseProps } = props;
-  const setUser = useSetRecoilState(userState);
-  getCurrentUser().then((user) => {
-    setUser({
-      id: user.uid,
-      name: user.displayName,
-      email: user.email,
-      isAuthenticated: true,
-    });
-  });
-  return <BaseSwitch {...baseProps}>{children}</BaseSwitch>;
+  const ShowRoute = (children: ReactNode) => (
+    <BaseRoute {...baseProps}>{children}</BaseRoute>
+  );
+  if (error) return ShowRoute(<Redirect to="/login" />);
+  if (guarded && user) return ShowRoute(children);
+  if (guarded && loading) return <LoadingView message="Fetching state" />;
+  if (guarded && (!user || error)) return ShowRoute(<Redirect to="/login" />);
+  return ShowRoute(children);
 };

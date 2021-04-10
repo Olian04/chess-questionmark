@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Grid, ListItem, List, Typography } from '@material-ui/core';
+import { Avatar, Grid, ListItem, List } from '@material-ui/core';
 import {
   Settings as SettingsIcon,
   AlternateEmail as AtIcon,
@@ -12,6 +12,7 @@ import { UpdateFieldModal } from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
 import { User } from '../types/User';
 import { signOut } from '../services/firebase/auth';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,12 +40,14 @@ export const SettingsView = (props: Props) => {
     hint: '...',
   });
 
+  const history = useHistory();
   const handleSignout = async () => {
     try {
       await signOut();
     } catch ({ code, message }) {
       console.log(code, message);
     }
+    history.push('/');
   };
 
   return (

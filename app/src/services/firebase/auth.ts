@@ -1,25 +1,18 @@
 import firebase from 'firebase';
+import { useAuthState as baseState } from 'react-firebase-hooks/auth';
 import { app } from '.';
 import 'firebase/auth';
 
 import { UserCredentials } from '../../types/UserCredentials';
 
-
 const auth = app.auth();
 
-export const signInWithEmailAndPassword = async (credentials: UserCredentials) =>
-  auth.signInWithEmailAndPassword(credentials.email, credentials.password);
+export const signInWithEmailAndPassword = async (
+  credentials: UserCredentials
+) => auth.signInWithEmailAndPassword(credentials.email, credentials.password);
 
-
-export const getCurrentUser = async () => {
-  return new Promise<firebase.User>((resolve, reject) => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        resolve(user);
-        unsubscribe();
-      }
-    });
-  });
+export const useAuthState = () => {
+  return baseState(auth);
 };
 
 export const signUp = async (credentials: UserCredentials) => {
