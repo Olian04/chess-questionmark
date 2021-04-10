@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, Container, Grid } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
+import { useRecoilValue } from 'recoil';
 
 import { PlayerBar } from '../components/game/PlayerBar';
 import { OnePlayerBoard } from '../components/game/OnePlayerBoard';
 import { TwoPlayerBoard } from '../components/game/TwoPlayerBoard';
 import { GameBoard } from '../components/game/GameBoard';
+import { fetchPuzzle } from '../state/board';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const GameView = () => {
   const classes = useStyles();
+  const fen = useRecoilValue(fetchPuzzle);
 
   return (
     <>
@@ -46,10 +49,9 @@ export const GameView = () => {
           icon="/assets/cat.jpg"
         />
         <OnePlayerBoard
-          position="rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+          position={fen}
           player="white"
         />
-
         <PlayerBar
           name="Player 2"
           countryCode="SE"

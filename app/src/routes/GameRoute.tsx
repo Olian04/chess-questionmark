@@ -1,10 +1,14 @@
 import React from 'react';
 import { GameView } from '../views/GameView';
 
+import { LoadingAnimation } from '../components/common/LoadingAnimation';
+
 export const GameRoute = () => {
   return (
     <>
-      <GameView />
+      <React.Suspense fallback={<LoadingAnimation />}>
+        <GameView />
+      </React.Suspense>
     </>
   );
 };
