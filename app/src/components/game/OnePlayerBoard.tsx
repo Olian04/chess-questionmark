@@ -29,7 +29,7 @@ class OnePlayerState extends Component {
   static propTypes = { children: PropTypes.func };
 
   state = {
-    fen: this.props.position || "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    fen: this.props.position,
     dropSquareStyle: {},
     squareStyles: {},
     pieceSquare: "",
@@ -37,6 +37,7 @@ class OnePlayerState extends Component {
     history: [],
     draggable: true,
     evaluation: [],
+    winner: '',
   }
 
   componentDidMount() {
@@ -159,6 +160,11 @@ class OnePlayerState extends Component {
           this.setState({
             draggable: true
           });
+          if (this.game.in_checkmate()) {
+            this.setState({
+              winner: (playerColor === 'white' ? 'black' : 'white')
+            });
+          }
         } else if ((match = line.match(/^info .*\bdepth (\d+) .*\bnps (\d+)/))) {
           engineStatus.search = "Depth: " + match[1] + " Nps: " + match[2];
         }
@@ -244,6 +250,11 @@ class OnePlayerState extends Component {
       this.setState({
         draggable: false
       });
+      if (this.game.in_checkmate()) {
+        this.setState({
+          winner: props.player
+        });
+      }
       resolve();
     }).then(() => this.engineGame().prepareMove());
   };
@@ -291,7 +302,7 @@ class OnePlayerState extends Component {
   };
 
   render() {
-    const { fen, dropSquareStyle, squareStyles, draggable } = this.state;
+    const { fen, dropSquareStyle, squareStyles, draggable, winner } = this.state;
 
     return this.props.children({
       squareStyles,
@@ -304,6 +315,7 @@ class OnePlayerState extends Component {
       onSquareClick: this.onSquareClick,
       onSquareRightClick: this.onSquareRightClick,
       draggable,
+      winner
     });
   }
 }
@@ -327,6 +339,7 @@ export const OnePlayerBoard = (props: Props) => {
           onDragOverSquare,
           onSquareClick,
           draggable,
+          winner
         }) => (
           <GameBoard
             position={position}
@@ -339,6 +352,7 @@ export const OnePlayerBoard = (props: Props) => {
             onSquareClick={onSquareClick}
             draggable={draggable}
             orientation={props.player}
+            winner={winner}
           />
         )}
       </OnePlayerState>

@@ -3,8 +3,11 @@ import Chessboard, { Props as cbjsxProps } from 'chessboardjsx';
 import { useTheme } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 
+import { EndOfGame } from './EndOfGame';
+
 interface Props extends cbjsxProps {
   size?: number;
+  winner: string;
 }
 
 export const GameBoard = (props: Props) => {
@@ -20,6 +23,7 @@ export const GameBoard = (props: Props) => {
 
   return (
     <Box display="flex" justifyContent="center">
+      <EndOfGame winner={props.winner} />
       <Chessboard
         {...props}
         boardStyle={{
