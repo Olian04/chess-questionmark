@@ -39,36 +39,41 @@ export const SettingsView = (props: Props) => {
   const classes = useStyles();
   const [modal, setModal] = useState({
     open: false,
-    title: '...',
-    value: '...',
-    description: '...',
-    hint: '...',
+    dialogs: [
+      {
+        title: '...',
+        fieldName: '...',
+        defaultValue: '...',
+        description: '...',
+        hint: '...',
+      },
+    ],
   });
 
   const [user, setUserState] = useRecoilState(userState);
+
+  const updateUser = (key: string, value: any) => {
+    userCollection.update(props.user.id, { [key]: value as string });
+    setUserState({ ...user, [key]: value as string });
+  };
   return (
     <>
       <UpdateFieldModal
         {...modal}
         onDiscard={() => setModal((curr) => ({ ...curr, open: false }))}
-        onSave={(fieldValue) => {
-          switch (modal.hint) {
-            case 'Email Address':
-              getUser()
-                ?.updateEmail(fieldValue)
-                .catch((e) => console.log(e));
-              setUserState({
-                ...user,
-                email: fieldValue,
-              });
-              break;
-            case 'Phone Number':
-              userCollection.update(props.user.id, { phone: fieldValue });
-              setUserState({
-                ...user,
-                phone: fieldValue,
-              });
-              break;
+        onSave={(fieldValues) => {
+          for (const [key, value] of Object.entries(fieldValues)) {
+            switch (key) {
+              case 'email':
+                getUser()
+                  ?.updateEmail(value as string)
+                  .catch((e) => console.log(e));
+                setUserState({ ...user, email: value as string });
+                break;
+              default:
+                updateUser(key, value);
+                break;
+            }
           }
           setModal((curr) => ({ ...curr, open: false }));
         }}
@@ -103,6 +108,34 @@ export const SettingsView = (props: Props) => {
                     }
                   />
                 }
+                onClick={() =>
+                  setModal({
+                    open: true,
+                    dialogs: [
+                      {
+                        title: 'Update display name',
+                        defaultValue: props.user.name,
+                        fieldName: 'name',
+                        description: 'Change display name',
+                        hint: 'Display name',
+                      },
+                      {
+                        title: 'Change team',
+                        defaultValue: props.user.team,
+                        fieldName: 'team',
+                        description: 'Change team association',
+                        hint: 'Change Team',
+                      },
+                      {
+                        title: 'Change Avatar',
+                        defaultValue: props.user.avatar,
+                        fieldName: 'avatar',
+                        description: 'Change avatar url (unsafe)',
+                        hint: 'Change Avatar',
+                      },
+                    ],
+                  })
+                }
               />
               <TwoRowButton
                 title="Email"
@@ -110,11 +143,16 @@ export const SettingsView = (props: Props) => {
                 onClick={() =>
                   setModal({
                     open: true,
-                    title: 'Update Email',
-                    value: props.user.email,
-                    description:
-                      'Change the email address associated with your account. Note that this change will update your login credentials.',
-                    hint: 'Email Address',
+                    dialogs: [
+                      {
+                        title: 'Update Email',
+                        defaultValue: props.user.email,
+                        fieldName: 'email',
+                        description:
+                          'Change the email address associated with your account. Note that this change will update your login credentials.',
+                        hint: 'Email Address',
+                      },
+                    ],
                   })
                 }
               />
@@ -124,10 +162,15 @@ export const SettingsView = (props: Props) => {
                 onClick={() =>
                   setModal({
                     open: true,
-                    title: 'Update Phone Number',
-                    value: props.user.phone,
-                    description: 'Update your registered phone number',
-                    hint: 'Phone Number',
+                    dialogs: [
+                      {
+                        title: 'Update Phone Number',
+                        fieldName: 'phone',
+                        defaultValue: props.user.phone,
+                        description: 'Update your registered phone number',
+                        hint: 'Phone Number',
+                      },
+                    ],
                   })
                 }
               />
