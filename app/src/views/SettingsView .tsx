@@ -11,8 +11,11 @@ import { SectionHeading } from '../components/settings/SectionHeading';
 import { UpdateFieldModal } from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
 import { User } from '../types/User';
-import { signOut } from '../services/firebase/auth';
-import { useHistory } from 'react-router-dom';
+import { getUser } from '../services/firebase/auth';
+
+import { userCollection } from '../services/firebase/storage';
+import { userState } from '../state/user';
+import { useRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,16 +40,38 @@ export const SettingsView = (props: Props) => {
   const [modal, setModal] = useState({
     open: false,
     title: '...',
+    value: '...',
     description: '...',
     hint: '...',
   });
 
+  const [user, setUserState] = useRecoilState(userState);
   return (
     <>
       <UpdateFieldModal
         {...modal}
         onDiscard={() => setModal((curr) => ({ ...curr, open: false }))}
-        onSave={() => setModal((curr) => ({ ...curr, open: false }))}
+        onSave={(fieldValue) => {
+          switch (modal.hint) {
+            case 'Email Address':
+              getUser()
+                ?.updateEmail(fieldValue)
+                .catch((e) => console.log(e));
+              setUserState({
+                ...user,
+                email: fieldValue,
+              });
+              break;
+            case 'Phone Number':
+              userCollection.update(props.user.id, { phone: fieldValue });
+              setUserState({
+                ...user,
+                phone: fieldValue,
+              });
+              break;
+          }
+          setModal((curr) => ({ ...curr, open: false }));
+        }}
       />
       <Grid
         container
@@ -86,6 +111,7 @@ export const SettingsView = (props: Props) => {
                   setModal({
                     open: true,
                     title: 'Update Email',
+                    value: props.user.email,
                     description:
                       'Change the email address associated with your account. Note that this change will update your login credentials.',
                     hint: 'Email Address',
@@ -99,6 +125,7 @@ export const SettingsView = (props: Props) => {
                   setModal({
                     open: true,
                     title: 'Update Phone Number',
+                    value: props.user.phone,
                     description: 'Update your registered phone number',
                     hint: 'Phone Number',
                   })

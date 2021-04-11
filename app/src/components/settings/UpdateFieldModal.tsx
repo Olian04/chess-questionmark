@@ -18,6 +18,7 @@ interface Props {
   title: string;
   description: string;
   hint: string;
+  value?: string;
   onSave: (value: string) => void;
   onDiscard: () => void;
 }
@@ -40,8 +41,11 @@ export const UpdateFieldModal = (props: Props) => {
           autoFocus
           margin="dense"
           label={props.hint}
+          variant="outlined"
+          color="secondary"
           fullWidth
           error={isError}
+          defaultValue={props.value}
           onChange={(ev) => {
             const value = ev.target.value;
             setFieldValue(value);

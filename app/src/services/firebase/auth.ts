@@ -15,6 +15,11 @@ export const useAuthState = () => {
   return baseState(auth);
 };
 
+export const getUser = () => {
+  const [user, ...rest] = useAuthState();
+  return user;
+};
+
 export const createUserWithEmailAndPassword = async (
   credentials: UserCredentials
 ) =>
