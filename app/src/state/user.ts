@@ -4,28 +4,32 @@ import { User } from '../types/User';
 
 const notApplicable = 'N/A';
 
+export const defaultUserState = {
+  id: notApplicable,
+  email: notApplicable,
+  name: notApplicable,
+  phone: notApplicable,
+  team: notApplicable,
+  avatar: notApplicable,
+};
+
+export const defaultProfileState = {
+  rank: -1,
+  rankDelta: -1,
+  wins: -1,
+  losses: -1,
+  draws: -1,
+  recentMatches: [],
+};
+
 export const userState = atom<User>({
   key: 'USER',
-  default: {
-    id: notApplicable,
-    email: notApplicable,
-    name: notApplicable,
-    phone: notApplicable,
-    team: notApplicable,
-    avatar: notApplicable,
-  },
+  default: defaultUserState,
 });
 
 export const profileState = atom<Profile>({
   key: 'PROFILE',
-  default: {
-    rank: -1,
-    rankDelta: -1,
-    wins: -1,
-    losses: -1,
-    draws: -1,
-    recentMatches: [],
-  },
+  default: defaultProfileState,
 });
 
 export const profileStatusState = atom<
