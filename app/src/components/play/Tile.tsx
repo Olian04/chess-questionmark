@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-  text: string;
-  subText: string;
+  text: string | number;
+  subText: string | number;
 }
 
 export const Tile = (props: Props) => {

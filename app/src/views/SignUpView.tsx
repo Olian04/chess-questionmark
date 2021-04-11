@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Checkbox,
@@ -19,10 +19,13 @@ import Logo from '/sign-up-logo.svg';
 import { LinkButton } from '../components/common/LinkButton';
 import { StyledLink } from '../components/common/CustomLink';
 import * as Yup from 'yup';
-import { signUp } from '../services/firebase/auth';
 import { green } from '@material-ui/core/colors';
 import { userState } from '../state/user';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { UserExtras } from '../types/UserExtras';
+import { UserCredentials } from '../types/UserCredentials';
+import { Snackbar } from '../components/common/Snackbar';
+import { snackbarState } from '../state/snackbar';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
@@ -60,13 +63,18 @@ const SignupSchema = Yup.object().shape({
   agreeOnTerms: Yup.boolean().oneOf([true], 'Term of conditions are required'),
 });
 
-export const SignUpView = () => {
+interface Props {
+  onLoading: boolean;
+  onSignUpAttempt: (
+    credentials: UserCredentials,
+    extras: Partial<UserExtras>
+  ) => void;
+}
+
+export const SignUpView = (props: Props) => {
   const classes = useStyles();
 
   const [checked, setChecked] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const setCredential = useSetRecoilState(userState);
 
   const handleCheckbox = (
     formik: any,
@@ -76,182 +84,185 @@ export const SignUpView = () => {
     setChecked(checked);
     formik.handleChange(event);
   };
+  /*
+  const setSnackbar = useSetRecoilState(snackbarState);
+  useEffect(() => {
+    if (props.signUpFailed) {
+      setSnackbar({ open: true });
+    }
+  }, [props.signUpFailed]);
+  */
 
   return (
-    <Container className={classes.container}>
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        spacing={1}
-        alignItems="center"
-        className={classes.gridBase}
-      >
-        <Grid item>
-          <Formik
-            initialValues={{
-              name: '',
-              email: '',
-              password: '',
-              agreeOnTerms: checked,
-            }}
-            onSubmit={async (values, actions) => {
-              if (!loading) {
-                try {
-                  setLoading(true);
-                  const user = await signUp({
-                    email: values.email,
-                    password: values.password,
-                  });
-                  if (user) {
-                    setCredential({ ...user, name: 'test' });
-                  }
-                } catch ({ code, message }) {
-                  actions.setSubmitting(false);
-                  switch (code) {
-                    case 'auth/email-already-in-use':
-                      actions.setErrors({ email: message });
-                      break;
-                  }
-                }
-                setLoading(false);
-              }
-            }}
-            validationSchema={SignupSchema}
-          >
-            {(props) => (
-              <form onSubmit={props.handleSubmit}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      flexDirection="column"
-                    >
-                      <Hidden only="xs">
-                        <img src={Logo} width="100vw" />
-                      </Hidden>
+    <>
+      <Snackbar />
+      <Container className={classes.container}>
+        <Grid
+          container
+          direction="column"
+          justify="center"
+          spacing={1}
+          alignItems="center"
+          className={classes.gridBase}
+        >
+          <Grid item>
+            <Formik
+              initialValues={{
+                name: '',
+                email: '',
+                password: '',
+                agreeOnTerms: checked,
+              }}
+              onSubmit={async (values, actions) => {
+                await props.onSignUpAttempt(
+                  { email: values.email, password: values.password },
+                  { name: values.name }
+                );
+              }}
+              validationSchema={SignupSchema}
+            >
+              {(formikProps) => (
+                <form onSubmit={formikProps.handleSubmit}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        flexDirection="column"
+                      >
+                        <Hidden only="xs">
+                          <img src={Logo} width="100vw" />
+                        </Hidden>
 
-                      <Typography variant="h5" align="center">
-                        Create an account
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <RoundedTextField
-                      color="secondary"
-                      autoComplete="name"
-                      name="name"
-                      variant="filled"
-                      fullWidth
-                      id="ingameName"
-                      label="In-game Name"
-                      onChange={props.handleChange}
-                      error={props.errors.name ? true : false}
-                      helperText={props.errors.name ? props.errors.name : ''}
-                      autoFocus
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <RoundedTextField
-                      color="secondary"
-                      autoComplete="email"
-                      name="email"
-                      variant="filled"
-                      fullWidth
-                      id="email"
-                      label="Email"
-                      onChange={props.handleChange}
-                      error={props.errors.email ? true : false}
-                      helperText={props.errors.email ? props.errors.email : ''}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <RoundedTextField
-                      color="secondary"
-                      variant="filled"
-                      fullWidth
-                      name="password"
-                      label="Password"
-                      type="password"
-                      id="password"
-                      autoComplete="current-password"
-                      onChange={props.handleChange}
-                      error={props.errors.password ? true : false}
-                      helperText={
-                        props.errors.password ? props.errors.password : ''
-                      }
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormGroup>
-                      <FormControl
-                        error={props.errors.agreeOnTerms ? true : false}
-                      >
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={checked}
-                              onChange={(event, checked) =>
-                                handleCheckbox(props, event, checked)
-                              }
-                              value={props.values.agreeOnTerms}
-                              name="agreeOnTerms"
-                            />
-                          }
-                          label={
-                            <Typography>
-                              I agree to the{' '}
-                              <StyledLink to="#">Terms</StyledLink> and <br />
-                              <StyledLink to="#">Privacy Policy</StyledLink>
-                            </Typography>
-                          }
-                        />
-                      </FormControl>
-                      <FormHelperText
-                        error={props.errors.agreeOnTerms ? true : false}
-                      >
-                        {props.errors.agreeOnTerms
-                          ? props.errors.agreeOnTerms
-                          : ''}
-                      </FormHelperText>
-                    </FormGroup>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    style={{ marginTop: '2em' }}
-                    className={classes.wrapper}
-                  >
-                    <LinkButton
-                      type="submit"
-                      fullWidth
-                      color="secondary"
-                      padding="1em"
-                      disabled={loading}
-                    >
-                      Sign up
-                    </LinkButton>
-                    {loading && (
-                      <CircularProgress
-                        size={24}
-                        className={classes.buttonProgress}
+                        <Typography variant="h5" align="center">
+                          Create an account
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <RoundedTextField
+                        color="secondary"
+                        autoComplete="name"
+                        name="name"
+                        variant="filled"
+                        fullWidth
+                        id="ingameName"
+                        label="In-game Name"
+                        onChange={formikProps.handleChange}
+                        error={formikProps.errors.name ? true : false}
+                        helperText={
+                          formikProps.errors.name ? formikProps.errors.name : ''
+                        }
+                        autoFocus
                       />
-                    )}
+                    </Grid>
+                    <Grid item xs={12}>
+                      <RoundedTextField
+                        color="secondary"
+                        autoComplete="email"
+                        name="email"
+                        variant="filled"
+                        fullWidth
+                        id="email"
+                        label="Email"
+                        onChange={formikProps.handleChange}
+                        error={formikProps.errors.email ? true : false}
+                        helperText={
+                          formikProps.errors.email
+                            ? formikProps.errors.email
+                            : ''
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <RoundedTextField
+                        color="secondary"
+                        variant="filled"
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        onChange={formikProps.handleChange}
+                        error={formikProps.errors.password ? true : false}
+                        helperText={
+                          formikProps.errors.password
+                            ? formikProps.errors.password
+                            : ''
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <FormGroup>
+                        <FormControl
+                          error={formikProps.errors.agreeOnTerms ? true : false}
+                        >
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={checked}
+                                onChange={(event, checked) =>
+                                  handleCheckbox(formikProps, event, checked)
+                                }
+                                value={formikProps.values.agreeOnTerms}
+                                name="agreeOnTerms"
+                              />
+                            }
+                            label={
+                              <Typography>
+                                I agree to the{' '}
+                                <StyledLink to="#">Terms</StyledLink> and <br />
+                                <StyledLink to="#">Privacy Policy</StyledLink>
+                              </Typography>
+                            }
+                          />
+                        </FormControl>
+                        <FormHelperText
+                          error={formikProps.errors.agreeOnTerms ? true : false}
+                        >
+                          {formikProps.errors.agreeOnTerms
+                            ? formikProps.errors.agreeOnTerms
+                            : ''}
+                        </FormHelperText>
+                      </FormGroup>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      style={{ marginTop: '2em' }}
+                      className={classes.wrapper}
+                    >
+                      <LinkButton
+                        type="submit"
+                        fullWidth
+                        color="secondary"
+                        padding="1em"
+                        disabled={props.onLoading}
+                      >
+                        Sign up
+                      </LinkButton>
+                      {props.onLoading && (
+                        <CircularProgress
+                          size={24}
+                          className={classes.buttonProgress}
+                        />
+                      )}
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="subtitle1">
+                        Already got an account?{' '}
+                        <StyledLink to="/login/sign-in">Sign in</StyledLink>
+                      </Typography>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Typography variant="subtitle1">
-                      Already got an account?{' '}
-                      <StyledLink to="/login/sign-in">Sign in</StyledLink>
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </form>
-            )}
-          </Formik>
+                </form>
+              )}
+            </Formik>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </>
   );
 };

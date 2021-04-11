@@ -3,10 +3,8 @@ import {
   CircularProgress,
   Container,
   Grid,
-  Snackbar,
   Typography,
 } from '@material-ui/core';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { RoundedTextField } from '../components/common/RoundedTextField';
@@ -16,8 +14,10 @@ import { UserCredentials } from '../types/UserCredentials';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { green } from '@material-ui/core/colors';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { loginStatusState } from '../state/authentication';
+import { Snackbar } from '../components/common/Snackbar';
+import { snackbarState } from '../state/snackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,49 +54,24 @@ interface Props {
   loginFailed: boolean;
 }
 
-const Alert = (props: AlertProps) => {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-};
 export const SignInView = (props: Props) => {
   const classes = useStyles();
 
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: 'information',
-    duration: 3000,
-    message: '',
-  });
-
   const loginStatus = useRecoilValue(loginStatusState);
 
-  const handleOnClose = (event: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') return;
-    setSnackbar({ ...snackbar, open: false });
-  };
-
+  const setSnackbar = useSetRecoilState(snackbarState);
   useEffect(() => {
     if (props.loginFailed) {
       setSnackbar({
-        ...snackbar,
         open: true,
-        message: 'Login failed',
         severity: 'error',
+        message: 'Login failed',
       });
     }
   }, [props.loginFailed]);
-
   return (
     <>
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={snackbar.duration}
-        onClose={handleOnClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-      >
-        <Alert onClose={handleOnClose} severity={snackbar.severity}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+      <Snackbar />
       <Container className={classes.container}>
         <Grid
           container

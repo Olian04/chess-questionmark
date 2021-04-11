@@ -24,13 +24,13 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-  rank: string;
-  delta: string;
+  rank: number;
+  delta: number | 'N/A';
 }
 
 export const Graph = (props: Props) => {
   const classes = useStyles();
-
+  const delta = props.delta === 'N/A' ? 0 : props.delta;
   return (
     <Grid item xs className={classes.background}>
       <Box>
@@ -42,10 +42,12 @@ export const Graph = (props: Props) => {
             #{props.rank}{' '}
             <span
               style={{
-                color: props.delta.includes('+') ? '#99FF99' : '#DF5049',
+                color: delta > 0 ? '#99FF99' : '#DF5049',
+                display: delta === 0 ? 'none' : 'block',
               }}
             >
-              {props.delta}
+              {delta > 0 ? '+' : '-'}
+              {delta}
             </span>
           </b>
         </Typography>

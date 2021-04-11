@@ -2,12 +2,15 @@ import React, { ReactNode } from 'react';
 import { Redirect, Route as BaseRoute, RouteProps } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { useAuthState } from '../services/firebase/auth';
+import { userCollection } from '../services/firebase/storage';
 import { userState } from '../state/user';
 import { LoadingView } from '../views/LoadingView';
 
 interface RecoilRouteProps extends RouteProps {
   guarded?: boolean;
 }
+
+const nonApplicable = 'N/A';
 
 export const RecoilRoute = (props: RecoilRouteProps) => {
   const { children, guarded, ...baseProps } = props;
@@ -24,11 +27,16 @@ export const RecoilRoute = (props: RecoilRouteProps) => {
    * we persist the user and shows the requested route
    */
   if (guarded && user) {
-    setUserState({
-      id: user.uid,
-      name: user.displayName as string,
-      email: user.email as string,
-    });
+    userCollection.get(user.uid).then((extras) =>
+      setUserState({
+        id: user.uid,
+        name: extras.name as string,
+        email: user.email as string,
+        phone: extras?.phone ?? (nonApplicable as string),
+        team: extras?.team ?? (nonApplicable as string),
+        avatar: extras?.avatar ?? (nonApplicable as string),
+      })
+    );
     return ShowRoute(children);
   }
   /** If a route is guarded and firebase auth is fetching a user

@@ -18,6 +18,9 @@ export const SettingsProvider = () => {
       id: notApplicable,
       email: notApplicable,
       name: notApplicable,
+      team: notApplicable,
+      avatar: notApplicable,
+      phone: notApplicable,
     });
     history.push('/');
   });

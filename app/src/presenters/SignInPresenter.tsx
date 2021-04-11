@@ -7,6 +7,7 @@ import { loginStatusState } from '../state/authentication';
 import { SignInView } from '../views/SignInView';
 import { signInWithEmailAndPassword } from '../services/firebase/auth';
 import { UserCredentials } from '../types/UserCredentials';
+import { userCollection } from '../services/firebase/storage';
 
 export const SignInPresenter = () => {
   const loginStatus = useRecoilValue(loginStatusState);
@@ -36,11 +37,15 @@ export const SignInPresenter = () => {
         set(loginStatusState, 'fail');
         return;
       }
+
+      const { name, phone } = await userCollection.get(loginResponse.user.uid);
+
       set(loginStatusState, 'success');
       set(userState, {
         id: loginResponse.user?.uid as string,
         email: loginResponse.user?.email as string,
-        name: loginResponse.user?.displayName as string,
+        name: name as string,
+        phone: phone as string,
       });
     }
   );

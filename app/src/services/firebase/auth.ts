@@ -15,24 +15,13 @@ export const useAuthState = () => {
   return baseState(auth);
 };
 
-export const signUp = async (credentials: UserCredentials) => {
-  try {
-    const userCredentials = await auth.createUserWithEmailAndPassword(
-      credentials.email,
-      credentials.password
-    );
-    if (userCredentials.user) {
-      const user = {
-        id: userCredentials.user.uid,
-        isAuthenticated: true,
-        email: credentials.email,
-      };
-      return user;
-    }
-  } catch (e) {
-    throw e;
-  }
-};
+export const createUserWithEmailAndPassword = async (
+  credentials: UserCredentials
+) =>
+  await auth.createUserWithEmailAndPassword(
+    credentials.email,
+    credentials.password
+  );
 
 export const signOut = async () => {
   try {

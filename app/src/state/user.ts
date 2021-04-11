@@ -10,6 +10,9 @@ export const userState = atom<User>({
     id: notApplicable,
     email: notApplicable,
     name: notApplicable,
+    phone: notApplicable,
+    team: notApplicable,
+    avatar: notApplicable,
   },
 });
 
@@ -23,4 +26,11 @@ export const profileState = atom<Profile>({
     draws: -1,
     recentMatches: [],
   },
+});
+
+export const profileStatusState = atom<
+  'idle' | 'pending' | 'fetching' | 'success' | 'fail'
+>({
+  key: 'PROFILE_STATUS',
+  default: 'idle',
 });

@@ -66,9 +66,17 @@ export const SettingsView = (props: Props) => {
             <VerticalButtonGroup>
               <TwoRowButton
                 title={props.user.name}
-                subTitle="Team DH2642"
+                subTitle={props.user.team}
                 startIcon={
-                  <Avatar alt="Bob" variant="rounded" src="/assets/cat.jpg" />
+                  <Avatar
+                    alt="Bob"
+                    variant="rounded"
+                    src={
+                      props.user.avatar !== 'N/A'
+                        ? props.user.avatar
+                        : '/assets/cat.jpg'
+                    }
+                  />
                 }
               />
               <TwoRowButton
@@ -86,7 +94,7 @@ export const SettingsView = (props: Props) => {
               />
               <TwoRowButton
                 title="Phone"
-                subTitle="080 8826 42"
+                subTitle={props.user.phone}
                 onClick={() =>
                   setModal({
                     open: true,

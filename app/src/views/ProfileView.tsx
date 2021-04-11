@@ -9,6 +9,9 @@ import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
 import { ThreeRowButton } from '../components/settings/ThreeRowButton';
 
 import BlankAvatar from '/preview.svg';
+import { Profile } from '../types/Profile';
+import { useRecoilValue } from 'recoil';
+import { profileState } from '../state/user';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,13 +28,22 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   user: User;
+  profileExists: boolean;
+  fetchDetails: () => void;
 }
 
 export const ProfileView = (props: Props) => {
   const classes = useStyles();
 
+  const profile = useRecoilValue(profileState);
+
   const username = props.user.name ? props.user.name : 'Anon';
 
+  useEffect(() => {
+    if (props.user.id !== 'N/A') {
+      props.fetchDetails();
+    }
+  }, [props.user]);
   return (
     <Grid
       container
@@ -41,17 +53,26 @@ export const ProfileView = (props: Props) => {
       spacing={2}
     >
       <Grid item xs>
-        <Typography variant="h4" color="textPrimary">
-          Looking good {username}!
-        </Typography>
+        <Grid
+          container
+          alignItems="center"
+          justify="center"
+          style={{ height: '100%' }}
+        >
+          <Grid item xs>
+            <Typography variant="h4" color="textPrimary">
+              Looking good {username}!
+            </Typography>
+          </Grid>
+        </Grid>
       </Grid>
 
-      <Graph rank="2280" delta="+17" />
+      <Graph rank={profile.rank} delta={profile.rankDelta} />
       <Grid item xs>
         <Grid container direction="row" spacing={2}>
-          <Tile text="42" subText="Wins" />
-          <Tile text="3" subText="Losses" />
-          <Tile text="5" subText="Draws" />
+          <Tile text={profile.wins} subText="Wins" />
+          <Tile text={profile.losses} subText="Losses" />
+          <Tile text={profile.draws} subText="Draws" />
         </Grid>
       </Grid>
 
@@ -69,24 +90,14 @@ export const ProfileView = (props: Props) => {
           <Grid item xs>
             <List>
               <VerticalButtonGroup>
-                <ThreeRowButton
-                  name="Alice"
-                  rank="Ranking title"
-                  delta="+12 points"
-                  avatar={<img src={BlankAvatar} width="80%" height="80%" />}
-                />
-                <ThreeRowButton
-                  name="Celine"
-                  rank="Ranking title"
-                  delta="+8 points"
-                  avatar={<img src={BlankAvatar} width="80%" height="80%" />}
-                />
-                <ThreeRowButton
-                  name="Alice"
-                  rank="Ranking title"
-                  delta="-24 points"
-                  avatar={<img src={BlankAvatar} width="80%" height="80%" />}
-                />
+                {profile.recentMatches.map((match, i) => (
+                  <ThreeRowButton
+                    key={i}
+                    {...match.opponent}
+                    delta={match.result}
+                    avatar={<img src={BlankAvatar} width="80%" height="80%" />}
+                  />
+                ))}
               </VerticalButtonGroup>
             </List>
           </Grid>
