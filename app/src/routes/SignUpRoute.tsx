@@ -5,7 +5,7 @@ import { SignUpPresenter } from '../presenters/SignUpPresenter';
 export const SignUpRoute = () => {
   return (
     <>
-      <BackgroundCircle side="right" />
+      {/*<BackgroundCircle side="right" />*/}
       <SignUpPresenter />
     </>
   );

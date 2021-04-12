@@ -5,7 +5,7 @@ import { ProfileProvider } from '../presenters/ProfilePresenter';
 export const ProfileRoute = () => {
   return (
     <>
-      <BackgroundCircle side="top" />
+      {/*<BackgroundCircle side="top" />*/}
       <ProfileProvider />
     </>
   );

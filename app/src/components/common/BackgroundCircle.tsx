@@ -1,35 +1,52 @@
+import { Box } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import { backgroundCircleState } from '../../state/backgroundCircle';
 
 const circleDiameter = '80vh';
-const circleOffsetPercentageX = '0.75';
-const circleOffsetPercentageY = '0.5';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    container: {
+      display: 'flex',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      position: 'absolute',
+      overflow: 'hidden',
+      backgroundColor: 'tomato',
+    },
     root: {
       position: 'absolute',
       background: theme.palette.primary.main,
       height: circleDiameter,
       width: circleDiameter,
       borderRadius: '50%',
-    },
-    left: {
-      left: `calc(-${circleOffsetPercentageX} * ${circleDiameter})`,
-      top: `calc(50% - ${circleDiameter} * 0.5)`,
+      transition: 'all 1s ease-in',
+      top: 0,
+      bottom: 0,
+      right: 0,
+      left: 0,
     },
     right: {
-      right: `calc(-${circleOffsetPercentageX} * ${circleDiameter})`,
-      top: `calc(50% - ${circleDiameter} * 0.5)`,
+      transform: `translate(40vh,10vh)`,
+    },
+    left: {
+      transform: `translate(-60vh,10vh)`,
     },
     top: {
-      top: `calc(-${circleOffsetPercentageY} * ${circleDiameter})`,
-      right: `calc(50% - ${circleDiameter} * 0.5)`,
+      transform: 'translate(-12vh, -50vh)',
     },
     bottom: {
-      bottom: `calc(-${circleOffsetPercentageY} * ${circleDiameter})`,
-      right: `calc(50% - ${circleDiameter} * 0.5)`,
+      transform: 'translate(-12vh, 75vh)',
+    },
+    hidden: {
+      display: 'none',
+      visible: 'hidden',
+      opacity: '0',
     },
   })
 );
@@ -38,7 +55,14 @@ interface Props {
   side: 'left' | 'right' | 'top' | 'bottom';
 }
 
-export const BackgroundCircle = (props: Props) => {
+export const BackgroundCircle = () => {
   const classes = useStyles();
-  return <div className={clsx(classes.root, classes[props.side])}></div>;
+
+  const side = useRecoilValue(backgroundCircleState);
+
+  return (
+    <Box className={classes.container}>
+      <div className={clsx(classes.root, classes[side])} />
+    </Box>
+  );
 };

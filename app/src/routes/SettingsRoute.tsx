@@ -5,7 +5,7 @@ import { SettingsProvider } from '../presenters/SettingsPresenter';
 export const SettingsRoute = () => {
   return (
     <>
-      <BackgroundCircle side="left" />
+      {/*<BackgroundCircle side="left" />*/}
       <SettingsProvider />
     </>
   );

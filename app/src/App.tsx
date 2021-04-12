@@ -1,5 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from 'react-router-dom';
 import { Container } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
@@ -14,6 +19,9 @@ import { ReplayRoute } from './routes/ReplayRoute';
 import { SettingsRoute } from './routes/SettingsRoute';
 import { ProfileRoute } from './routes/ProfileRoute';
 import { RecoilRoute } from './providers/stateProvider';
+import { BackgroundCircle } from './components/common/BackgroundCircle';
+import { useRecoilValue } from 'recoil';
+import { backgroundCircleState } from './state/backgroundCircle';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,12 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const App = () => {
   const classes = useStyles();
-
   return (
     <Router>
       <div className={classes.background}>
         <Switch>
-          <RecoilRoute path="/login">
+          <Route path="/login">
             <Container maxWidth="sm" className={classes.container}>
               <React.Suspense fallback={<LoadingAnimation />}>
                 <Switch>
@@ -59,7 +66,7 @@ export const App = () => {
                 </Switch>
               </React.Suspense>
             </Container>
-          </RecoilRoute>
+          </Route>
           <RecoilRoute guarded path="/">
             <NavigationBar
               menuItems={[
@@ -86,6 +93,7 @@ export const App = () => {
           </RecoilRoute>
         </Switch>
       </div>
+      <BackgroundCircle />
     </Router>
   );
 };
