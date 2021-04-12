@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
       overflowY: 'scroll',
       flexWrap: 'nowrap',
     },
+    list: {
+      zIndex: 1,
+    },
     error: {
       backgroundColor: theme.palette.error.main,
     },
@@ -86,7 +89,7 @@ export const SettingsView = (props: Props) => {
         justify="space-around"
         className={classes.container}
       >
-        <List>
+        <List className={classes.list}>
           <SectionHeading
             title="Account"
             subTitle="Edit and manage your details"

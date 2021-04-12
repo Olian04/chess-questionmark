@@ -6,10 +6,9 @@ import { backgroundCircleState } from '../state/backgroundCircle';
 export const SignInRoute = () => {
   const setSide = useSetRecoilState(backgroundCircleState);
 
-  useEffect(() => setSide('left'));
+  useEffect(() => setSide('right'));
   return (
     <>
-      {/*<BackgroundCircle side="right" />*/}
       <SignInPresenter />
     </>
   );

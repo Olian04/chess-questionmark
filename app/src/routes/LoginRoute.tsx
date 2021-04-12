@@ -8,7 +8,6 @@ export const LoginRoute = () => {
   useEffect(() => setSide('right'));
   return (
     <>
-      {/*<BackgroundCircle side="right" />*/}
       <LoginView />
     </>
   );

@@ -17,7 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
       bottom: 0,
       position: 'absolute',
       overflow: 'hidden',
-      backgroundColor: 'tomato',
+      zIndex: 0,
+      pointerEvents: 'none',
     },
     root: {
       position: 'absolute',
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: circleDiameter,
       width: circleDiameter,
       borderRadius: '50%',
-      transition: 'all 1s ease-in',
+      transition: 'all 0.75s ease-in-out',
       top: 0,
       bottom: 0,
       right: 0,
@@ -38,10 +39,10 @@ const useStyles = makeStyles((theme: Theme) =>
       transform: `translate(-60vh,10vh)`,
     },
     top: {
-      transform: 'translate(-12vh, -50vh)',
+      transform: 'translate(-12vh, -40vh)',
     },
     bottom: {
-      transform: 'translate(-12vh, 75vh)',
+      transform: 'translate(-12vh, 60vh)',
     },
     hidden: {
       display: 'none',
