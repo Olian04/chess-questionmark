@@ -11,6 +11,7 @@ import { SectionHeading } from '../components/settings/SectionHeading';
 import { UpdateFieldModal } from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
 import { User } from '../types/User';
+import { Gravatar } from '../components/common/Gravatar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -65,7 +66,7 @@ export const SettingsView = (props: Props) => {
                 title={props.user.name}
                 subTitle="Team DH2642"
                 startIcon={
-                  <Avatar alt="Bob" variant="rounded" src="/assets/cat.jpg" />
+                  <Gravatar variant="rounded" email={props.user.email} />
                 }
               />
               <TwoRowButton

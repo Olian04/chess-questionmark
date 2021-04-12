@@ -9,6 +9,7 @@ import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
 import { ThreeRowButton } from '../components/settings/ThreeRowButton';
 
 import BlankAvatar from '/preview.svg';
+import { Gravatar } from '../components/common/Gravatar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -69,19 +70,19 @@ export const ProfileView = (props: Props) => {
               name="Alice"
               rank="Ranking title"
               delta="+12 points"
-              avatar={<img src={BlankAvatar} width="80%" height="80%" />}
+              avatar={<Gravatar email="AliceEmail"/>}
             />
             <ThreeRowButton
               name="Celine"
               rank="Ranking title"
               delta="+8 points"
-              avatar={<img src={BlankAvatar} width="80%" height="80%" />}
+              avatar={<Gravatar email="CelineEmail"/>}
             />
             <ThreeRowButton
               name="Alice"
               rank="Ranking title"
               delta="-24 points"
-              avatar={<img src={BlankAvatar} width="80%" height="80%" />}
+              avatar={<Gravatar email="AliceEmail"/>}
             />
           </VerticalButtonGroup>
         </List>
