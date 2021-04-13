@@ -14,25 +14,26 @@ export const EndOfGame = (props: Props) => {
   const theme = useTheme();
 
   const [winner, setWinner] = useState('');
+  const [gameOver, setGameOver] = useState(false);
+
   useEffect(() => {
-    setWinner(props.winner);
+    if (props.winner !== '') {
+      setGameOver(true);
+      setWinner(props.winner);
+    }
   }, [props.winner]);
 
   const handleClose = () => {
-    setWinner('');
+    setGameOver(false);
   };
 
   return (
-    <Dialog open={winner} onClose={handleClose}>
+    <Dialog open={gameOver} onClose={handleClose}>
       <DialogContent>
-        <DialogContentText>
-          winner is {winner}
-        </DialogContentText>
+        <DialogContentText>winner is {winner}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button>
-          Return to profile!
-        </Button>
+        <Button>Return to profile!</Button>
       </DialogActions>
     </Dialog>
   );

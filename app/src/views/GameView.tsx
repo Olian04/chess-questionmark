@@ -7,7 +7,6 @@ import { PlayerBar } from '../components/game/PlayerBar';
 import { OnePlayerBoard } from '../components/game/OnePlayerBoard';
 import { TwoPlayerBoard } from '../components/game/TwoPlayerBoard';
 import { GameBoard } from '../components/game/GameBoard';
-import { fetchPuzzle } from '../state/board';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,7 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const GameView = () => {
   const classes = useStyles();
-  const fen = useRecoilValue(fetchPuzzle);
 
   return (
     <>
@@ -43,16 +41,15 @@ export const GameView = () => {
         className={classes.container}
       >
         <PlayerBar
+          time={900}
           name="Player 1"
           countryCode="SE"
           rating="1900"
           icon="/assets/cat.jpg"
         />
-        <OnePlayerBoard
-          position={fen}
-          player="white"
-        />
+        <OnePlayerBoard onUpdate={() => {}} position={'start'} player="white" />
         <PlayerBar
+          time={900}
           name="Player 2"
           countryCode="SE"
           rating="2000"
