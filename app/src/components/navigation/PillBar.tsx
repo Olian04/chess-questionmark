@@ -6,8 +6,9 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
-import { useHistory } from 'react-router';
+import { useWindowSize } from '@react-hook/window-size';
+import { useRecoilValue } from 'recoil';
+import { pillState } from '../../state/pill';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,7 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     sliderButton: {
       borderRadius: theme.shape.borderRadius,
-      left: '2px',
       position: 'relative',
       backgroundColor: theme.palette.primary.main,
       transition: 'left 0.3s ease-in-out',
@@ -59,18 +59,23 @@ interface Props {
 export const PillBar = (props: Props) => {
   const classes = useStyles();
   const [pillSize, setPillSize] = useState({ w: 0, h: 0 });
+  const [width, _] = useWindowSize();
   const [pillPosition, setPillPosition] = useState(2);
+
+  const currentPill = useRecoilValue(pillState);
+
   const pillRef = React.createRef<HTMLDivElement>();
   useEffect(() => {
-    if (pillRef.current && pillSize.w === 0 && pillSize.h === 0) {
+    if (pillRef.current) {
       const currentPillWidth = pillRef.current.clientWidth / props.items.length;
       const currentPillHeight = pillRef.current.clientHeight;
       setPillSize({ w: currentPillWidth, h: currentPillHeight });
+      setPillPosition(2 + currentPill * currentPillWidth);
     }
-  });
+  }, [width, currentPill]);
 
-  const handleOnClick = (onClick: () => void, i: number) => {
-    setPillPosition(2 + i * pillSize.w);
+  const handleOnClick = (onClick: () => void) => {
+    setPillPosition(2 + currentPill * pillSize.w);
     onClick();
   };
   return (
@@ -89,7 +94,7 @@ export const PillBar = (props: Props) => {
               variant="contained"
               disableElevation={true}
               className={classes.button}
-              onClick={() => handleOnClick(item.onClick, i)}
+              onClick={() => handleOnClick(item.onClick)}
             >
               <Typography variant="caption" color="textPrimary">
                 {item.title}

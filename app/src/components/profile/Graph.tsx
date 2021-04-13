@@ -1,24 +1,28 @@
 import React from 'react';
-import { Grid, Typography, Paper, Box } from '@material-ui/core';
+import { Grid, Typography, Box } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
-import { borders, borderRadius, border } from '@material-ui/system';
 
 // should go for chart.js in the future
 import graphSvg from '/graph.svg';
+import { Chart } from './Chart';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    background: {
+    container: {
       borderRadius: theme.shape.borderRadius,
-      background:
-        theme.palette.background.paper +
-        ` url(${graphSvg})` +
-        ' bottom right no-repeat',
-
-      backgroundOrigin: 'border-box',
-      backgroundBlendMode: 'soft-light',
+      backgroundColor: theme.palette.background.paper,
       margin: theme.spacing(1),
       minHeight: '160px',
+      position: 'relative',
+      overflow: 'hidden',
+    },
+    wrapper: {
+      position: 'absolute',
+      top: 0,
+      padding: theme.spacing(1),
+    },
+    chart: {
+      margin: theme.spacing(-2),
     },
   })
 );
@@ -30,10 +34,13 @@ interface Props {
 
 export const Graph = (props: Props) => {
   const classes = useStyles();
+
   const delta = props.delta === 'N/A' ? 0 : props.delta;
+
   return (
-    <Grid item xs className={classes.background}>
-      <Box>
+    <Grid item xs className={classes.container}>
+      <Chart data={[1500]} />
+      <Box className={classes.wrapper}>
         <Typography variant="h5" color="textPrimary">
           <b>Ranking</b>
         </Typography>

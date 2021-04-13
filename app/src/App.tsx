@@ -45,7 +45,7 @@ export const App = () => {
     <Router>
       <div className={classes.background}>
         <Switch>
-          <Route path="/login">
+          <RecoilRoute path="/login">
             <Container maxWidth="sm" className={classes.container}>
               <React.Suspense fallback={<LoadingAnimation />}>
                 <Switch>
@@ -66,7 +66,7 @@ export const App = () => {
                 </Switch>
               </React.Suspense>
             </Container>
-          </Route>
+          </RecoilRoute>
           <RecoilRoute guarded path="/">
             <NavigationBar
               menuItems={[

@@ -23,6 +23,10 @@ export const RecoilRoute = (props: RecoilRouteProps) => {
   );
   /** If firebase auth returns error, we always redirect to the landing page */
   if (error) return ShowRoute(<Redirect to="/login" />);
+  /** If there exists a user and they visits the login route,
+   *  we redirect them back to profile */
+  if (user && baseProps.path?.includes('login'))
+    return ShowRoute(<Redirect to="/profile" />);
   /** If a route is guarded and firebase auth returns a user,
    * we persist the user and shows the requested route
    */
