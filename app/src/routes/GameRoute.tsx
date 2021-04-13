@@ -1,10 +1,10 @@
 import React from 'react';
-import { GameView } from '../views/GameView';
+import { GamePresenter } from '../presenters/GamePresenter';
 
 export const GameRoute = () => {
   return (
     <>
-      <GameView />
+      <GamePresenter />
     </>
   );
 };

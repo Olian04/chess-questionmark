@@ -39,6 +39,7 @@ interface Props {
   rating: string;
   icon: string;
   countryCode: string;
+  time: number;
 }
 
 export const PlayerBar = (props: Props) => {
@@ -90,7 +91,7 @@ export const PlayerBar = (props: Props) => {
           color="textPrimary"
           className={clsx(classes.text, classes.timerText)}
         >
-          15:00
+          {(props.time - (props.time % 60)) / 60}:{props.time % 60}
         </Typography>
       </Box>
     </Box>

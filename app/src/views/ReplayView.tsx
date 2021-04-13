@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Slider, Button, Box } from '@material-ui/core';
+import { Slider, Button, Box } from '@material-ui/core';
 import {
   Theme,
   makeStyles,
@@ -100,6 +100,7 @@ export const ReplayView = () => {
         className={classes.container}
       >
         <PlayerBar
+          time={0}
           name="Player 1"
           countryCode="SE"
           rating="1900"
@@ -110,6 +111,7 @@ export const ReplayView = () => {
           transitionDuration={400}
           draggable={false}
           size={0.8}
+          winner={''}
         />
         <Box>
           <Box display="flex" justifyContent="center">
@@ -137,11 +139,12 @@ export const ReplayView = () => {
             min={1}
             max={hist.length}
             value={turn}
-            onChange={(e, v) => setTurn(v)}
+            onChange={(_, v) => setTurn(v as number)}
           />
         </Box>
 
         <PlayerBar
+          time={0}
           name="Player 2"
           countryCode="SE"
           rating="2000"
