@@ -14,6 +14,7 @@ import { SignUpRoute } from './routes/SignUpRoute';
 import { SignInRoute } from './routes/SignInRoute';
 import { PlayRoute } from './routes/PlayRoute';
 import { GameRoute } from './routes/GameRoute';
+import { PuzzleRoute } from './routes/PuzzleRoute';
 import { ReplayRoute } from './routes/ReplayRoute';
 import { SettingsRoute } from './routes/SettingsRoute';
 import { ProfileRoute } from './routes/ProfileRoute';
@@ -64,6 +65,7 @@ export const App = () => {
             <Container maxWidth="sm" className={classes.container}>
               <Switch>
                 <Route exact path="/game" component={GameRoute} />
+                <Route exact path="/puzzle" component={PuzzleRoute} />
                 <Route exact path="/replay" component={ReplayRoute} />
                 <Route exact path="/settings" component={SettingsRoute} />
                 <Route exact path="/play" component={PlayRoute} />

@@ -1,4 +1,5 @@
 import { selector, atom } from 'recoil';
+import { Game } from '../types/Game';
 
 const url = 'https://api.chess.com/pub/puzzle/random';
 
@@ -13,4 +14,9 @@ export const fetchPuzzle = selector({
       throw err;
     }
   }
+});
+
+export const gameState = atom<Game | null>({
+  key: 'GAME_STATE',
+  default: null,
 });
