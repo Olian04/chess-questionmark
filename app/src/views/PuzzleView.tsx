@@ -53,7 +53,7 @@ export const PuzzleView = (props: Props) => {
           name="Player 1"
           countryCode="SE"
           rating="1900"
-          icon="/assets/cat.jpg"
+          email="test@fest.pest"
         />
         <OnePlayerBoard
           onUpdate={props.onUpdate}
@@ -65,7 +65,8 @@ export const PuzzleView = (props: Props) => {
           name="Player 2"
           countryCode="SE"
           rating="2000"
-          icon="/assets/cat.jpg"
+          email="t
+          fest@pest.fest"
         />
       </Box>
       <Box className={classes.background} />

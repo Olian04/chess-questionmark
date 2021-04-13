@@ -1,15 +1,16 @@
 import React from 'react';
-import { Avatar } from '@material-ui/core';
-import {Md5} from "md5-typescript";
+import { Avatar, AvatarProps } from '@material-ui/core';
+import { Md5 } from 'md5-typescript';
 
-interface Props {
-    email: string
-    variant?: string
+interface Props extends AvatarProps {
+  email: string;
+  forceDefault: 'retro' | 'robohash';
 }
 
 export const Gravatar = (props: Props) => {
-    const hash = "https://www.gravatar.com/avatar/" + Md5.init(props.email) + "?d=mp"
-    return ( 
-        <Avatar alt="Bob" variant={props.variant ? "rounded": undefined} src={hash} />
-    )
-}
+  const { email, forceDefault, ...innerProps } = props;
+  const hash = Md5.init(props.email);
+  const url =
+    'https://www.gravatar.com/avatar/' + hash + '?d=' + forceDefault + '&f=y';
+  return <Avatar {...innerProps} src={url} />;
+};

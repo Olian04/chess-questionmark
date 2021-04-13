@@ -43,17 +43,17 @@ export const GameView = () => {
         <PlayerBar
           time={900}
           name="Player 1"
+          email="test@test.yes"
           countryCode="SE"
           rating="1900"
-          icon="/assets/cat.jpg"
         />
         <OnePlayerBoard onUpdate={() => {}} position={'start'} player="white" />
         <PlayerBar
           time={900}
           name="Player 2"
+          email="test@test.no"
           countryCode="SE"
           rating="2000"
-          icon="/assets/cat.jpg"
         />
       </Box>
       <Box className={classes.background} />

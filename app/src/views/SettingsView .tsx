@@ -66,7 +66,11 @@ export const SettingsView = (props: Props) => {
                 title={props.user.name}
                 subTitle="Team DH2642"
                 startIcon={
-                  <Gravatar variant="rounded" email={props.user.email} />
+                  <Gravatar
+                    variant="rounded"
+                    email={props.user.email}
+                    forceDefault="retro"
+                  />
                 }
               />
               <TwoRowButton

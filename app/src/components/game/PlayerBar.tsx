@@ -3,6 +3,7 @@ import { Avatar, Typography, Box } from '@material-ui/core';
 import { AccessTime as AccessTimeIcon } from '@material-ui/icons';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import { Gravatar } from '../common/Gravatar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,8 +37,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   name: string;
+  email: string;
   rating: string;
-  icon: string;
   countryCode: string;
   time: number;
 }
@@ -54,10 +55,11 @@ export const PlayerBar = (props: Props) => {
     >
       <Box display="flex" width="100%">
         <Box p={1}>
-          <Avatar
+          <Gravatar
             alt={props.name}
+            email={props.email}
+            forceDefault="retro"
             variant="circular"
-            src={props.icon}
             className={classes.avatar}
           />
         </Box>
