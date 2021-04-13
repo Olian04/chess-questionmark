@@ -20,7 +20,7 @@ interface Props {
   icon: any;
   text: string;
   subText: string | JSX.Element;
-  onClick: Function;
+  onClick: () => void;
 }
 
 export const Button = (props: Props) => {
