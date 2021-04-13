@@ -2,5 +2,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  isAuthenticated: boolean;
+  phone: string;
+  team: string;
+  avatar: string;
 }

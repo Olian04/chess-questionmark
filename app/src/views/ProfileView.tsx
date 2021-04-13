@@ -10,6 +10,8 @@ import { ThreeRowButton } from '../components/settings/ThreeRowButton';
 
 import BlankAvatar from '/preview.svg';
 import { Gravatar } from '../components/common/Gravatar';
+import { useRecoilValue } from 'recoil';
+import { profileState } from '../state/user';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,13 +28,22 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   user: User;
+  profileExists: boolean;
+  fetchDetails: () => void;
 }
 
 export const ProfileView = (props: Props) => {
   const classes = useStyles();
 
+  const profile = useRecoilValue(profileState);
+
   const username = props.user.name ? props.user.name : 'Anon';
 
+  useEffect(() => {
+    if (props.user.id !== 'N/A') {
+      props.fetchDetails();
+    }
+  }, [props.user]);
   return (
     <Grid
       container
@@ -42,50 +53,60 @@ export const ProfileView = (props: Props) => {
       spacing={2}
     >
       <Grid item xs>
-        <Typography variant="h4" color="textPrimary">
-          Looking good {username}!
-        </Typography>
-      </Grid>
-
-      <Graph rank="2280" delta="+17" />
-      <Grid item xs>
-        <Grid container direction="row" spacing={2}>
-          <Tile text="42" subText="Wins" />
-          <Tile text="3" subText="Losses" />
-          <Tile text="5" subText="Draws" />
+        <Grid
+          container
+          alignItems="center"
+          justify="center"
+          style={{ height: '100%' }}
+        >
+          <Grid item xs>
+            <Typography variant="h4" color="textPrimary">
+              Looking good {username}!
+            </Typography>
+          </Grid>
         </Grid>
       </Grid>
 
-      <Grid item xs container direction="column" justify="space-evenly">
-        <Typography
-          className={classes.padding}
-          variant="button"
-          color="textPrimary"
-        >
-          Recent Matches
-        </Typography>
-        <List>
-          <VerticalButtonGroup>
-            <ThreeRowButton
-              name="Alice"
-              rank="Ranking title"
-              delta="+12 points"
-              avatar={<Gravatar email="AliceEmail"/>}
-            />
-            <ThreeRowButton
-              name="Celine"
-              rank="Ranking title"
-              delta="+8 points"
-              avatar={<Gravatar email="CelineEmail"/>}
-            />
-            <ThreeRowButton
-              name="Alice"
-              rank="Ranking title"
-              delta="-24 points"
-              avatar={<Gravatar email="AliceEmail"/>}
-            />
-          </VerticalButtonGroup>
-        </List>
+      <Graph rank={profile.rank} delta={profile.rankDelta} />
+      <Grid item xs>
+        <Grid container direction="row" spacing={2}>
+          <Tile text={profile.wins} subText="Wins" />
+          <Tile text={profile.losses} subText="Losses" />
+          <Tile text={profile.draws} subText="Draws" />
+        </Grid>
+      </Grid>
+
+      <Grid item xs>
+        <Grid container direction="column" justify="space-evenly">
+          <Grid item xs>
+            <Typography
+              className={classes.padding}
+              variant="button"
+              color="textPrimary"
+            >
+              Recent Matches
+            </Typography>
+          </Grid>
+          <Grid item xs>
+            <List>
+              <VerticalButtonGroup>
+                {profile.recentMatches.map((match, i) => (
+                  <ThreeRowButton
+                    key={i}
+                    {...match.opponent}
+                    delta={match.result}
+                    avatar={
+                      <Gravatar
+                        variant="circular"
+                        opponent={{ email: `fix@db.side${i}` }}
+                      />
+                    }
+                  />
+                ))}
+              </VerticalButtonGroup>
+            </List>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

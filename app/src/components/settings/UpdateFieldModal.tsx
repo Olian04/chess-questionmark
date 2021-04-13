@@ -15,16 +15,20 @@ const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
 interface Props {
   open: boolean;
-  title: string;
-  description: string;
-  hint: string;
-  onSave: (value: string) => void;
+  dialogs: Array<{
+    title: string;
+    fieldName: string;
+    description: string;
+    defaultValue: string;
+    hint: string;
+  }>;
+  onSave: (value: {}) => void;
   onDiscard: () => void;
 }
 
 export const UpdateFieldModal = (props: Props) => {
   const classes = useStyles();
-  const [fieldValue, setFieldValue] = useState('');
+  const [fieldValues, setFieldValues] = useState({});
   const [isError, setIsError] = useState(false);
 
   return (
@@ -33,31 +37,34 @@ export const UpdateFieldModal = (props: Props) => {
       onClose={props.onDiscard}
       aria-labelledby="form-dialog-title"
     >
-      <DialogTitle id="form-dialog-title">{props.title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{props.description}</DialogContentText>
-        <TextField
-          autoFocus
-          margin="dense"
-          label={props.hint}
-          fullWidth
-          error={isError}
-          onChange={(ev) => {
-            const value = ev.target.value;
-            setFieldValue(value);
-            setIsError(false);
-          }}
-        />
-      </DialogContent>
+      {props.dialogs.map((dialog, i) => (
+        <div key={i}>
+          <DialogTitle id="form-dialog-title">{dialog.title}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>{dialog.description}</DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              label={dialog.hint}
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              error={isError}
+              defaultValue={dialog.defaultValue}
+              onChange={(ev) => {
+                const value = ev.target.value;
+                setFieldValues({ ...fieldValues, [dialog.fieldName]: value });
+                setIsError(false);
+              }}
+            />
+          </DialogContent>
+        </div>
+      ))}
       <DialogActions>
         <MaterialButton onClick={props.onDiscard}>Cancel</MaterialButton>
         <MaterialButton
           onClick={() => {
-            if (fieldValue.trim().length === 0) {
-              setIsError(true);
-              return;
-            }
-            props.onSave(fieldValue);
+            props.onSave(fieldValues);
           }}
         >
           Save

@@ -57,8 +57,6 @@ export const PlayerBar = (props: Props) => {
         <Box p={1}>
           <Gravatar
             alt={props.name}
-            email={props.email}
-            forceDefault="retro"
             variant="circular"
             className={classes.avatar}
           />

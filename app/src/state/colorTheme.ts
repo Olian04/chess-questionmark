@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-export const colorTheme = atom<'light' | 'dark'>({
+export const colorThemeState = atom<'light' | 'dark'>({
   key: 'COLOR_THEME',
   default: 'dark',
 });

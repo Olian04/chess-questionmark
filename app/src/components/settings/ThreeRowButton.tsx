@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props extends ButtonProps {
   name: string;
   rank?: string;
-  delta?: string;
+  delta?: number | undefined;
   avatar?: JSX.Element;
 }
 
@@ -48,9 +48,8 @@ export const ThreeRowButton = (props: Props) => {
         {delta ? (
           <Grid item container alignItems="flex-start" xs>
             <Typography variant="caption" color="textPrimary">
-              <span
-                style={{ color: delta.includes('+') ? '#99FF99' : '#DF5049' }}
-              >
+              <span style={{ color: delta > 0 ? '#99FF99' : '#DF5049' }}>
+                {delta === 0 ? '' : delta > 0 ? '+' : '-'}
                 {delta}
               </span>
             </Typography>

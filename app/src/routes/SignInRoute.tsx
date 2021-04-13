@@ -1,11 +1,14 @@
-import React from 'react';
-import { BackgroundCircle } from '../components/common/BackgroundCircle';
+import React, { useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
 import { SignInPresenter } from '../presenters/SignInPresenter';
+import { backgroundCircleState } from '../state/backgroundCircle';
 
 export const SignInRoute = () => {
+  const setSide = useSetRecoilState(backgroundCircleState);
+
+  useEffect(() => setSide('right'));
   return (
     <>
-      <BackgroundCircle side="right" />
       <SignInPresenter />
     </>
   );

@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.paper,
       color: theme.palette.primary.contrastText,
     },
+    item: {
+      zIndex: 1,
+    },
     paper: {
       textAlign: 'center',
       backgroundColor: theme.palette.background.paper,
@@ -48,7 +51,7 @@ export const PlayView = () => {
       spacing={1}
       justify="flex-start"
     >
-      <Grid xs item>
+      <Grid xs item className={classes.item}>
         <Grid
           container
           alignItems="center"
@@ -58,7 +61,7 @@ export const PlayView = () => {
           <Typography variant="h5">Lets see what you go for Bob!</Typography>
         </Grid>
       </Grid>
-      <Grid xs item>
+      <Grid xs item className={classes.item}>
         <Grid container direction="column" spacing={1}>
           <Button
             onClick={() => {}}
@@ -84,7 +87,7 @@ export const PlayView = () => {
           />
         </Grid>
       </Grid>
-      <Grid xs item style={{ zIndex: 1 }}>
+      <Grid xs item className={classes.item}>
         <Grid
           container
           justify="space-between"

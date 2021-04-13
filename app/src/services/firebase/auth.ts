@@ -1,33 +1,37 @@
+import firebase from 'firebase';
+import { useAuthState as baseState } from 'react-firebase-hooks/auth';
 import { app } from '.';
 import 'firebase/auth';
 
-import { User } from '../../types/User';
 import { UserCredentials } from '../../types/UserCredentials';
 
 const auth = app.auth();
 
-const fallbackString = 'N/A';
-
-export const loginUser = async (
+export const signInWithEmailAndPassword = async (
   credentials: UserCredentials
-): Promise<User> => {
+) => auth.signInWithEmailAndPassword(credentials.email, credentials.password);
+
+export const useAuthState = () => {
+  return baseState(auth);
+};
+
+export const getUser = () => {
+  const [user, ...rest] = useAuthState();
+  return user;
+};
+
+export const createUserWithEmailAndPassword = async (
+  credentials: UserCredentials
+) =>
+  await auth.createUserWithEmailAndPassword(
+    credentials.email,
+    credentials.password
+  );
+
+export const signOut = async () => {
   try {
-    const firebaseCredentials = await auth.signInWithEmailAndPassword(
-      credentials.email,
-      credentials.password
-    );
-    return {
-      id: firebaseCredentials.user?.uid ?? fallbackString,
-      name: firebaseCredentials.user?.displayName ?? fallbackString,
-      isAuthenticated: true,
-      email: credentials.email,
-    };
-  } catch {
-    return {
-      id: fallbackString,
-      name: fallbackString,
-      isAuthenticated: false,
-      email: credentials.email,
-    };
+    await auth.signOut();
+  } catch (e) {
+    throw e;
   }
 };

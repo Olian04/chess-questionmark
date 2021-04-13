@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ThemeProvider } from './providers/ThemeProvider';
 import { RecoilRoot } from 'recoil';
 import './index.css';
-import { ThemeProvider } from './providers/ThemeProvider';
 import { App } from './App';
 
 const domRoot = document.getElementById('root');

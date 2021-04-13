@@ -1,13 +1,14 @@
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
   Redirect,
+  Route,
+  Switch,
 } from 'react-router-dom';
 import { Container } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
+import { LoadingAnimation } from './components/common/LoadingAnimation';
 import { NavigationBar } from './components/navigation/NavigationBar';
 import { LoginRoute } from './routes/LoginRoute';
 import { SignUpRoute } from './routes/SignUpRoute';
@@ -18,6 +19,8 @@ import { PuzzleRoute } from './routes/PuzzleRoute';
 import { ReplayRoute } from './routes/ReplayRoute';
 import { SettingsRoute } from './routes/SettingsRoute';
 import { ProfileRoute } from './routes/ProfileRoute';
+import { RecoilRoute } from './providers/stateProvider';
+import { BackgroundCircle } from './components/common/BackgroundCircle';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,24 +40,33 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const App = () => {
   const classes = useStyles();
-
   return (
     <Router>
       <div className={classes.background}>
         <Switch>
-          <Route path="/login">
+          <RecoilRoute path="/login">
             <Container maxWidth="sm" className={classes.container}>
-              <Switch>
-                <Route exact path="/login" component={LoginRoute} />
-                <Route exact path="/login/sign-up" component={SignUpRoute} />
-                <Route exact path="/login/sign-in" component={SignInRoute} />
-                <Route>
-                  <Redirect to="/login" />
-                </Route>
-              </Switch>
+              <React.Suspense fallback={<LoadingAnimation />}>
+                <Switch>
+                  <RecoilRoute exact path="/login" component={LoginRoute} />
+                  <RecoilRoute
+                    exact
+                    path="/login/sign-up"
+                    component={SignUpRoute}
+                  />
+                  <RecoilRoute
+                    exact
+                    path="/login/sign-in"
+                    component={SignInRoute}
+                  />
+                  <RecoilRoute>
+                    <Redirect to="/login" />
+                  </RecoilRoute>
+                </Switch>
+              </React.Suspense>
             </Container>
-          </Route>
-          <Route path="/">
+          </RecoilRoute>
+          <RecoilRoute guarded path="/">
             <NavigationBar
               menuItems={[
                 { title: 'Play', to: '/play' },
@@ -63,21 +75,28 @@ export const App = () => {
               ]}
             />
             <Container maxWidth="sm" className={classes.container}>
-              <Switch>
-                <Route exact path="/game" component={GameRoute} />
-                <Route exact path="/puzzle" component={PuzzleRoute} />
-                <Route exact path="/replay" component={ReplayRoute} />
-                <Route exact path="/settings" component={SettingsRoute} />
-                <Route exact path="/play" component={PlayRoute} />
-                <Route exact path="/profile" component={ProfileRoute} />
-                <Route>
-                  <Redirect to="/login" />
-                </Route>
-              </Switch>
+              <React.Suspense fallback={<LoadingAnimation />}>
+                <Switch>
+                  <RecoilRoute exact path="/game" component={GameRoute} />
+                  <RecoilRoute exact path="/puzzle" component={PuzzleRoute} />
+                  <RecoilRoute exact path="/replay" component={ReplayRoute} />
+                  <RecoilRoute
+                    exact
+                    path="/settings"
+                    component={SettingsRoute}
+                  />
+                  <RecoilRoute exact path="/play" component={PlayRoute} />
+                  <RecoilRoute exact path="/profile" component={ProfileRoute} />
+                  <RecoilRoute exact path="/">
+                    <Redirect to="/profile" />
+                  </RecoilRoute>
+                </Switch>
+              </React.Suspense>
             </Container>
-          </Route>
+          </RecoilRoute>
         </Switch>
       </div>
+      <BackgroundCircle />
     </Router>
   );
 };
