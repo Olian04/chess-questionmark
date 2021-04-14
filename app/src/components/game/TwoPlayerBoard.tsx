@@ -1,59 +1,80 @@
-import React, { useEffect, useRef, useState, Component } from 'react';
-import { useTheme } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
-import { useWindowWidth } from '@react-hook/window-size/throttled';
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { GameBoard } from './GameBoard';
-import { Chess } from 'chess.js';
+import { Chess, Square } from 'chess.js';
+import { Game } from '../../types/Game';
+import { Winner } from '../../types/Winner';
 
-const squareStyling = ({ pieceSquare, history }) => {
+interface Props {
+  position: string;
+  player?: 'white' | 'black';
+  onUpdate: (game: Game) => void;
+}
+
+type SquareStylingProps = {
+  pieceSquare: Square;
+  history: Array<{ from: Square; to: Square }>;
+};
+
+const squareStyling = ({ pieceSquare, history }: SquareStylingProps) => {
   const sourceSquare = history.length && history[history.length - 1].from;
   const targetSquare = history.length && history[history.length - 1].to;
 
   return {
-    [pieceSquare]: { backgroundColor: "cornFlowerBlue" },
+    [pieceSquare]: { backgroundColor: 'cornFlowerBlue' },
     ...(history.length && {
       [sourceSquare]: {
-        backgroundColor: "cornFlowerBlue"
-      }
+        backgroundColor: 'cornFlowerBlue',
+      },
     }),
     ...(history.length && {
       [targetSquare]: {
-        backgroundColor: "cornFlowerBlue"
-      }
-    })
+        backgroundColor: 'cornFlowerBlue',
+      },
+    }),
   };
 };
 
-class TwoPlayerState extends Component {
+class TwoPlayerState extends Component<Props> {
   static propTypes = { children: PropTypes.func };
 
   state = {
-    fen: this.props.position || "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    fen: this.props.position,
     dropSquareStyle: {},
     squareStyles: {},
-    pieceSquare: "",
-    square: "",
+    pieceSquare: '' as Square,
+    square: '',
     history: [],
     draggable: true,
     evaluation: [],
-  }
+    winner: '' as Winner,
+  };
+
+  game: any;
 
   componentDidMount() {
     this.game = new Chess(this.state.fen);
     this.setState({
-      draggable: (this.game.turn() === "w" ? "white" : "black") === this.props.player
+      draggable:
+        (this.game.turn() === 'w' ? 'white' : 'black') === this.props.player,
     });
-    // init firebase listener
+  }
+
+  updateCallback() {
+    this.props.onUpdate({
+      turn: this.game.turn(),
+      fen: this.state.fen,
+      winner: this.state.winner,
+    });
   }
 
   removeHighlightSquare = () => {
-    this.setState(({ pieceSquare, history }) => ({
-      squareStyles: squareStyling({ pieceSquare, history })
+    this.setState(({ pieceSquare, history }: SquareStylingProps) => ({
+      squareStyles: squareStyling({ pieceSquare, history }),
     }));
   };
 
-  highlightSquare = (sourceSquare, squaresToHighlight) => {
+  highlightSquare = (sourceSquare: Square, squaresToHighlight: Square[]) => {
     const highlightStyles = [sourceSquare, ...squaresToHighlight].reduce(
       (a, b) => {
         return {
@@ -61,54 +82,65 @@ class TwoPlayerState extends Component {
           ...{
             [b]: {
               background:
-                "radial-gradient(circle, cornFlowerBlue 36%, transparent 40%)",
-              borderRadius: "50%"
-            }
+                'radial-gradient(circle, cornFlowerBlue 36%, transparent 40%)',
+              borderRadius: '50%',
+            },
           },
           ...squareStyling({
             history: this.state.history,
-            pieceSquare: this.state.pieceSquare
-          })
+            pieceSquare: this.state.pieceSquare,
+          }),
         };
       },
       {}
     );
 
-    this.setState(({ squareStyles }) => ({
-      squareStyles: { ...squareStyles, ...highlightStyles }
+    this.setState(({ squareStyles }: { squareStyles: Object }) => ({
+      squareStyles: { ...squareStyles, ...highlightStyles },
     }));
   };
 
-  onDrop = ({ sourceSquare, targetSquare }) => {
+  onDrop = ({
+    sourceSquare,
+    targetSquare,
+  }: {
+    sourceSquare: Square;
+    targetSquare: Square;
+  }) => {
     let move = this.game.move({
       from: sourceSquare,
       to: targetSquare,
-      promotion: "q",
+      promotion: 'q',
     });
 
     if (move === null) return;
 
-    return new Promise(resolve => {
-      this.setState(({ history, pieceSquare }) => ({
+    return new Promise((resolve) => {
+      this.setState(({ history, pieceSquare }: SquareStylingProps) => ({
         fen: this.game.fen(),
         history: this.game.history({ verbose: true }),
         squareStyles: squareStyling({ pieceSquare, history }),
       }));
       this.removeHighlightSquare();
       this.setState({
-        draggable: false
+        draggable: false,
       });
-      resolve();
+      if (this.game.in_checkmate()) {
+        this.setState({
+          winner: this.props.player,
+        });
+      }
+      this.updateCallback();
+      resolve(undefined);
     });
-    // write to firebase
   };
 
-  onMouseOverSquare = square => {
+  onMouseOverSquare = (square: Square) => {
     if (!this.state.draggable) return;
 
     let moves = this.game.moves({
       square: square,
-      verbose: true
+      verbose: true,
     });
 
     if (moves.length === 0) return;
@@ -121,19 +153,19 @@ class TwoPlayerState extends Component {
     this.highlightSquare(square, squaresToHighlight);
   };
 
-  onMouseOutSquare = square => this.removeHighlightSquare(square);
+  onMouseOutSquare = () => this.removeHighlightSquare();
 
-  onDragOverSquare = square => {
+  onDragOverSquare = () => {
     this.setState({
-      dropSquareStyle: { backgroundColor: "cornFlowerBlue" }
+      dropSquareStyle: { backgroundColor: 'cornFlowerBlue' },
     });
   };
 
-  onSquareClick = square => {
+  onSquareClick = (square: Square) => {
     let move = this.game.move({
       from: this.state.pieceSquare,
       to: square,
-      promotion: "q"
+      promotion: 'q',
     });
 
     if (move === null) return;
@@ -141,62 +173,45 @@ class TwoPlayerState extends Component {
     this.setState({
       fen: this.game.fen(),
       history: this.game.history({ verbose: true }),
-      pieceSquare: ""
+      pieceSquare: '',
     });
   };
 
   render() {
-    const { fen, dropSquareStyle, squareStyles, draggable } = this.state;
-
-    return this.props.children({
-      squareStyles,
-      position: fen,
-      onMouseOverSquare: this.onMouseOverSquare,
-      onMouseOutSquare: this.onMouseOutSquare,
-      onDrop: this.onDrop,
+    const {
+      fen,
       dropSquareStyle,
-      onDragOverSquare: this.onDragOverSquare,
-      onSquareClick: this.onSquareClick,
-      onSquareRightClick: this.onSquareRightClick,
+      squareStyles,
       draggable,
-    });
-  }
-}
+      winner,
+    } = this.state;
 
-interface Props {
-  position: string;
-  player: string;
+    return (
+      <GameBoard
+        position={fen}
+        onDrop={this.onDrop}
+        onMouseOverSquare={this.onMouseOverSquare}
+        onMouseOutSquare={this.onMouseOutSquare}
+        squareStyles={squareStyles}
+        dropSquareStyle={dropSquareStyle}
+        onDragOverSquare={this.onDragOverSquare}
+        onSquareClick={this.onSquareClick}
+        draggable={draggable}
+        orientation={this.props.player}
+        winner={winner}
+      />
+    );
+  }
 }
 
 export const TwoPlayerBoard = (props: Props) => {
   return (
     <>
-      <TwoPlayerState position={props.position} player={props.player}>
-        {({
-          position,
-          onDrop,
-          onMouseOverSquare,
-          onMouseOutSquare,
-          squareStyles,
-          dropSquareStyle,
-          onDragOverSquare,
-          onSquareClick,
-          draggable,
-        }) => (
-          <GameBoard
-            position={position}
-            onDrop={onDrop}
-            onMouseOverSquare={onMouseOverSquare}
-            onMouseOutSquare={onMouseOutSquare}
-            squareStyles={squareStyles}
-            dropSquareStyle={dropSquareStyle}
-            onDragOverSquare={onDragOverSquare}
-            onSquareClick={onSquareClick}
-            draggable={draggable}
-            orientation={props.player}
-          />
-        )}
-      </TwoPlayerState>
+      <TwoPlayerState
+        onUpdate={props.onUpdate}
+        position={props.position}
+        player={props.player}
+      />
     </>
   );
-}
+};

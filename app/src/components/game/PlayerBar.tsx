@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Typography, Box } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 import { AccessTime as AccessTimeIcon } from '@material-ui/icons';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';

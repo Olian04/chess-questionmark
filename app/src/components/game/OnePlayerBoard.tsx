@@ -38,8 +38,6 @@ const squareStyling = ({ pieceSquare, history }: SquareStylingProps) => {
 class OnePlayerState extends Component<Props> {
   static propTypes = {
     children: PropTypes.func,
-    player: PropTypes.string.isRequired,
-    position: PropTypes.string.isRequired,
   };
 
   state = {

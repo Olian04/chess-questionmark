@@ -50,10 +50,10 @@ export const PuzzleView = (props: Props) => {
       >
         <PlayerBar
           time={props.time}
+          email=""
           name="Player 1"
           countryCode="SE"
           rating="1900"
-          email="test@fest.pest"
         />
         <OnePlayerBoard
           onUpdate={props.onUpdate}
@@ -62,11 +62,10 @@ export const PuzzleView = (props: Props) => {
         />
         <PlayerBar
           time={props.time}
+          email=""
           name="Player 2"
           countryCode="SE"
           rating="2000"
-          email="t
-          fest@pest.fest"
         />
       </Box>
       <Box className={classes.background} />

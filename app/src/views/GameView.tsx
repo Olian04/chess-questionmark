@@ -1,11 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, Container, Grid } from '@material-ui/core';
+import React from 'react';
+import { Box } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
-import { useRecoilValue } from 'recoil';
 
+import { BoardProps } from '../types/Board';
 import { PlayerBar } from '../components/game/PlayerBar';
-import { OnePlayerBoard } from '../components/game/OnePlayerBoard';
-import { TwoPlayerBoard } from '../components/game/TwoPlayerBoard';
 import { GameBoard } from '../components/game/GameBoard';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,7 +26,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const GameView = () => {
+interface Props {
+  boardProps: BoardProps;
+}
+
+export const GameView = (props: Props) => {
   const classes = useStyles();
 
   return (
@@ -47,7 +49,7 @@ export const GameView = () => {
           countryCode="SE"
           rating="1900"
         />
-        <OnePlayerBoard onUpdate={() => {}} position={'start'} player="white" />
+        <GameBoard {...props.boardProps} />
         <PlayerBar
           time={900}
           name="Player 2"
