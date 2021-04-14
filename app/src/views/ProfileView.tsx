@@ -6,9 +6,13 @@ import { Graph } from '../components/profile/Graph';
 import { Tile } from '../components/play/Tile';
 import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
 
-import { ThreeRowButton } from '../components/settings/ThreeRowButton';
+import {
+  ThreeRowButton,
+  ThreeRowButtonSkeleton,
+} from '../components/settings/ThreeRowButton';
 
-import BlankAvatar from '/preview.svg';
+import { greet } from '../services/greeter';
+
 import { Gravatar } from '../components/common/Gravatar';
 import { useRecoilValue } from 'recoil';
 import { profileState } from '../state/user';
@@ -36,14 +40,14 @@ export const ProfileView = (props: Props) => {
   const classes = useStyles();
 
   const profile = useRecoilValue(profileState);
-
+  const [greeting, setGreeting] = useState<string>();
   const username = props.user.name ? props.user.name : 'Anon';
-
   useEffect(() => {
     if (props.user.id !== 'N/A') {
       props.fetchDetails();
+      setGreeting(greet(username));
     }
-  }, [props.user]);
+  }, [props.user, username]);
   return (
     <Grid
       container
@@ -61,7 +65,7 @@ export const ProfileView = (props: Props) => {
         >
           <Grid item xs>
             <Typography variant="h4" color="textPrimary">
-              Looking good {username}!
+              {props.user.name !== 'N/A' && greeting}
             </Typography>
           </Grid>
         </Grid>
@@ -90,19 +94,9 @@ export const ProfileView = (props: Props) => {
           <Grid item xs>
             <List>
               <VerticalButtonGroup>
-                {profile.recentMatches.map((match, i) => (
-                  <ThreeRowButton
-                    key={i}
-                    {...match.opponent}
-                    delta={match.result}
-                    avatar={
-                      <Gravatar
-                        variant="circular"
-                        opponent={{ email: `fix@db.side${i}` }}
-                      />
-                    }
-                  />
-                ))}
+                {profile.recentMatches.length === 1 && (
+                  <ThreeRowButtonSkeleton />
+                )}
               </VerticalButtonGroup>
             </List>
           </Grid>

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Grid, Typography, Paper } from '@material-ui/core';
+import { Grid, Typography, Paper, Box } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
+import { LoadingAnimation } from '../common/LoadingAnimation';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,8 +24,17 @@ export const Tile = (props: Props) => {
   return (
     <Grid item xs>
       <Paper className={classes.paper}>
-        <Typography variant="h4">{props.text}</Typography>
-        <Typography variant="subtitle2">{props.subText}</Typography>
+        {props.text === -1 && (
+          <Box>
+            <LoadingAnimation />
+          </Box>
+        )}
+        {props.text !== -1 && (
+          <Box>
+            <Typography variant="h4">{props.text}</Typography>
+            <Typography variant="subtitle2">{props.subText}</Typography>
+          </Box>
+        )}
       </Paper>
     </Grid>
   );

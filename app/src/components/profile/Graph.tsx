@@ -45,18 +45,20 @@ export const Graph = (props: Props) => {
           <b>Ranking</b>
         </Typography>
         <Typography variant="caption" color="textPrimary">
-          <b>
-            #{props.rank}{' '}
-            <span
-              style={{
-                color: delta > 0 ? '#99FF99' : '#DF5049',
-                display: delta === 0 ? 'none' : 'block',
-              }}
-            >
-              {delta > 0 ? '+' : '-'}
-              {delta}
-            </span>
-          </b>
+          {props.rank !== -1 && (
+            <b>
+              #{props.rank}{' '}
+              <span
+                style={{
+                  color: delta > 0 ? '#99FF99' : '#DF5049',
+                  display: delta === 0 ? 'none' : 'block',
+                }}
+              >
+                {delta > 0 ? '+' : '-'}
+                {delta}
+              </span>
+            </b>
+          )}
         </Typography>
       </Box>
     </Grid>

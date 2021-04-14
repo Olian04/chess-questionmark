@@ -5,6 +5,7 @@ import clsx from 'clsx';
 
 import { LinkButton } from '../common/LinkButton';
 import { PlayCircleOutline } from '@material-ui/icons';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,13 +22,52 @@ interface Props extends ButtonProps {
   avatar?: JSX.Element;
 }
 
+export const ThreeRowButtonSkeleton = () => {
+  const classes = useStyles();
+
+  return (
+    <LinkButton
+      startIcon={
+        <Skeleton
+          animation="wave"
+          variant="circle"
+          width="40px"
+          height="40px"
+        />
+      }
+      endIcon={
+        <Skeleton
+          animation="wave"
+          variant="circle"
+          width="15px"
+          height="15px"
+        />
+      }
+      margin={0.1}
+      className={classes.button}
+    >
+      <Grid item container direction="column" spacing={1} xs>
+        <Grid item alignItems="flex-start" xs>
+          <Skeleton animation="wave" variant="text" width="60px" height="8px" />
+        </Grid>
+        <Grid item alignItems="flex-start" xs>
+          <Skeleton animation="wave" variant="text" width="40px" height="8px" />
+        </Grid>
+        <Grid item alignItems="flex-start" xs>
+          <Skeleton animation="wave" variant="text" width="20px" height="8px" />
+        </Grid>
+      </Grid>
+    </LinkButton>
+  );
+};
+
 export const ThreeRowButton = (props: Props) => {
   const classes = useStyles();
   const { name, rank, delta, avatar, className, ...innerProps } = props;
   return (
     <LinkButton
       startIcon={avatar}
-      endIcon={<PlayCircleOutline />}
+      endIcon={<PlayCircleOutline height="40px" width="40px" />}
       margin={0.1}
       className={clsx(className || '', classes.button)}
       {...innerProps}
