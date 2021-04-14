@@ -4,10 +4,11 @@ export interface Profile {
   wins: number;
   losses: number;
   draws: number;
-  recentMatches: Match[];
+  recentMatches: __Match[];
 }
 
-export interface Match {
+// TODO: replace this "__Match" with a reference to match entry in DB.
+export interface __Match {
   opponent: {
     name: string;
     rankTitle: string;

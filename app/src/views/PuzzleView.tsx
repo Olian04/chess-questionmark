@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   onUpdate: (game: Game) => void;
+  onClickBack: () => void;
   time: number;
 }
 

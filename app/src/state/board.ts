@@ -1,19 +1,10 @@
 import { selector, atom } from 'recoil';
+import { fetchRandomPuzzle } from '../services/chess';
 import { Game } from '../types/Game';
 
-const url = 'https://api.chess.com/pub/puzzle/random';
-
-export const fetchPuzzle = selector({
+export const fetchPuzzle = selector<string>({
   key: 'FEN',
-  get: async ({ get }) => {
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      return data.fen;
-    } catch(err) {
-      throw err;
-    }
-  }
+  get: fetchRandomPuzzle,
 });
 
 export const gameState = atom<Game | null>({

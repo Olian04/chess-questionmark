@@ -4,8 +4,13 @@ import 'firebase/firestore';
 import { User } from '../../types/User';
 import { Profile } from '../../types/Profile';
 import { UserExtras } from '../../types/UserExtras';
+import { Match } from '../../types/Match';
 
 const db = app.firestore();
+
+export const createMatch = (match: Match) => {
+  return db.collection('matches').add(match);
+};
 
 export const profileCollection = {
   collection: db.collection('profiles'),

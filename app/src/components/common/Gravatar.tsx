@@ -2,9 +2,9 @@ import React from 'react';
 import { Avatar, AvatarProps } from '@material-ui/core';
 import { Md5 } from 'md5-typescript';
 import { useRecoilValue } from 'recoil';
-import { userState } from '../../state/user';
 
-const baseUrl = 'https://www.gravatar.com/avatar/';
+import { userState } from '../../state/user';
+import { getGravatarUrl } from '../../services/gravatar';
 
 interface Props extends AvatarProps {
   forceDefault?: 'retro' | 'robohash';
@@ -13,16 +13,6 @@ interface Props extends AvatarProps {
     avatar?: string;
   };
 }
-
-interface GravatarProps {
-  defaultImage: 'retro' | 'robohash';
-  email: string;
-}
-
-const getGravatarUrl = (props: GravatarProps) => {
-  const hash = Md5.init(props.email);
-  return `${baseUrl}${hash}?d=${props.defaultImage}&f=y`;
-};
 
 export const Gravatar = (props: Props) => {
   const { forceDefault, opponent, ...innerProps } = props;

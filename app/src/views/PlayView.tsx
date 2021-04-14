@@ -1,13 +1,9 @@
 import React from 'react';
-import {
-  Grid,
-  Typography,
-} from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 import { Tile } from '../components/play/Tile';
 import { Button } from '../components/play/Button';
-import { useHistory } from 'react-router';
 
 import MatchIcon from '/matchicon.svg';
 import AiIcon from '/aiicon.svg';
@@ -35,13 +31,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const PlayView = () => {
-  const classes = useStyles();
-  const history = useHistory();
+interface Props {
+  onClickStartPuzzle: () => void;
+}
 
-  const startPuzzle = () => {
-    history.push('/puzzle');
-  };
+export const PlayView = (props: Props) => {
+  const classes = useStyles();
 
   return (
     <Grid
@@ -80,7 +75,10 @@ export const PlayView = () => {
             icon={MatchIcon}
           />
           <Button
-            onClick={startPuzzle}
+            onClick={() => {
+              console.log(0);
+              props.onClickStartPuzzle();
+            }}
             text="Beat our AI"
             subText="Battle your way up from a randomized blunder"
             icon={AiIcon}
