@@ -4,6 +4,11 @@ import { GameView } from '../views/GameView';
 import { gameState } from '../state/board';
 import { Chess, Square, Move } from 'chess.js';
 import { Winner } from '../types/Winner';
+import { Player } from '../types/Player';
+
+const startTimeLeft = 20;
+const timerIncrease = 15;
+const defaultFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 type SquareStylingProps = {
   pieceSquare: Square;
@@ -12,21 +17,20 @@ type SquareStylingProps = {
 
 export const GamePresenter = () => {
   const [gamestate, setGamestate] = useRecoilState(gameState);
-  const [playerColor, setPlayerColor] = useState('w');
-  const [player, setPlayer] = useState('' as Winner);
+  const [player, setPlayer] = useState('white' as Player);
 
-  const [timeLeft, setTimeLeft] = useState(900);
+  const [botTimeLeft, setBotTimeLeft] = useState(startTimeLeft);
+  const [topTimeLeft, setTopTimeLeft] = useState(startTimeLeft);
   const [intervalID, setIntervalID] = useState(0);
+  const [timeOut, setTimeout] = useState('' as Winner);
 
-  const [position, setPosition] = useState(
-    'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-  );
+  const [position, setPosition] = useState(defaultFEN);
   const [dropSquareStyle, setDropSquareStyle] = useState({});
   const [squareStyles, setSquareStyles] = useState({});
   const [pieceSquare, setPieceSquare] = useState('' as Square);
   const [square, setSquare] = useState('');
   const [history, setHistory] = useState([] as Move[]);
-  const [draggable, setDraggable] = useState(playerColor === 'w');
+  const [draggable, setDraggable] = useState(player === 'white');
   const [winner, setWinner] = useState('' as Winner);
 
   const game = new Chess(position);
@@ -157,36 +161,75 @@ export const GamePresenter = () => {
     },
   };
 
-  // const play = () => {
-  //   let t = timeLeft;
-  //   setIntervalID(
-  //     setInterval(() => {
-  //       setTimeLeft(--t);
-  //       console.log(t);
-  //     }, 1000)
-  //   );
-  // };
-  //
-  // const pause = () => {
-  //   clearInterval(intervalID);
-  // };
-  //
-  // const playPause = () => {
-  //   if (playing) {
-  //     pause();
-  //   } else {
-  //     if (timeLeft <= hist.length) return;
-  //     play();
-  //   }
-  // };
+  const gameTimeout = (p: Winner) => {
+    clearInterval(intervalID);
+    if (p === 'white') {
+      setWinner('black');
+    } else if (p === 'black') {
+      setWinner('white');
+    }
+    updateCallback();
+    setDraggable(false);
+  };
+
+  const runBotTimer = () => {
+    let t = botTimeLeft;
+    setIntervalID(
+      setInterval(() => {
+        if (t <= 0) {
+          gameTimeout('white');
+          return;
+        }
+        setBotTimeLeft(--t);
+        console.log(t);
+      }, 1000)
+    );
+  };
+
+  const stopBotTimer = () => {
+    clearInterval(intervalID);
+    setBotTimeLeft(Math.min(botTimeLeft + timerIncrease, startTimeLeft));
+  };
+
+  const runTopTimer = () => {
+    let t = topTimeLeft;
+    setIntervalID(
+      setInterval(() => {
+        if (t <= 0) {
+          gameTimeout('black');
+          return;
+        }
+        setTopTimeLeft(--t);
+        console.log(t);
+      }, 1000)
+    );
+  };
+
+  const stopTopTimer = () => {
+    clearInterval(intervalID);
+    setTopTimeLeft(Math.min(topTimeLeft + timerIncrease, startTimeLeft));
+  };
 
   useEffect(() => {
     console.log(gamestate);
+    if (gamestate) {
+      const turn = gamestate.turn === 'w' ? 'white' : 'black';
+      if (turn === player) {
+        stopTopTimer();
+        runBotTimer();
+      } else {
+        stopBotTimer();
+        runTopTimer();
+      }
+    }
   }, [gamestate]);
 
   return (
     <GameView
+      topTime={topTimeLeft}
+      botTime={botTimeLeft}
       boardProps={{
+        orientation: player,
         position: position,
         squareStyles: squareStyles,
         dropSquareStyle: dropSquareStyle,

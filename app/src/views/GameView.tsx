@@ -28,6 +28,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   boardProps: BoardProps;
+  topTime: number;
+  botTime: number;
 }
 
 export const GameView = (props: Props) => {
@@ -43,7 +45,7 @@ export const GameView = (props: Props) => {
         className={classes.container}
       >
         <PlayerBar
-          time={900}
+          time={props.topTime}
           name="Player 1"
           email="test@test.yes"
           countryCode="SE"
@@ -51,7 +53,7 @@ export const GameView = (props: Props) => {
         />
         <GameBoard {...props.boardProps} />
         <PlayerBar
-          time={900}
+          time={props.botTime}
           name="Player 2"
           email="test@test.no"
           countryCode="SE"
