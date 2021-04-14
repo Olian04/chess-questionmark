@@ -16,7 +16,7 @@ export const PuzzlePresenter = () => {
     const timer = setTimeout(() => {
       setTime(time - 1);
     }, 1000);
-  });
+  }, []);
 
   return (
     <React.Suspense fallback={<LoadingAnimation />}>
