@@ -79,6 +79,7 @@ export const ReplayView = (props: Props) => {
         className={classes.container}
       >
         <PlayerBar
+          email=""
           time={0}
           email=""
           name="Player 1"
@@ -127,6 +128,7 @@ export const ReplayView = (props: Props) => {
         </Box>
 
         <PlayerBar
+          email=""
           time={0}
           email=""
           name="Player 2"
