@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useTheme } from '@material-ui/core/styles';
+import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -8,32 +7,18 @@ import Button from '@material-ui/core/Button';
 
 interface Props {
   winner: string;
+  open: boolean;
+  onClick: () => void;
 }
 
 export const EndOfGame = (props: Props) => {
-  const theme = useTheme();
-
-  const [winner, setWinner] = useState('');
-  const [gameOver, setGameOver] = useState(false);
-
-  useEffect(() => {
-    if (props.winner !== '') {
-      setGameOver(true);
-      setWinner(props.winner);
-    }
-  }, [props.winner]);
-
-  const handleClose = () => {
-    setGameOver(false);
-  };
-
   return (
-    <Dialog open={gameOver} onClose={handleClose}>
+    <Dialog open={props.open} onClose={props.onClick}>
       <DialogContent>
-        <DialogContentText>winner is {winner}</DialogContentText>
+        <DialogContentText>winner is {props.winner}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button>Return to profile!</Button>
+        <Button onClick={props.onClick}>Return to profile!</Button>
       </DialogActions>
     </Dialog>
   );

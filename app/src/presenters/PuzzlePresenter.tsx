@@ -7,6 +7,7 @@ import { currentMatchIDState } from '../state/match';
 import { addFenStateToMatch } from '../services/firebase/realtimeDB';
 import { migrateMatchFromRealtimeDBToFirestore } from '../services/firebase/helpers';
 import { useHistory } from 'react-router';
+import { userState } from '../state/user';
 
 export const PuzzlePresenter = () => {
   const [currentMatchID, setCurrentMatchID] = useRecoilState(
@@ -14,6 +15,7 @@ export const PuzzlePresenter = () => {
   );
   const [game, setGame] = useRecoilState(gameState);
   const [time, setTime] = useState(900);
+  const [winnerDialogueOpen, setWinnerDialogueOpen] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -28,6 +30,7 @@ export const PuzzlePresenter = () => {
     if (game.winner) {
       migrateMatchFromRealtimeDBToFirestore(currentMatchID);
       setCurrentMatchID(null);
+      setWinnerDialogueOpen(true);
     }
   }, [game]);
 
@@ -43,8 +46,11 @@ export const PuzzlePresenter = () => {
         time={time}
         onUpdate={(s) => setGame(s)}
         onClickBack={() => {
+          setWinnerDialogueOpen(false);
           history.push('/profile');
         }}
+        winner={game?.winner as string}
+        openWinnerDialogue={winnerDialogueOpen}
       />
     </React.Suspense>
   );

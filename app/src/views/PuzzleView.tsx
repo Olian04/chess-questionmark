@@ -1,14 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, Container, Grid } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Box } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { useRecoilValue } from 'recoil';
 
 import { PlayerBar } from '../components/game/PlayerBar';
 import { OnePlayerBoard } from '../components/game/OnePlayerBoard';
-import { TwoPlayerBoard } from '../components/game/TwoPlayerBoard';
-import { GameBoard } from '../components/game/GameBoard';
 import { fetchPuzzle } from '../state/board';
 import { Game } from '../types/Game';
+import { EndOfGame } from '../components/game/EndOfGame';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,7 +32,9 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   onUpdate: (game: Game) => void;
   onClickBack: () => void;
+  winner: string;
   time: number;
+  openWinnerDialogue: boolean;
 }
 
 export const PuzzleView = (props: Props) => {
@@ -42,6 +43,11 @@ export const PuzzleView = (props: Props) => {
 
   return (
     <>
+      <EndOfGame
+        winner={props.winner}
+        onClick={props.onClickBack}
+        open={props.openWinnerDialogue}
+      />
       <Box
         display="flex"
         flexDirection="column"
@@ -66,8 +72,7 @@ export const PuzzleView = (props: Props) => {
           name="Player 2"
           countryCode="SE"
           rating="2000"
-          email="t
-          fest@pest.fest"
+          email="test@pest.fest"
         />
       </Box>
       <Box className={classes.background} />
