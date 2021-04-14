@@ -70,6 +70,7 @@ class OnePlayerState extends Component<Props> {
       turn: this.game.turn(),
       fen: this.state.fen,
       winner: this.state.winner,
+      against: 'ai', // TODO: hook up player 2
     });
   }
 

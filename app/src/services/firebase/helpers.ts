@@ -1,9 +1,12 @@
 import { createMatch } from './storage';
-import { getMatchByID } from './realtimeDB';
+import { getMatchByID, migrateMatchByUser } from './realtimeDB';
+import { User } from '../../types/User';
 
-export const migrateMatchFromRealtimeDBToFirestore = async (
-  matchID: string
-) => {
-  const match = await getMatchByID(matchID);
-  createMatch(match);
+export const migrateMatch = async (user: User) => {
+  const [matchInfo, match] = await migrateMatchByUser(user);
+  await createMatch({
+    winner: matchInfo.winner,
+    history: match.history as string[],
+    against: matchInfo.against,
+  });
 };

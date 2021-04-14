@@ -76,7 +76,6 @@ export const PlayView = (props: Props) => {
           />
           <Button
             onClick={() => {
-              console.log(0);
               props.onClickStartPuzzle();
             }}
             text="Beat our AI"

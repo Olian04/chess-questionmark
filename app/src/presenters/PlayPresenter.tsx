@@ -11,12 +11,15 @@ export const PlayPresenter = () => {
   const user = useRecoilValue(userState);
   const history = useHistory();
 
+  /*
   const startPuzzle = useRecoilCallback(({ snapshot, set }) => async () => {
     const puzzleFen = await snapshot.getPromise(fetchPuzzle);
     const matchID = await createAIMatch(user.id, puzzleFen);
     set(currentMatchIDState, matchID);
     history.push('/puzzle');
   });
+  */
+  const startPuzzle = () => history.push('/puzzle');
 
   return <PlayView onClickStartPuzzle={startPuzzle} />;
 };

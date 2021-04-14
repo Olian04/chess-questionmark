@@ -3,4 +3,5 @@ export interface Match {
     [k in number]: string;
   };
   player: string;
+  turn: 'b' | 'w';
 }

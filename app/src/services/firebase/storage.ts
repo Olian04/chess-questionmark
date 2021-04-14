@@ -8,7 +8,11 @@ import { Match } from '../../types/Match';
 
 const db = app.firestore();
 
-export const createMatch = (match: Match) => {
+export const createMatch = (match: {
+  winner: string;
+  against: string;
+  history: string[];
+}) => {
   return db.collection('matches').add(match);
 };
 

@@ -1,1 +1,1 @@
-export type Winner = 'black' | 'white' | '';
+export type Winner = 'black' | 'white' | 'N/A';

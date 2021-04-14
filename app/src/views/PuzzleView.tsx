@@ -5,9 +5,12 @@ import { useRecoilValue } from 'recoil';
 
 import { PlayerBar } from '../components/game/PlayerBar';
 import { OnePlayerBoard } from '../components/game/OnePlayerBoard';
-import { fetchPuzzle } from '../state/board';
+import { fetchPuzzle, gameState } from '../state/board';
 import { Game } from '../types/Game';
 import { EndOfGame } from '../components/game/EndOfGame';
+import { userState } from '../state/user';
+import { LoadingAnimation } from '../components/common/LoadingAnimation';
+import { currentMatchData } from '../state/match';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,19 +35,18 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   onUpdate: (game: Game) => void;
   onClickBack: () => void;
-  winner: string;
   time: number;
   openWinnerDialogue: boolean;
+  game: Game | null;
 }
 
 export const PuzzleView = (props: Props) => {
   const classes = useStyles();
-  const fen = useRecoilValue(fetchPuzzle);
 
   return (
     <>
       <EndOfGame
-        winner={props.winner}
+        winner={props.game ? props.game.winner : 'N/A'}
         onClick={props.onClickBack}
         open={props.openWinnerDialogue}
       />
@@ -62,11 +64,15 @@ export const PuzzleView = (props: Props) => {
           rating="1900"
           email="test@fest.pest"
         />
-        <OnePlayerBoard
-          onUpdate={props.onUpdate}
-          position={fen}
-          player="white"
-        />
+        {props.game && (
+          <OnePlayerBoard
+            onUpdate={props.onUpdate}
+            position={props.game.fen}
+            player="white"
+          />
+        )}
+        {!props.game && <LoadingAnimation />}
+
         <PlayerBar
           time={props.time}
           name="Player 2"
