@@ -100,11 +100,11 @@ export const ReplayView = () => {
         className={classes.container}
       >
         <PlayerBar
+          email=""
           time={0}
           name="Player 1"
           countryCode="SE"
           rating="1900"
-          icon="/assets/cat.jpg"
         />
         <GameBoard
           position={hist[turn - 1]}
@@ -144,11 +144,11 @@ export const ReplayView = () => {
         </Box>
 
         <PlayerBar
+          email=""
           time={0}
           name="Player 2"
           countryCode="SE"
           rating="2000"
-          icon="/assets/cat.jpg"
         />
       </Box>
       <Box className={classes.background} />

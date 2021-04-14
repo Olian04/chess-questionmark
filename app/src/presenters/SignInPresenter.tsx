@@ -46,6 +46,8 @@ export const SignInPresenter = () => {
         email: loginResponse.user?.email as string,
         name: name as string,
         phone: phone as string,
+        team: '',
+        avatar: '',
       });
     }
   );

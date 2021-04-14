@@ -76,10 +76,7 @@ class OnePlayerState extends Component<Props> {
   engineGame = (options: Object) => {
     options = options || {};
 
-    let engine = new Worker(
-      '../../../node_modules/stockfish/src/stockfish.js',
-      { type: 'module' }
-    );
+    let engine = new Worker('/stockfish/src/stockfish.js', { type: 'module' });
 
     let engineStatus = {} as {
       engineReady: boolean;
