@@ -2,8 +2,13 @@ import React from 'react';
 import { Box } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
+import { BoardProps } from '../types/Board';
 import { PlayerBar } from '../components/game/PlayerBar';
+<<<<<<< HEAD
+import { GameBoard } from '../components/game/GameBoard';
+=======
 import { OnePlayerBoard } from '../components/game/OnePlayerBoard';
+>>>>>>> master
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +30,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const GameView = () => {
+interface Props {
+  boardProps: BoardProps;
+  topTime: number;
+  botTime: number;
+}
+
+export const GameView = (props: Props) => {
   const classes = useStyles();
 
   return (
@@ -38,15 +49,15 @@ export const GameView = () => {
         className={classes.container}
       >
         <PlayerBar
-          time={900}
+          time={props.topTime}
           name="Player 1"
           email="test@test.yes"
           countryCode="SE"
           rating="1900"
         />
-        <OnePlayerBoard onUpdate={() => {}} position={'start'} player="white" />
+        <GameBoard {...props.boardProps} />
         <PlayerBar
-          time={900}
+          time={props.botTime}
           name="Player 2"
           email="test@test.no"
           countryCode="SE"

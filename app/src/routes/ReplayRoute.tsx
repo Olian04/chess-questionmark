@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { backgroundCircleState } from '../state/backgroundCircle';
 import { pillState } from '../state/pill';
-import { ReplayView } from '../views/ReplayView';
+import { ReplayPresenter } from '../presenters/ReplayPresenter';
 
 export const ReplayRoute = () => {
   const setSide = useSetRecoilState(backgroundCircleState);
@@ -13,7 +13,7 @@ export const ReplayRoute = () => {
   });
   return (
     <>
-      <ReplayView />
+      <ReplayPresenter />
     </>
   );
 };

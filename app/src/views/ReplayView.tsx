@@ -6,7 +6,7 @@ import {
   createStyles,
   withStyles,
 } from '@material-ui/core/styles';
-import { PlayArrow, SkipNext, SkipPrevious } from '@material-ui/icons';
+import { PlayArrow, SkipNext, SkipPrevious, Pause } from '@material-ui/icons';
 
 import { PlayerBar } from '../components/game/PlayerBar';
 import { GameBoard } from '../components/game/GameBoard';
@@ -53,42 +53,21 @@ const ReplaySlider = withStyles({
   },
 })(Slider);
 
-export const ReplayView = () => {
+interface Props {
+  fen: string;
+  turn: number;
+  onPrevious: () => void;
+  onPlay: () => void;
+  onNext: () => void;
+  onSlider: (v: number) => void;
+  start: boolean;
+  end: boolean;
+  max: number;
+  playing: boolean;
+}
+
+export const ReplayView = (props: Props) => {
   const classes = useStyles();
-  const [turn, setTurn] = useState(1);
-  const [intervalID, setIntervalID] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const hist = [
-    'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-    'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1',
-    'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2',
-    'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2',
-  ];
-
-  const play = () => {
-    let t = turn;
-    setIntervalID(
-      setInterval(() => {
-        if (t >= hist.length) return;
-        setTurn(++t);
-        console.log(t);
-      }, 2000)
-    );
-    setPlaying(true);
-  };
-
-  const pause = () => {
-    clearInterval(intervalID);
-    setPlaying(false);
-  };
-
-  const playPause = () => {
-    if (playing) {
-      pause();
-    } else {
-      play();
-    }
-  };
 
   return (
     <>
@@ -102,12 +81,13 @@ export const ReplayView = () => {
         <PlayerBar
           email=""
           time={0}
+          email=""
           name="Player 1"
           countryCode="SE"
           rating="1900"
         />
         <GameBoard
-          position={hist[turn - 1]}
+          position={props.fen}
           transitionDuration={400}
           draggable={false}
           size={0.8}
@@ -116,19 +96,23 @@ export const ReplayView = () => {
         <Box>
           <Box display="flex" justifyContent="center">
             <Button
-              disabled={turn <= 1}
+              disabled={props.start}
               variant="outlined"
-              onClick={() => setTurn(turn - 1)}
+              onClick={props.onPrevious}
             >
               <SkipPrevious fontSize="large" color="action" />
             </Button>
-            <Button variant="outlined" onClick={() => playPause()}>
-              <PlayArrow fontSize="large" color="action" />
+            <Button variant="outlined" onClick={props.onPlay}>
+              {!props.playing ? (
+                <PlayArrow fontSize="large" color="action" />
+              ) : (
+                <Pause fontSize="large" color="action" />
+              )}
             </Button>
             <Button
-              disabled={turn >= hist.length}
+              disabled={props.end}
               variant="outlined"
-              onClick={() => setTurn(turn + 1)}
+              onClick={props.onNext}
             >
               <SkipNext fontSize="large" color="action" />
             </Button>
@@ -137,15 +121,16 @@ export const ReplayView = () => {
           <ReplaySlider
             marks={true}
             min={1}
-            max={hist.length}
-            value={turn}
-            onChange={(_, v) => setTurn(v as number)}
+            max={props.max}
+            value={props.turn}
+            onChange={(_, v) => props.onSlider(v as number)}
           />
         </Box>
 
         <PlayerBar
           email=""
           time={0}
+          email=""
           name="Player 2"
           countryCode="SE"
           rating="2000"
