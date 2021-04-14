@@ -4,11 +4,7 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 import { BoardProps } from '../types/Board';
 import { PlayerBar } from '../components/game/PlayerBar';
-<<<<<<< HEAD
 import { GameBoard } from '../components/game/GameBoard';
-=======
-import { OnePlayerBoard } from '../components/game/OnePlayerBoard';
->>>>>>> master
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
