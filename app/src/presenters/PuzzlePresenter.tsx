@@ -69,6 +69,9 @@ export const PuzzlePresenter = () => {
         ],
       });
       const newGameState = await getLiveGameByUserID(userID);
+      if (newGameState === null) {
+        throw new Error(`This should never happen... Run for your lives!!`);
+      }
       set(currentGameState, newGameState);
     }
   );

@@ -93,8 +93,8 @@ export const ProfileView = (props: Props) => {
                 {profile.recentMatches.map((match, i) => (
                   <ThreeRowButton
                     key={i}
-                    {...match.opponent}
-                    delta={match.result}
+                    name={match}
+                    delta={1}
                     avatar={
                       <Gravatar
                         variant="circular"
