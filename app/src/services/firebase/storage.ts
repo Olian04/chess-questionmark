@@ -4,16 +4,15 @@ import 'firebase/firestore';
 import { User } from '../../types/User';
 import { Profile } from '../../types/Profile';
 import { UserExtras } from '../../types/UserExtras';
-import { Match } from '../../types/Match';
+import { StorageGame } from '../../types/storage/StorageGame';
 
 const db = app.firestore();
 
-export const createMatch = (match: {
-  winner: string;
-  against: string;
-  history: string[];
-}) => {
-  return db.collection('matches').add(match);
+export const createStorageGame = (game: StorageGame) => {
+  return db
+    .collection('games')
+    .add(game)
+    .then(() => {});
 };
 
 export const profileCollection = {

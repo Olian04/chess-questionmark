@@ -1,6 +1,8 @@
 import { atom, selector } from 'recoil';
 import { Profile } from '../types/Profile';
 import { User } from '../types/User';
+import { auth, getCurrentUser } from '../services/firebase/auth';
+import { userCollection } from '../services/firebase/storage';
 
 const notApplicable = 'N/A';
 
@@ -24,7 +26,22 @@ export const defaultProfileState = {
 
 export const userState = atom<User>({
   key: 'USER',
-  default: defaultUserState,
+  default: selector({
+    key: 'USER/DEFAULT',
+    get: async () => {
+      const maybeUser = await getCurrentUser();
+      if (maybeUser === null) return defaultUserState;
+      const extras = await userCollection.get(maybeUser.uid);
+      return {
+        id: maybeUser.uid,
+        name: extras.name as string,
+        email: maybeUser.email as string,
+        phone: extras?.phone ?? (notApplicable as string),
+        team: extras?.team ?? (notApplicable as string),
+        avatar: extras?.avatar ?? (notApplicable as string),
+      };
+    },
+  }),
 });
 
 export const profileState = atom<Profile>({

@@ -3,6 +3,7 @@ import { useSetRecoilState } from 'recoil';
 import { PuzzlePresenter } from '../presenters/PuzzlePresenter';
 import { backgroundCircleState } from '../state/backgroundCircle';
 import { pillState } from '../state/pill';
+import { LoadingAnimation } from '../components/common/LoadingAnimation';
 
 export const PuzzleRoute = () => {
   const setSide = useSetRecoilState(backgroundCircleState);
@@ -13,7 +14,9 @@ export const PuzzleRoute = () => {
   });
   return (
     <>
-      <PuzzlePresenter />
+      <React.Suspense fallback={<LoadingAnimation />}>
+        <PuzzlePresenter />
+      </React.Suspense>
     </>
   );
 };

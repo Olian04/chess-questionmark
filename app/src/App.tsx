@@ -21,6 +21,7 @@ import { SettingsRoute } from './routes/SettingsRoute';
 import { ProfileRoute } from './routes/ProfileRoute';
 import { RecoilRoute } from './providers/stateProvider';
 import { BackgroundCircle } from './components/common/BackgroundCircle';
+import { GameHydrationProvider } from './providers/GameHydrationProvider';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,6 +77,7 @@ export const App = () => {
             />
             <Container maxWidth="sm" className={classes.container}>
               <React.Suspense fallback={<LoadingAnimation />}>
+                <GameHydrationProvider />
                 <Switch>
                   <RecoilRoute exact path="/game" component={GameRoute} />
                   <RecoilRoute exact path="/puzzle" component={PuzzleRoute} />

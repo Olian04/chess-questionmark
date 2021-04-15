@@ -75,9 +75,7 @@ export const PlayView = (props: Props) => {
             icon={MatchIcon}
           />
           <Button
-            onClick={() => {
-              props.onClickStartPuzzle();
-            }}
+            onClick={props.onClickStartPuzzle}
             text="Beat our AI"
             subText="Battle your way up from a randomized blunder"
             icon={AiIcon}
