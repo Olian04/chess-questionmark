@@ -9,16 +9,16 @@ import { GameView } from '../views/GameView';
 import { Chess, Square, Move } from 'chess.js';
 import { currentGameState } from '../state/game';
 import { useHistory } from 'react-router-dom';
-import { userState } from '../state/user';
+import { profileState, userState } from '../state/user';
 import { EndOfGame } from '../components/game/EndOfGame';
 import { useChessLogic } from '../hooks/use-chess-logic';
-import { LiveGame } from '../types/live/LiveGame';
 import { migrateGameByUserID } from '../services/firebase/util/migrateDB';
 import {
   updateLiveGameByUserID,
   getLiveGameByUserID,
 } from '../services/firebase/realtimeDB';
 import { snackbarState } from '../state/snackbar';
+import { profileCollection } from '../services/firebase/storage';
 
 export const PuzzlePresenter = () => {
   const history = useHistory();

@@ -11,28 +11,29 @@ export const migrateGameByUserID = async (userID: string) => {
   }
 
   console.log('migrate', liveGame);
+  if (liveGame) {
+    const winner = {
+      playerOne: liveGame.playerOne,
+      playerTwo: liveGame.playerTwo,
+    }[liveGame.winner];
 
-  const winner = {
-    playerOne: liveGame.playerOne,
-    playerTwo: liveGame.playerTwo,
-  }[liveGame.winner];
+    const loser = {
+      playerTwo: liveGame.playerOne,
+      playerOne: liveGame.playerTwo,
+    }[liveGame.winner];
 
-  const loser = {
-    playerTwo: liveGame.playerOne,
-    playerOne: liveGame.playerTwo,
-  }[liveGame.winner];
+    const id = await createStorageGame({
+      history: liveGame.history,
+      winnerID: winner,
+      loserID: loser,
+    });
 
-  const id = await createStorageGame({
-    history: liveGame.history,
-    winnerID: winner,
-    loserID: loser,
-  });
+    const profile = await profileCollection.getRaw(liveGame.playerOne);
 
-  const profile = await profileCollection.get(liveGame.playerOne);
+    profileCollection.updateRaw(liveGame.playerOne, {
+      recentMatches: [...(profile?.recentMatches ?? []), id],
+    });
 
-  profileCollection.update(liveGame.playerOne, {
-    recentMatches: [...(profile.recentMatches ?? []), id],
-  });
-
-  return deleteLiveGameByUserID(userID);
+    return deleteLiveGameByUserID(userID);
+  }
 };

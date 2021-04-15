@@ -7,7 +7,7 @@ import {
   getStorageGameByID,
   profileCollection,
 } from '../services/firebase/storage';
-import { StorageGame } from '../types/storage/StorageGame';
+import { StorageGameLocal } from '../types/storage/StorageGame';
 
 const notApplicable = 'N/A';
 
@@ -22,7 +22,7 @@ export const defaultUserState = {
 
 export const defaultProfileState = {
   rank: -1,
-  rankDelta: -1,
+  rankDelta: 'N/A' as number | 'N/A',
   wins: -1,
   losses: -1,
   draws: -1,
@@ -56,22 +56,16 @@ export const profileState = atom<Profile>({
     get: async ({ get }) => {
       const user = get(userState);
       const profileData = await profileCollection.get(user.id);
+      console.log('STATE', profileData);
 
       if (profileData) {
-        profileData.recentMatches = await Promise.all(
-          profileData.recentMatches.map((id: string) => get(recentMatch(id)))
-        );
         return profileData;
       }
+
+      await profileCollection.set(user.id, defaultProfileState);
+      return defaultProfileState;
     },
   }),
-});
-
-export const recentMatch = selectorFamily<StorageGame, string>({
-  key: 'RECENT_MATCH',
-  get: (id: string) => async () => {
-    return getStorageGameByID(id);
-  },
 });
 
 export const profileStatusState = atom<

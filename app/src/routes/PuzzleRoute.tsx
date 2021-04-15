@@ -18,7 +18,6 @@ export const PuzzleRoute = () => {
   return (
     <>
       <React.Suspense fallback={<LoadingView message="Fetching state" />}>
-        <Snackbar />
         <PuzzlePresenter />
       </React.Suspense>
     </>

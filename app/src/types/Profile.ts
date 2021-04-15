@@ -1,4 +1,4 @@
-import { StorageGame } from './storage/StorageGame';
+import { StorageGameLocal } from './storage/StorageGame';
 
 export interface Profile {
   rank: number;
@@ -6,5 +6,5 @@ export interface Profile {
   wins: number;
   losses: number;
   draws: number;
-  recentMatches: StorageGame[];
+  recentMatches: StorageGameLocal[];
 }

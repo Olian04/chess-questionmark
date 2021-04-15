@@ -1,17 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Grid, List, Typography } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { User } from '../types/User';
 import { Graph } from '../components/profile/Graph';
 import { Tile } from '../components/play/Tile';
 import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
-
 import { ThreeRowButton } from '../components/settings/ThreeRowButton';
-
-import BlankAvatar from '/preview.svg';
 import { Gravatar } from '../components/common/Gravatar';
-import { useRecoilValue } from 'recoil';
-import { profileState } from '../state/user';
 import { Profile } from '../types/Profile';
 import { LoadingView } from './LoadingView';
 
@@ -88,12 +83,25 @@ export const ProfileView = (props: Props) => {
                     {profile.recentMatches.map((match, i) => (
                       <ThreeRowButton
                         key={i}
-                        name={JSON.stringify(match)}
-                        delta={1}
+                        name={
+                          user.name === match.winner.name
+                            ? match.loser.name
+                            : match.winner.name
+                        }
+                        delta={user.name === match.winner.name ? 10 : -10}
                         avatar={
                           <Gravatar
                             variant="circular"
-                            opponent={{ email: `fix@db.side${i}` }}
+                            opponent={{
+                              email:
+                                user.name === match.winner.name
+                                  ? match.loser.email
+                                  : match.winner.email,
+                              avatar:
+                                user.name === match.winner.name
+                                  ? match.loser.avatar
+                                  : match.winner.avatar,
+                            }}
                           />
                         }
                       />
