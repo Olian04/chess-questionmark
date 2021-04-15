@@ -12,7 +12,7 @@ import { UpdateFieldModal } from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
 import { User } from '../types/User';
 import { Gravatar } from '../components/common/Gravatar';
-import { getUser } from '../services/firebase/auth';
+import { useUserState } from '../hooks/use-user-state';
 import { userCollection } from '../services/firebase/storage';
 import { userState } from '../state/user';
 import { useRecoilState } from 'recoil';
@@ -40,6 +40,7 @@ interface Props {
 
 export const SettingsView = (props: Props) => {
   const classes = useStyles();
+  const firebaseUser = useUserState();
   const [modal, setModal] = useState({
     open: false,
     dialogs: [
@@ -68,7 +69,7 @@ export const SettingsView = (props: Props) => {
           for (const [key, value] of Object.entries(fieldValues)) {
             switch (key) {
               case 'email':
-                getUser()
+                firebaseUser
                   ?.updateEmail(value as string)
                   .catch((e: { code: string; message: string }) =>
                     console.log(e)

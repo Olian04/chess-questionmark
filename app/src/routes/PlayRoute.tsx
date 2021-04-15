@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
+
 import { backgroundCircleState } from '../state/backgroundCircle';
 import { pillState } from '../state/pill';
-
-import { PlayView } from '../views/PlayView';
+import { PlayPresenter } from '../presenters/PlayPresenter';
 
 export const PlayRoute = () => {
   const setSide = useSetRecoilState(backgroundCircleState);
@@ -14,7 +14,7 @@ export const PlayRoute = () => {
   });
   return (
     <>
-      <PlayView />
+      <PlayPresenter />
     </>
   );
 };

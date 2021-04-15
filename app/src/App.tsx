@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Redirect,
-  Route,
-  Switch,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
 import { Container } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
@@ -14,7 +9,6 @@ import { LoginRoute } from './routes/LoginRoute';
 import { SignUpRoute } from './routes/SignUpRoute';
 import { SignInRoute } from './routes/SignInRoute';
 import { PlayRoute } from './routes/PlayRoute';
-import { GameRoute } from './routes/GameRoute';
 import { PuzzleRoute } from './routes/PuzzleRoute';
 import { ReplayRoute } from './routes/ReplayRoute';
 import { SettingsRoute } from './routes/SettingsRoute';
@@ -77,7 +71,6 @@ export const App = () => {
             <Container maxWidth="sm" className={classes.container}>
               <React.Suspense fallback={<LoadingAnimation />}>
                 <Switch>
-                  <RecoilRoute exact path="/game" component={GameRoute} />
                   <RecoilRoute exact path="/puzzle" component={PuzzleRoute} />
                   <RecoilRoute exact path="/replay" component={ReplayRoute} />
                   <RecoilRoute

@@ -23,7 +23,6 @@ export const GameBoard = (props: Props) => {
 
   return (
     <Box display="flex" justifyContent="center">
-      <EndOfGame winner={props.winner} />
       <Chessboard
         {...props}
         boardStyle={{

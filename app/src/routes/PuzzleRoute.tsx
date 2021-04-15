@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { PuzzlePresenter } from '../presenters/PuzzlePresenter';
 import { backgroundCircleState } from '../state/backgroundCircle';
 import { pillState } from '../state/pill';
-import { LoadingAnimation } from '../components/common/LoadingAnimation';
+import { currentGameState } from '../state/game';
+import { LoadingView } from '../views/LoadingView';
+import { Redirect } from 'react-router-dom';
 
 export const PuzzleRoute = () => {
   const setSide = useSetRecoilState(backgroundCircleState);
@@ -14,7 +16,7 @@ export const PuzzleRoute = () => {
   });
   return (
     <>
-      <React.Suspense fallback={<LoadingAnimation />}>
+      <React.Suspense fallback={<LoadingView message="Fetching state" />}>
         <PuzzlePresenter />
       </React.Suspense>
     </>

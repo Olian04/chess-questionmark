@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Redirect, Route as BaseRoute, RouteProps } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { useAuthState } from '../services/firebase/auth';
+import { useAuthState } from '../hooks/use-auth-state';
 import { userCollection } from '../services/firebase/storage';
 import { userState } from '../state/user';
 import { LoadingView } from '../views/LoadingView';

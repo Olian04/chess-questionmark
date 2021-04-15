@@ -4,8 +4,16 @@ import 'firebase/firestore';
 import { User } from '../../types/User';
 import { Profile } from '../../types/Profile';
 import { UserExtras } from '../../types/UserExtras';
+import { StorageGame } from '../../types/storage/StorageGame';
 
 const db = app.firestore();
+
+export const createStorageGame = (game: StorageGame) => {
+  return db
+    .collection('games')
+    .add(game)
+    .then(() => {});
+};
 
 export const profileCollection = {
   collection: db.collection('profiles'),
