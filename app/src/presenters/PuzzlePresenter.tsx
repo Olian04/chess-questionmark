@@ -39,6 +39,12 @@ export const PuzzlePresenter = () => {
     timerIncreaseOnMove: 5,
   });
 
+  useEffect(() => {
+    if (!initialFEN) {
+      history.push('/play');
+    }
+  }, []);
+
   const endGame = useRecoilCallback(({ reset, snapshot }) => async () => {
     setWinnerDialogueOpen(true);
     const { id: userID } = await snapshot.getPromise(userState);
@@ -85,7 +91,7 @@ export const PuzzlePresenter = () => {
         winner={gameLogic.boardProps.winner}
         onClick={() => {
           setWinnerDialogueOpen(false);
-          history.push('/profile');
+          history.push('/play');
         }}
         open={winnerDialogueOpen}
       />
