@@ -1,80 +1,80 @@
-# iprog-project
+# Chess?
 
-## Dev Locally
+The project is a Chess app that is created using react, recoil, firebase and various API's.
+It will have various features that mainly focus on the following:
 
-1. Clone this repo
-2. Checkout your own branch
-3. Install nodejs
-4. Navigate to the repo
-5. Natigate to the `app` folder
-6. Intstall deps: `npm install`
-7. Run dev server: `npm run dev`
-8. Open browser to `localhost:3000` 
+- The app allows a user to sign up and log in, which then takes them to a profile page where they can see their own game history.
+- Users can create or join games, either against other users or against an AI controlled player using stockfish.
+- The user can play against the AI in a puzzle that has been fetched from an API.
+- Completed games can be watched as a replay through the profile screen.
 
-## Usage Sequence
+The app will manage all the users and chess games to match them up and provide any data needed to create a smooth user experience.
 
-1. Register/Login screen
-2. Profile Page
-3. Play Screen
-4. Game Screen
-5. Replay Screen
+## What have we done
 
-## Screens
+We have built a chess platfrom, where you are able to play puzzle games against an AI. From the chess data we are extrapolation profile information about a users recent matches as well as their track record.
 
-### Login/Register Screen
+The API and technologies that are being used are the following:
 
-![](./prototype/login_design.PNG)
+- [Firebase](https://firebase.google.com/) :: Serverless & Hosting
+- [Recoil](https://recoiljs.org/) :: State management
+- [Stockfish](https://stockfishchess.org/) :: Chess AI
+- [Chess.com](https://www.chess.com/club/chess-com-developer-community) :: Chess Puzzle API
+- [Gravatar](https://sv.gravatar.com/) :: Automated Profile avatars
+- [Countryflags.io](https://www.countryflags.io/) :: Country flags API
 
-### Profile Screen
+So far we've implemented the following to a satisfyin:
 
-![](./prototype/profile_design.PNG)
+- The app allows a user to sign up and log in, which then takes them to a profile page.
+- The user can play against the AI in a puzzle that has been fetched from an API.
 
-### Settings Screen
+## What is planned
 
-![](./prototype/settings_design.PNG)
+Our next features that we paln to implement include:
 
-### Play Screen
+- Create & Play matches against other people
+- Replay recent matches
 
-![](./prototype/play_design.PNG)
+This will include writing the logic for a two-player game, listing all open matches and allowing users to join a game of their choice.
 
-### Game Screen
+## Rough outline of project structure
 
-![](./prototype/game_design.PNG)
+_(Note: We know you said write a short description/purpose of **each file**. However since we have so many, we hope that a rough outline will suffice)_
 
-### Replay Screen
+The app is written in `Typescript`, using `React` & `Recoil`, with a boilerplate provided by our build pipeline `Vitejs`, and hosted on firebase.
 
-![](./prototype/replay_design.PNG)
+Repository file structure:
 
+- `app` is the root of the app.
+- `meetings` contains those meeting protocols that we remember to write down.
+- `prototype` contains design prototypes for the app, designed in Figma.
+- `.firebaserc` is a config file for firebase.
+- `firebase.json` is a config file for firebase.
+- `DESIGN_DOC.md` is the design doc we used when we developed the views for the app.
+- `PROJECT_HANDIN.md` is the file that we handed in for the initial project review.
+- `README.md` is this file.
 
-## Minimal Viable Product Featureset
+App file structure:
 
-* Login with google.
-* Create a match.
-* List all matches.
-* Join a match.
-* Play a chess game agains another player.
-* Play a solo practice game vs AI, where a specific board state is loaded, where it is possible to "mate" in 2 or 3 turns, and play to see how many turns it takes you to "mate".
-* Win / Loose / Draw.
+- `vite.config.ts` is the config file for the build pipeline.
+- `tsconfig.json` is the config file for the typescript transpiler.
+- `package.json` is the config file for NPM, which is both a dependency manager as well as a scripts engine.
+- `index.html` is the entry point for the build system.
+- `public` contains all of your staticly served resources.
+- `src` contains all of our typescript source files.
 
+Source file structure:
 
-## Extended Featureset (Streach goals)
-
-* Game timer (stop to end turn).
-* Watch along chat / aka spectators
-* Clip functionality, like twich. Generate a gif from a set of FEN strings using a firebase cloud function, store the FEN string in firebase, and return a URL for the gif.
-* Feature new clips on the front page.
-* Replay matches (replay sequence of FEN strings).
-
-## Resources
-
-Forsyth-Edwards Notation (FEN): https://www.chess.com/terms/fen-chess <br>
-Chess board component: https://www.chessboardjsx.com/ <br>
-Chess logic: https://github.com/jhlywa/chess.js <br>
-Chess AI: https://github.com/nmrugg/stockfish.js <br>
-~~Random starting board states: https://chessblunders.org/ <br>~~
-Puzzle based starting board state: https://www.chess.com/news/view/published-data-api#pubapi-daily-puzzle
-Profile pictures: https://en.gravatar.com/ <br>
-
-Maybe look into Lichess (might be overkill): https://lichess.org/api#section/Authentication
-
-Figma project: https://www.figma.com/file/3iUKHHol5BU6zsU5zE5wP7/prototype <br>
+- `main.tsx` is the entry point of the app.
+- `index.css` contains some baseline css.
+- `App.tsx` is the root react component of the app.
+- `components` contains all of your stateless components.
+- `hooks` contains all of our custom hooks.
+- `lib` contains glue code for other libraries.
+- `presenters` contains our presenters.
+- `providers` containers jsx components that provide app wide functionality, such as theaming or route gating.
+- `routes` contains routing components used by react router.
+- `servies` contains code for interacting with 3rd party api's.
+- `state` contains our app wide recoil state.
+- `types` contains typescript types used across the entire app.
+- `views` contains our view components.
