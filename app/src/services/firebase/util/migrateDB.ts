@@ -1,4 +1,4 @@
-import { createStorageGame } from '../storage';
+import { createStorageGame, profileCollection } from '../storage';
 import { getLiveGameByUserID, deleteLiveGameByUserID } from '../realtimeDB';
 import { User } from '../../../types/User';
 import { LiveGame } from '../../../types/live/LiveGame';
@@ -22,10 +22,16 @@ export const migrateGameByUserID = async (userID: string) => {
     playerOne: liveGame.playerTwo,
   }[liveGame.winner];
 
-  await createStorageGame({
+  const id = await createStorageGame({
     history: liveGame.history,
     winnerID: winner,
     loserID: loser,
+  });
+
+  const profile = await profileCollection.get(liveGame.playerOne);
+
+  profileCollection.update(liveGame.playerOne, {
+    recentMatches: [...(profile.recentMatches ?? []), id],
   });
 
   return deleteLiveGameByUserID(userID);

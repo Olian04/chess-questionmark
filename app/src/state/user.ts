@@ -1,8 +1,13 @@
-import { atom, selector } from 'recoil';
+import { atom, selector, selectorFamily } from 'recoil';
 import { Profile } from '../types/Profile';
 import { User } from '../types/User';
 import { auth, getCurrentUser } from '../services/firebase/auth';
-import { userCollection } from '../services/firebase/storage';
+import {
+  userCollection,
+  getStorageGameByID,
+  profileCollection,
+} from '../services/firebase/storage';
+import { StorageGame } from '../types/storage/StorageGame';
 
 const notApplicable = 'N/A';
 
@@ -46,7 +51,27 @@ export const userState = atom<User>({
 
 export const profileState = atom<Profile>({
   key: 'PROFILE',
-  default: defaultProfileState,
+  default: selector({
+    key: 'PROFILE/DEFAULT',
+    get: async ({ get }) => {
+      const user = get(userState);
+      const profileData = await profileCollection.get(user.id);
+
+      if (profileData) {
+        profileData.recentMatches = await Promise.all(
+          profileData.recentMatches.map((id: string) => get(recentMatch(id)))
+        );
+        return profileData;
+      }
+    },
+  }),
+});
+
+export const recentMatch = selectorFamily<StorageGame, string>({
+  key: 'RECENT_MATCH',
+  get: (id: string) => async () => {
+    return getStorageGameByID(id);
+  },
 });
 
 export const profileStatusState = atom<

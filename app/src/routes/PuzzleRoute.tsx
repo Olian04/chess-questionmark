@@ -6,6 +6,7 @@ import { pillState } from '../state/pill';
 import { currentGameState } from '../state/game';
 import { LoadingView } from '../views/LoadingView';
 import { Redirect } from 'react-router-dom';
+import { Snackbar } from '../components/common/Snackbar';
 
 export const PuzzleRoute = () => {
   const setSide = useSetRecoilState(backgroundCircleState);
@@ -17,6 +18,7 @@ export const PuzzleRoute = () => {
   return (
     <>
       <React.Suspense fallback={<LoadingView message="Fetching state" />}>
+        <Snackbar />
         <PuzzlePresenter />
       </React.Suspense>
     </>

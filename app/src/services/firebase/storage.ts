@@ -12,14 +12,19 @@ export const createStorageGame = (game: StorageGame) => {
   return db
     .collection('games')
     .add(game)
-    .then(() => {});
+    .then((doc) => doc.id);
+};
+
+export const getStorageGameByID = async (id: string) => {
+  return (await db.doc(`/games/${id}`).get()) as StorageGame;
 };
 
 export const profileCollection = {
   collection: db.collection('profiles'),
   get: async function (id: string) {
+    if (id === 'N/A') return null;
     const document = await this.collection.doc(id).get();
-    if (!document.exists) throw new Error('Document does not exist');
+    if (!document.exists) return null;
 
     return document.data() as Profile;
   },

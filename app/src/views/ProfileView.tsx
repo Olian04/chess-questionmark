@@ -12,6 +12,8 @@ import BlankAvatar from '/preview.svg';
 import { Gravatar } from '../components/common/Gravatar';
 import { useRecoilValue } from 'recoil';
 import { profileState } from '../state/user';
+import { Profile } from '../types/Profile';
+import { LoadingView } from './LoadingView';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,22 +30,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   user: User;
-  profileExists: boolean;
-  fetchDetails: () => void;
+  profile: Profile;
 }
 
 export const ProfileView = (props: Props) => {
+  const { user, profile } = props;
   const classes = useStyles();
 
-  const profile = useRecoilValue(profileState);
-
-  const username = props.user.name ? props.user.name : 'Anon';
-
-  useEffect(() => {
-    if (props.user.id !== 'N/A') {
-      props.fetchDetails();
-    }
-  }, [props.user]);
   return (
     <Grid
       container
@@ -52,62 +45,67 @@ export const ProfileView = (props: Props) => {
       className={classes.container}
       spacing={2}
     >
-      <Grid item xs>
-        <Grid
-          container
-          alignItems="center"
-          justify="center"
-          style={{ height: '100%' }}
-        >
+      {profile && (
+        <>
           <Grid item xs>
-            <Typography variant="h4" color="textPrimary">
-              Looking good {username}!
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-
-      <Graph rank={profile.rank} delta={profile.rankDelta} />
-      <Grid item xs>
-        <Grid container direction="row" spacing={2}>
-          <Tile text={profile.wins} subText="Wins" />
-          <Tile text={profile.losses} subText="Losses" />
-          <Tile text={profile.draws} subText="Draws" />
-        </Grid>
-      </Grid>
-
-      <Grid item xs>
-        <Grid container direction="column" justify="space-evenly">
-          <Grid item xs>
-            <Typography
-              className={classes.padding}
-              variant="button"
-              color="textPrimary"
+            <Grid
+              container
+              alignItems="center"
+              justify="center"
+              style={{ height: '100%' }}
             >
-              Recent Matches
-            </Typography>
+              <Grid item xs>
+                <Typography variant="h4" color="textPrimary">
+                  Looking good {user.name}!
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
+
+          <Graph rank={profile.rank} delta={profile.rankDelta} />
           <Grid item xs>
-            <List>
-              <VerticalButtonGroup>
-                {profile.recentMatches.map((match, i) => (
-                  <ThreeRowButton
-                    key={i}
-                    {...match.opponent}
-                    delta={match.result}
-                    avatar={
-                      <Gravatar
-                        variant="circular"
-                        opponent={{ email: `fix@db.side${i}` }}
-                      />
-                    }
-                  />
-                ))}
-              </VerticalButtonGroup>
-            </List>
+            <Grid container direction="row" spacing={2}>
+              <Tile text={profile.wins} subText="Wins" />
+              <Tile text={profile.losses} subText="Losses" />
+              <Tile text={profile.draws} subText="Draws" />
+            </Grid>
           </Grid>
-        </Grid>
-      </Grid>
+
+          <Grid item xs>
+            <Grid container direction="column" justify="space-evenly">
+              <Grid item xs>
+                <Typography
+                  className={classes.padding}
+                  variant="button"
+                  color="textPrimary"
+                >
+                  Recent Matches
+                </Typography>
+              </Grid>
+              <Grid item xs>
+                <List>
+                  <VerticalButtonGroup>
+                    {profile.recentMatches.map((match, i) => (
+                      <ThreeRowButton
+                        key={i}
+                        name={JSON.stringify(match)}
+                        delta={1}
+                        avatar={
+                          <Gravatar
+                            variant="circular"
+                            opponent={{ email: `fix@db.side${i}` }}
+                          />
+                        }
+                      />
+                    ))}
+                  </VerticalButtonGroup>
+                </List>
+              </Grid>
+            </Grid>
+          </Grid>
+        </>
+      )}
+      {!profile && <LoadingView message="fetching profile" />}
     </Grid>
   );
 };

@@ -18,11 +18,13 @@ import {
   updateLiveGameByUserID,
   getLiveGameByUserID,
 } from '../services/firebase/realtimeDB';
+import { snackbarState } from '../state/snackbar';
 
 export const PuzzlePresenter = () => {
   const history = useHistory();
   const user = useRecoilValue(userState);
   const [gameState, setGamestate] = useRecoilState(currentGameState);
+  const setSnackbar = useSetRecoilState(snackbarState);
   const [winnerDialogueOpen, setWinnerDialogueOpen] = useState<boolean>(false);
   const [playerIsWhite] = useState(
     gameState?.history[0]?.split(' ')?.[1] === 'w' ?? true
@@ -85,6 +87,13 @@ export const PuzzlePresenter = () => {
     }
   }, [gameLogic.history]);
 
+  useEffect(() => {
+    setSnackbar({
+      open: true,
+      severity: 'info',
+      message: `You are playing as ${playerIsWhite ? 'white' : 'black'}`,
+    });
+  }, [gameLogic.boardProps.orientation]);
   return (
     <>
       <EndOfGame
