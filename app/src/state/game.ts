@@ -17,13 +17,10 @@ export const currentGameState = atom<LiveGame>({
   key: 'GAME_STATE',
   default: selector({
     key: 'GAME_STATE/DEFAULT',
-    get: ({ get }) => {
+    get: async ({ get }) => {
       const user = get(userState);
-      try {
-        return getLiveGameByUserID(user.id);
-      } catch {
-        return fallbackGameState;
-      }
+      const maybeGame = await getLiveGameByUserID(user.id);
+      return maybeGame ?? fallbackGameState;
     },
   }),
 });

@@ -9,18 +9,23 @@ export const migrateGameByUserID = async (userID: string) => {
   if (liveGame.winner === 'N/A') {
     throw new Error(`Can't migrate game with no winner`);
   }
+
+  console.log('migrate', liveGame);
+
   const winner = {
     playerOne: liveGame.playerOne,
     playerTwo: liveGame.playerTwo,
   }[liveGame.winner];
-  const looser = {
+
+  const loser = {
     playerTwo: liveGame.playerOne,
     playerOne: liveGame.playerTwo,
   }[liveGame.winner];
+
   await createStorageGame({
     history: liveGame.history,
     winnerID: winner,
-    loserID: looser,
+    loserID: loser,
   });
 
   return deleteLiveGameByUserID(userID);

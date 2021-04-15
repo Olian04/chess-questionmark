@@ -77,7 +77,6 @@ export const App = () => {
             />
             <Container maxWidth="sm" className={classes.container}>
               <React.Suspense fallback={<LoadingAnimation />}>
-                <GameHydrationProvider />
                 <Switch>
                   <RecoilRoute exact path="/game" component={GameRoute} />
                   <RecoilRoute exact path="/puzzle" component={PuzzleRoute} />

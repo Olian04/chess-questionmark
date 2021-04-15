@@ -9,8 +9,10 @@ import { BoardProps } from '../types/BoardProps';
 
 interface Config {
   initialFEN: string;
+  previousFENStrings?: string[];
   timerLength: number;
   timerIncreaseOnMove: number;
+  playerColor: 'white' | 'black';
 }
 
 type Move = {
@@ -36,7 +38,7 @@ type Player = 'white' | 'black';
 type Winner = Player | 'N/A';
 
 export const useChessLogic = (conf: Config): API => {
-  const [player, setPlayer] = useState('white' as Player);
+  const [player] = useState<Player>(conf.playerColor);
 
   const [botTimeLeft, setBotTimeLeft] = useState(conf.timerLength);
   const [topTimeLeft, setTopTimeLeft] = useState(conf.timerLength);
@@ -46,12 +48,16 @@ export const useChessLogic = (conf: Config): API => {
   const [dropSquareStyle, setDropSquareStyle] = useState({});
   const [squareStyles, setSquareStyles] = useState({});
   const [pieceSquare, setPieceSquare] = useState('' as Square);
-  const [square, setSquare] = useState('');
   const [history, setHistory] = useState([] as ChessMove[]);
-  const [draggable, setDraggable] = useState(player === 'white');
+  const [draggable, setDraggable] = useState(true);
   const [winner, setWinner] = useState('N/A' as Winner);
 
-  const [apiHistory, setApiHistory] = useState<Move[]>([]);
+  const [apiHistory, setApiHistory] = useState<Move[]>(
+    conf?.previousFENStrings?.map((fen, i) => ({
+      fen,
+      player: i % 2 === 0 ? 'human' : 'ai',
+    })) ?? []
+  );
 
   const [game] = useState(new Chess(position));
 
@@ -133,7 +139,7 @@ export const useChessLogic = (conf: Config): API => {
         ...h,
         {
           player: 'human',
-          fen: position,
+          fen: game.fen(),
         },
       ]);
       engineGame({}).prepareMove();
@@ -183,10 +189,7 @@ export const useChessLogic = (conf: Config): API => {
   const engineGame = (options: Object) => {
     options = options || {};
 
-    let engine = new Worker(
-      '../../../node_modules/stockfish/src/stockfish.js',
-      { type: 'module' }
-    );
+    let engine = stockfishEngine;
 
     let engineStatus = {} as {
       engineReady: boolean;
@@ -316,8 +319,8 @@ export const useChessLogic = (conf: Config): API => {
           setApiHistory((h) => [
             ...h,
             {
-              player: 'ai',
-              fen: position,
+              player: 'human',
+              fen: game.fen(),
             },
           ]);
         } else if (
@@ -411,7 +414,7 @@ export const useChessLogic = (conf: Config): API => {
 
   useEffect(() => {
     if (!apiHistory.length) return;
-    if (apiHistory[apiHistory.length - 1].player === 'ai') {
+    if (apiHistory[apiHistory.length - 1].player === 'human') {
       stopTopTimer();
       runBotTimer();
     } else {

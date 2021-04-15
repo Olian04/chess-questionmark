@@ -37,13 +37,13 @@ export const updateLiveGameByUserID = async (
 
 export const getLiveGameByUserID = async (
   userID: string
-): Promise<LiveGame> => {
+): Promise<LiveGame | null> => {
   const maybeGameInfo = await __getGameByUserID(userID);
   if (maybeGameInfo) {
     const [_, gameData] = maybeGameInfo;
     return gameData;
   }
-  throw new Error(`There is no game for user with ID ${userID}`);
+  return null;
 };
 
 export const deleteLiveGameByUserID = async (userID: string) => {

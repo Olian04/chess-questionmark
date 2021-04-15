@@ -14,23 +14,58 @@ import { EndOfGame } from '../components/game/EndOfGame';
 import { useChessLogic } from '../hooks/use-chess-logic';
 import { LiveGame } from '../types/live/LiveGame';
 import { migrateGameByUserID } from '../services/firebase/util/migrateDB';
+import {
+  updateLiveGameByUserID,
+  getLiveGameByUserID,
+} from '../services/firebase/realtimeDB';
 
 export const PuzzlePresenter = () => {
   const history = useHistory();
   const user = useRecoilValue(userState);
   const [gameState, setGamestate] = useRecoilState(currentGameState);
   const [winnerDialogueOpen, setWinnerDialogueOpen] = useState<boolean>(false);
+  const [playerIsWhite] = useState(
+    gameState?.history[0]?.split(' ')?.[1] === 'w' ?? true
+  );
+  const [initialFEN] = useState(
+    gameState?.history?.[gameState?.history?.length - 1]
+  );
+  const [previousFENStrings] = useState(gameState?.history);
   const gameLogic = useChessLogic({
-    initialFEN: gameState.history[gameState.history.length - 1] ?? '',
+    initialFEN,
+    previousFENStrings,
+    playerColor: playerIsWhite ? 'white' : 'black',
     timerLength: 59,
     timerIncreaseOnMove: 5,
   });
 
-  const endGame = useRecoilCallback(({ reset }) => async () => {
+  const endGame = useRecoilCallback(({ reset, snapshot }) => async () => {
     setWinnerDialogueOpen(true);
-    migrateGameByUserID(user.id);
+    const { id: userID } = await snapshot.getPromise(userState);
+    await updateLiveGameByUserID(userID, {
+      winner:
+        gameLogic.boardProps.orientation === gameLogic.boardProps.winner
+          ? 'playerOne'
+          : 'playerTwo',
+    });
+    await migrateGameByUserID(user.id);
     reset(currentGameState);
   });
+
+  const addMoveToGameState = useRecoilCallback(
+    ({ snapshot, set }) => async () => {
+      const { id: userID } = await snapshot.getPromise(userState);
+      const gameState = await snapshot.getPromise(currentGameState);
+      await updateLiveGameByUserID(userID, {
+        history: [
+          ...gameState.history,
+          gameLogic.history[gameLogic.history.length - 1].fen,
+        ],
+      });
+      const newGameState = await getLiveGameByUserID(userID);
+      set(currentGameState, newGameState);
+    }
+  );
 
   useEffect(() => {
     if (['black', 'white'].includes(gameLogic.boardProps.winner)) {
@@ -39,10 +74,9 @@ export const PuzzlePresenter = () => {
   }, [gameLogic.boardProps.winner]);
 
   useEffect(() => {
-    setGamestate((state) => ({
-      ...state,
-      history: gameLogic.history.map((h) => h.fen),
-    }));
+    if (gameLogic.history.length > 1) {
+      addMoveToGameState();
+    }
   }, [gameLogic.history]);
 
   return (
