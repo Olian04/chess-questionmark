@@ -3,6 +3,7 @@ import { getLiveGameByUserID, deleteLiveGameByUserID } from '../realtimeDB';
 import { User } from '../../../types/User';
 import { LiveGame } from '../../../types/live/LiveGame';
 import { StorageGame } from '../../../types/storage/StorageGame';
+import { getMaterialCostFromFen } from '../../chess';
 
 export const migrateGameByUserID = async (userID: string) => {
   const liveGame = await getLiveGameByUserID(userID);
@@ -10,7 +11,6 @@ export const migrateGameByUserID = async (userID: string) => {
     throw new Error(`Can't migrate game with no winner`);
   }
 
-  console.log('migrate', liveGame);
   if (liveGame) {
     const winner = {
       playerOne: liveGame.playerOne,
@@ -22,17 +22,27 @@ export const migrateGameByUserID = async (userID: string) => {
       playerOne: liveGame.playerTwo,
     }[liveGame.winner];
 
+    const fen = liveGame.history[liveGame.history.length - 1];
+    const material = getMaterialCostFromFen(fen);
+
     const id = await createStorageGame({
       history: liveGame.history,
       winnerID: winner,
       loserID: loser,
+      material: material,
     });
 
     const profile = await profileCollection.getRaw(liveGame.playerOne);
 
-    profileCollection.updateRaw(liveGame.playerOne, {
-      recentMatches: [...(profile?.recentMatches ?? []), id],
-    });
+    if (profile) {
+      profileCollection.updateRaw(userID, {
+        losses: userID === loser ? profile.losses + 1 : profile.losses,
+        wins: userID === winner ? profile.wins + 1 : profile.wins,
+        rank:
+          userID === winner ? profile.rank + material : profile.rank - material,
+        recentMatches: [...profile.recentMatches, id],
+      });
+    }
 
     return deleteLiveGameByUserID(userID);
   }

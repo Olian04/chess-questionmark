@@ -4,6 +4,7 @@ import 'firebase/database';
 import { Md5 } from 'md5-typescript';
 import { LiveGame } from '../../types/live/LiveGame';
 import { User } from '../../types/User';
+import React from 'react';
 
 const db = app.database();
 
@@ -55,4 +56,32 @@ export const deleteLiveGameByUserID = async (userID: string) => {
       .remove()
       .then(() => {});
   }
+};
+
+export const getGameObserver = (callback: (a: number) => void) => {
+  const doc = db.ref('/games');
+  doc.on('value', (snapshot) => {
+    const games = snapshot.val();
+    const amountOfGames = Object.keys(games).length;
+    callback(amountOfGames);
+  });
+  return { unsubscribe: () => doc.off('value') };
+};
+
+export const getPlayerObserver = (callback: (a: number) => void) => {
+  const doc = db.ref('/games');
+  doc.on('value', (snapshot) => {
+    const games = snapshot.val();
+    const gamesArray = Object.entries(games) as [
+      string,
+      { playerOne: string; playerTwo: string }
+    ][];
+    const players = new Set();
+    for (const [_, value] of gamesArray) {
+      if (value.playerOne !== 'AI') players.add(value.playerOne);
+      if (value.playerTwo !== 'AI') players.add(value.playerTwo);
+    }
+    callback(players.size);
+  });
+  return { unsubscribe: () => doc.off('value') };
 };

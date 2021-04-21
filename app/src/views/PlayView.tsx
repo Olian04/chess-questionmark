@@ -33,6 +33,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   onClickStartPuzzle: () => void;
+  gameCount: number;
+  playerCount: number;
 }
 
 export const PlayView = (props: Props) => {
@@ -91,10 +93,10 @@ export const PlayView = (props: Props) => {
           alignContent="flex-end"
         >
           <Grid item xs={12} sm={6}>
-            <Tile text="104291" subText="Players" />
+            <Tile text={props.playerCount} subText="Players" />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Tile text="41665" subText="Games in play" />
+            <Tile text={props.gameCount} subText="Games in play" />
           </Grid>
         </Grid>
       </Grid>

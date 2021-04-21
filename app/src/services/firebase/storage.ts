@@ -25,6 +25,7 @@ export const getStorageGameByID = async (matchID: string) => {
     winner: await getUserByID(data.winnerID),
     loser: await getUserByID(data.loserID),
     history: data.history,
+    material: data.material,
   } as StorageGameLocal;
 };
 

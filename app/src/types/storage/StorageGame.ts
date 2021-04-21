@@ -9,10 +9,12 @@ export interface StorageGameLocal {
   history: string[];
   winner: User;
   loser: User;
+  material: number;
 }
 
 export interface StorageGameRemote {
   history: string[];
   winnerID: string;
   loserID: string;
+  material: number;
 }

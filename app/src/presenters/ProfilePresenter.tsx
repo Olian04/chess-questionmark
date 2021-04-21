@@ -13,7 +13,6 @@ export const ProfilePresenter = () => {
     const profile = await snapshot.getPromise(profileState);
 
     set(profileState, profile);
-    console.log('WOW:', profile);
   });
 
   useEffect(() => {

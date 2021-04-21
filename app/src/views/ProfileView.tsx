@@ -57,7 +57,12 @@ export const ProfileView = (props: Props) => {
             </Grid>
           </Grid>
 
-          <Graph rank={profile.rank} delta={profile.rankDelta} />
+          <Graph
+            recentMatches={props.profile.recentMatches}
+            username={props.user.name}
+            rank={profile.rank}
+            delta={profile.rankDelta}
+          />
           <Grid item xs>
             <Grid container direction="row" spacing={2}>
               <Tile text={profile.wins} subText="Wins" />
@@ -88,7 +93,11 @@ export const ProfileView = (props: Props) => {
                             ? match.loser.name
                             : match.winner.name
                         }
-                        delta={user.name === match.winner.name ? 10 : -10}
+                        delta={
+                          user.name === match.winner.name
+                            ? match.material
+                            : -1 * match.material
+                        }
                         avatar={
                           <Gravatar
                             variant="circular"

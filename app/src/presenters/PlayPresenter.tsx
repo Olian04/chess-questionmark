@@ -1,17 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilCallback } from 'recoil';
 
 import { fetchRandomPuzzle } from '../services/chess';
-import { createLiveGame } from '../services/firebase/realtimeDB';
+import {
+  createLiveGame,
+  getGameObserver,
+  getPlayerObserver,
+} from '../services/firebase/realtimeDB';
 import { currentGameState } from '../state/game';
 import { userState } from '../state/user';
 import { LiveGame } from '../types/live/LiveGame';
 import { PlayView } from '../views/PlayView';
 
 export const PlayPresenter = () => {
-  const user = useRecoilValue(userState);
   const history = useHistory();
+  const [gameCount, setGameCount] = useState(-1);
+  const [playerCount, setPlayerCount] = useState(-1);
 
   const initBoard = useRecoilCallback(({ snapshot, set }) => async () => {
     const { id: userId } = await snapshot.getPromise(userState);
@@ -34,5 +39,23 @@ export const PlayPresenter = () => {
     history.push('/puzzle');
   });
 
-  return <PlayView onClickStartPuzzle={initBoard} />;
+  useEffect(() => {
+    const observer = getGameObserver((count) => setGameCount(count));
+
+    return () => observer.unsubscribe();
+  }, [gameCount]);
+
+  useEffect(() => {
+    const observer = getPlayerObserver((count) => setPlayerCount(count));
+
+    return () => observer.unsubscribe();
+  }, [playerCount]);
+
+  return (
+    <PlayView
+      onClickStartPuzzle={initBoard}
+      gameCount={gameCount}
+      playerCount={playerCount}
+    />
+  );
 };

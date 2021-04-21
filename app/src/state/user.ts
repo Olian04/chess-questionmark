@@ -56,7 +56,6 @@ export const profileState = atom<Profile>({
     get: async ({ get }) => {
       const user = get(userState);
       const profileData = await profileCollection.get(user.id);
-      console.log('STATE', profileData);
 
       if (profileData) {
         return profileData;
