@@ -6,6 +6,7 @@ import {
   profileCollection,
   userCollection,
 } from '../services/firebase/storage';
+import { fetchCountryCode } from '../services/ipdata';
 import { loginStatusState } from '../state/authentication';
 import { snackbarState } from '../state/snackbar';
 import { defaultProfileState, profileState, userState } from '../state/user';
@@ -54,6 +55,8 @@ export const SignUpPresenter = () => {
         return;
       }
 
+      const countryCode = await fetchCountryCode();
+
       const user = {
         id: signUpResponse.user.uid as string,
         email: signUpResponse.user.email as string,
@@ -61,6 +64,7 @@ export const SignUpPresenter = () => {
         team: extras.team ? extras.team : nonApplicable,
         phone: extras.phone ? extras.phone : nonApplicable,
         avatar: extras.avatar ? extras.avatar : nonApplicable,
+        countryCode: countryCode,
       };
 
       await profileCollection.set(signUpResponse.user.uid, defaultProfileState);
@@ -70,6 +74,7 @@ export const SignUpPresenter = () => {
         team: extras.team ? extras.team : nonApplicable,
         phone: extras.phone ? extras.phone : nonApplicable,
         avatar: extras.avatar ? extras.avatar : nonApplicable,
+        countryCode: countryCode,
       });
 
       set(loginStatusState, 'success');

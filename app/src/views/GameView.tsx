@@ -6,6 +6,7 @@ import { BoardProps } from '../types/Board';
 import { PlayerBar } from '../components/game/PlayerBar';
 import { GameBoard } from '../components/game/GameBoard';
 import { Snackbar } from '../components/common/Snackbar';
+import { User } from '../types/User';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,6 +32,7 @@ interface Props {
   boardProps: BoardProps;
   topTime: number;
   botTime: number;
+  player: { name: string; email: string; countryCode: string; rating: number };
 }
 
 export const GameView = (props: Props) => {
@@ -56,10 +58,10 @@ export const GameView = (props: Props) => {
         <GameBoard {...props.boardProps} />
         <PlayerBar
           time={props.botTime}
-          name="Player 2"
-          email="test@test.no"
-          countryCode="SE"
-          rating="2000"
+          name={props.player.name}
+          email={props.player.email}
+          countryCode={props.player.countryCode}
+          rating={props.player.rating}
         />
       </Box>
       <Box className={classes.background} />

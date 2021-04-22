@@ -23,6 +23,7 @@ import { profileCollection } from '../services/firebase/storage';
 export const PuzzlePresenter = () => {
   const history = useHistory();
   const user = useRecoilValue(userState);
+  const userProfile = useRecoilValue(profileState);
   const [gameState, setGamestate] = useRecoilState(currentGameState);
   const setSnackbar = useSetRecoilState(snackbarState);
   const [winnerDialogueOpen, setWinnerDialogueOpen] = useState<boolean>(false);
@@ -56,7 +57,7 @@ export const PuzzlePresenter = () => {
           ? 'playerOne'
           : 'playerTwo',
     });
-    await migrateGameByUserID(user.id);
+    await migrateGameByUserID(userID);
     reset(currentGameState);
   });
 
@@ -94,6 +95,13 @@ export const PuzzlePresenter = () => {
       message: `You are playing as ${playerIsWhite ? 'white' : 'black'}`,
     });
   }, [gameLogic.boardProps.orientation]);
+
+  const userInfo = {
+    name: user.name,
+    email: user.email,
+    countryCode: user.countryCode,
+    rating: userProfile.rank,
+  };
   return (
     <>
       <EndOfGame
@@ -105,6 +113,7 @@ export const PuzzlePresenter = () => {
         open={winnerDialogueOpen}
       />
       <GameView
+        player={userInfo}
         topTime={gameLogic.timeLeft.opponent}
         botTime={gameLogic.timeLeft.self}
         boardProps={gameLogic.boardProps}

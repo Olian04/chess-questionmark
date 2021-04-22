@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   name: string;
   email: string;
-  rating: string;
+  rating: number;
   countryCode: string;
   time: number;
 }
@@ -71,7 +71,7 @@ export const PlayerBar = (props: Props) => {
             </Typography>
             <img
               style={{ paddingLeft: '5px' }}
-              src={`https://www.countryflags.io/${props.countryCode}/flat/24.png`}
+              src={`https://ipdata.co/flags/${props.countryCode.toLowerCase()}.png`}
               height="20px"
             />
           </Box>

@@ -19,6 +19,7 @@ export const defaultUserState = {
   phone: notApplicable,
   team: notApplicable,
   avatar: notApplicable,
+  countryCode: 'SE',
 };
 
 export const defaultProfileState = {
@@ -52,6 +53,7 @@ export const userHydrateState = selector<User>({
         phone: extras.phone,
         team: extras.team,
         avatar: extras.avatar,
+        countryCode: extras.countryCode,
       } as User;
     }
     return defaultUserState;

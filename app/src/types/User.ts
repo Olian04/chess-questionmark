@@ -5,4 +5,5 @@ export interface User {
   phone: string;
   team: string;
   avatar: string;
+  countryCode: string;
 }

@@ -3,4 +3,5 @@ export interface UserExtras {
   avatar: string;
   team: string;
   phone: string;
+  countryCode: string;
 }
