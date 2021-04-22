@@ -44,58 +44,86 @@ export const App = () => {
   return (
     <Router>
       <div className={classes.background}>
-        <Switch>
-          <RecoilRoute path="/login">
-            <Container maxWidth="sm" className={classes.container}>
-              <React.Suspense fallback={<LoadingAnimation />}>
-                <Switch>
-                  <RecoilRoute exact path="/login" component={LoginRoute} />
-                  <RecoilRoute
-                    exact
-                    path="/login/sign-up"
-                    component={SignUpRoute}
-                  />
-                  <RecoilRoute
-                    exact
-                    path="/login/sign-in"
-                    component={SignInRoute}
-                  />
-                  <RecoilRoute>
-                    <Redirect to="/login" />
-                  </RecoilRoute>
-                </Switch>
-              </React.Suspense>
-            </Container>
-          </RecoilRoute>
-          <RecoilRoute guarded path="/">
-            <NavigationBar
-              menuItems={[
-                { title: 'Play', to: '/play' },
-                { title: 'Profile', to: '/profile' },
-                { title: 'Settings', to: '/settings' },
-              ]}
-            />
-            <Container maxWidth="sm" className={classes.container}>
-              <React.Suspense fallback={<LoadingAnimation />}>
-                <Switch>
-                  <RecoilRoute exact path="/game" component={GameRoute} />
-                  <RecoilRoute exact path="/puzzle" component={PuzzleRoute} />
-                  <RecoilRoute exact path="/replay" component={ReplayRoute} />
-                  <RecoilRoute
-                    exact
-                    path="/settings"
-                    component={SettingsRoute}
-                  />
-                  <RecoilRoute exact path="/play" component={PlayRoute} />
-                  <RecoilRoute exact path="/profile" component={ProfileRoute} />
-                  <RecoilRoute exact path="/">
-                    <Redirect to="/profile" />
-                  </RecoilRoute>
-                </Switch>
-              </React.Suspense>
-            </Container>
-          </RecoilRoute>
-        </Switch>
+        <React.Suspense fallback={<LoadingAnimation />}>
+          <Switch>
+            <RecoilRoute path="/login">
+              <Container maxWidth="sm" className={classes.container}>
+                <React.Suspense fallback={<LoadingAnimation />}>
+                  <Switch>
+                    <RecoilRoute exact path="/login" component={LoginRoute} />
+                    <RecoilRoute
+                      exact
+                      path="/login/sign-up"
+                      component={SignUpRoute}
+                    />
+                    <RecoilRoute
+                      exact
+                      path="/login/sign-in"
+                      component={SignInRoute}
+                    />
+                    <RecoilRoute>
+                      <Redirect to="/login" />
+                    </RecoilRoute>
+                  </Switch>
+                </React.Suspense>
+              </Container>
+            </RecoilRoute>
+            <RecoilRoute path="/">
+              <NavigationBar
+                menuItems={[
+                  { title: 'Play', to: '/play' },
+                  { title: 'Profile', to: '/profile' },
+                  { title: 'Settings', to: '/settings' },
+                ]}
+              />
+              <Container maxWidth="sm" className={classes.container}>
+                <React.Suspense fallback={<LoadingAnimation />}>
+                  <Switch>
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/game"
+                      component={GameRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/puzzle"
+                      component={PuzzleRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/replay"
+                      component={ReplayRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/settings"
+                      component={SettingsRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/play"
+                      component={PlayRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/profile"
+                      component={ProfileRoute}
+                    />
+                    <RecoilRoute guarded exact path="/">
+                      <Redirect to="/profile" />
+                    </RecoilRoute>
+                  </Switch>
+                </React.Suspense>
+              </Container>
+            </RecoilRoute>
+          </Switch>
+        </React.Suspense>
       </div>
       <BackgroundCircle />
     </Router>

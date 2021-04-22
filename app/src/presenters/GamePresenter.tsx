@@ -185,7 +185,6 @@ export const GamePresenter = () => {
           return;
         }
         setBotTimeLeft(--t);
-        console.log(t);
       }, 1000)
     );
   };
@@ -204,7 +203,6 @@ export const GamePresenter = () => {
           return;
         }
         setTopTimeLeft(--t);
-        console.log(t);
       }, 1000)
     );
   };
@@ -215,7 +213,6 @@ export const GamePresenter = () => {
   };
 
   useEffect(() => {
-    console.log(gamestate);
     if (gamestate) {
       const turn = gamestate.turn === 'w' ? 'white' : 'black';
       if (turn === player) {

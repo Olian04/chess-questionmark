@@ -38,7 +38,9 @@ export const SignInPresenter = () => {
         return;
       }
 
-      const { name, phone } = await userCollection.get(loginResponse.user.uid);
+      const { name, phone, team, avatar } = await userCollection.get(
+        loginResponse.user.uid
+      );
 
       set(loginStatusState, 'success');
       set(userState, {
@@ -46,8 +48,8 @@ export const SignInPresenter = () => {
         email: loginResponse.user?.email as string,
         name: name as string,
         phone: phone as string,
-        team: '',
-        avatar: '',
+        team: team as string,
+        avatar: avatar as string,
       });
     }
   );

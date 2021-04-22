@@ -1,22 +1,42 @@
 import React, { useEffect } from 'react';
 import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import { profileCollection } from '../services/firebase/storage';
-import { profileState, profileStatusState, userState } from '../state/user';
+import {
+  profileState,
+  profileStatusState,
+  userHydrateState,
+  userState,
+} from '../state/user';
 import { Profile } from '../types/Profile';
 import { ProfileView } from '../views/ProfileView';
 
 export const ProfilePresenter = () => {
-  const _user = useRecoilValue(userState);
-  const profile = useRecoilValue(profileState);
+  const user = useRecoilValue(userHydrateState);
+  const [profile, setProfile] = useRecoilState(profileState);
 
+  /*
   const profileDetails = useRecoilCallback(({ snapshot, set }) => async () => {
-    const profile = await snapshot.getPromise(profileState);
-
-    set(profileState, profile);
+    const user = await snapshot.getPromise(userState);
+    profileCollection.observe(user.id, (profile) => {
+      set(profileState, profile);
+    });
   });
+  */
+
+  const hydrateProfile = () => {
+    if (user) {
+      return profileCollection.observe(user.id, (profile) =>
+        setProfile(profile)
+      );
+    }
+  };
 
   useEffect(() => {
-    profileDetails();
+    const unsubscribe = hydrateProfile();
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
-  return <ProfileView user={_user} profile={profile} />;
+
+  return <ProfileView user={user} profile={profile} />;
 };

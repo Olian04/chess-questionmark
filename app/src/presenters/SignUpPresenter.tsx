@@ -2,10 +2,13 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { createUserWithEmailAndPassword } from '../services/firebase/auth';
-import { userCollection } from '../services/firebase/storage';
+import {
+  profileCollection,
+  userCollection,
+} from '../services/firebase/storage';
 import { loginStatusState } from '../state/authentication';
 import { snackbarState } from '../state/snackbar';
-import { userState } from '../state/user';
+import { defaultProfileState, profileState, userState } from '../state/user';
 import { User } from '../types/User';
 import { UserCredentials } from '../types/UserCredentials';
 import { UserExtras } from '../types/UserExtras';
@@ -55,10 +58,12 @@ export const SignUpPresenter = () => {
         id: signUpResponse.user.uid as string,
         email: signUpResponse.user.email as string,
         name: extras.name as string,
-        phone: nonApplicable,
-        avatar: nonApplicable,
-        team: nonApplicable,
+        team: extras.team ? extras.team : nonApplicable,
+        phone: extras.phone ? extras.phone : nonApplicable,
+        avatar: extras.avatar ? extras.avatar : nonApplicable,
       };
+
+      await profileCollection.set(signUpResponse.user.uid, defaultProfileState);
       // Creates a user-document and stores in on firestore
       await userCollection.set(signUpResponse.user.uid, {
         name: extras.name ? extras.name : nonApplicable,
@@ -69,6 +74,7 @@ export const SignUpPresenter = () => {
 
       set(loginStatusState, 'success');
       set(userState, user);
+      set(profileState, defaultProfileState);
       history.push('/profile');
     }
   );

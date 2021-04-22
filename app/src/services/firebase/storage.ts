@@ -45,6 +45,15 @@ const getUserByID = async (userID: string) => {
   };
 };
 
+const getMatches = async (recentMatches: string[]) => {
+  if (recentMatches.length > 0) {
+    return await Promise.all(
+      recentMatches.map((matchID: string) => getStorageGameByID(matchID))
+    );
+  }
+  return recentMatches;
+};
+
 export const profileCollection = {
   collection: db.collection('profiles'),
   get: async function (id: string) {
@@ -60,11 +69,7 @@ export const profileCollection = {
       draws: number;
       recentMatches: any;
     };
-    if (data.recentMatches.length > 0) {
-      data.recentMatches = await Promise.all(
-        data.recentMatches.map((matchID: string) => getStorageGameByID(matchID))
-      );
-    }
+    data.recentMatches = await getMatches(data.recentMatches);
     return data as Profile;
   },
   getRaw: async function (id: string) {
@@ -109,6 +114,21 @@ export const profileCollection = {
       .doc(id)
       .update(document)
       .catch((e) => console.log(e));
+  },
+
+  observe: function (id: string, callback: (a: any) => void) {
+    if (!id || id === 'N/A') return callback(null);
+
+    const unsubscribe = this.collection.doc(id).onSnapshot(async (snap) => {
+      if (!snap.exists) return callback(null);
+
+      const data = snap.data();
+      if (data) {
+        data.recentMatches = await getMatches(data.recentMatches);
+        callback(data);
+      }
+    });
+    return unsubscribe;
   },
 };
 

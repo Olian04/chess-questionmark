@@ -8,6 +8,7 @@ import {
   profileCollection,
 } from '../services/firebase/storage';
 import { StorageGameLocal } from '../types/storage/StorageGame';
+import { loginStatusState } from './authentication';
 
 const notApplicable = 'N/A';
 
@@ -21,50 +22,49 @@ export const defaultUserState = {
 };
 
 export const defaultProfileState = {
-  rank: -1,
+  rank: 1500,
   rankDelta: 'N/A' as number | 'N/A',
-  wins: -1,
-  losses: -1,
-  draws: -1,
+  wins: 0,
+  losses: 0,
+  draws: 0,
   recentMatches: [],
 };
 
 export const userState = atom<User>({
   key: 'USER',
-  default: selector({
-    key: 'USER/DEFAULT',
-    get: async () => {
-      const maybeUser = await getCurrentUser();
-      if (maybeUser === null) return defaultUserState;
+  default: defaultUserState,
+});
+
+export const userHydrateState = selector<User>({
+  key: 'USER_ASYNC',
+  get: async ({ get }) => {
+    const state = get(userState);
+    if (state.id !== notApplicable && state.avatar !== notApplicable)
+      return state;
+
+    const maybeUser = await getCurrentUser();
+    if (maybeUser) {
       const extras = await userCollection.get(maybeUser.uid);
+      console.log(extras);
       return {
         id: maybeUser.uid,
-        name: extras.name as string,
-        email: maybeUser.email as string,
-        phone: extras?.phone ?? (notApplicable as string),
-        team: extras?.team ?? (notApplicable as string),
-        avatar: extras?.avatar ?? (notApplicable as string),
-      };
-    },
-  }),
+        email: maybeUser.email,
+        name: extras.name,
+        phone: extras.phone,
+        team: extras.team,
+        avatar: extras.avatar,
+      } as User;
+    }
+    return defaultUserState;
+  },
+  set: ({ set }, newValue) => {
+    set(userState, newValue);
+  },
 });
 
 export const profileState = atom<Profile>({
   key: 'PROFILE',
-  default: selector({
-    key: 'PROFILE/DEFAULT',
-    get: async ({ get }) => {
-      const user = get(userState);
-      const profileData = await profileCollection.get(user.id);
-
-      if (profileData) {
-        return profileData;
-      }
-
-      await profileCollection.set(user.id, defaultProfileState);
-      return defaultProfileState;
-    },
-  }),
+  default: defaultProfileState,
 });
 
 export const profileStatusState = atom<

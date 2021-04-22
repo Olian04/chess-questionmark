@@ -49,7 +49,5 @@ export const getMaterialCostFromFen = (fen: string) => {
     white: whiteMaterial,
     black: blackMaterial,
   } = materialArray.reduce(getCost, { white: 0, black: 0 });
-
-  console.log(whiteMaterial, blackMaterial);
   return Math.abs(whiteMaterial - blackMaterial);
 };

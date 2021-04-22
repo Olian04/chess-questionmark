@@ -122,7 +122,7 @@ export const Chart = (props: Props) => {
         };
       }
     }
-  }, []);
+  }, [props.data]);
 
   return <canvas ref={chartRef} className={classes.chart} />;
 };

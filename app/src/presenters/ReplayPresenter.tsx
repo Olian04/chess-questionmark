@@ -17,7 +17,6 @@ export const ReplayPresenter = () => {
     setIntervalID(
       setInterval(() => {
         setTurn(++t);
-        console.log(t);
       }, 2000)
     );
     setPlaying(true);

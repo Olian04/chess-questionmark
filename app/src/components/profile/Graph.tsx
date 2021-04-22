@@ -47,6 +47,7 @@ export const Graph = (props: Props) => {
   const rankHistory = props.recentMatches.map(
     (match) => startRank + getTick(props.username, match)
   );
+
   return (
     <Grid item xs className={classes.container}>
       <Chart data={[startRank, ...rankHistory]} />

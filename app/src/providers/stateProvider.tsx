@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactComponentElement, ReactNode } from 'react';
 import { Redirect, Route as BaseRoute, RouteProps } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { useAuthState } from '../hooks/use-auth-state';
@@ -13,7 +13,7 @@ interface RecoilRouteProps extends RouteProps {
 const nonApplicable = 'N/A';
 
 export const RecoilRoute = (props: RecoilRouteProps) => {
-  const { children, guarded, ...baseProps } = props;
+  const { children, guarded, component, ...baseProps } = props;
 
   const [user, loading, error] = useAuthState();
   const setUserState = useSetRecoilState(userState);
@@ -21,16 +21,16 @@ export const RecoilRoute = (props: RecoilRouteProps) => {
   const ShowRoute = (children: ReactNode) => (
     <BaseRoute {...baseProps}>{children}</BaseRoute>
   );
+
+  const ShowRouteComponent = (component: React.ComponentType<any>) => (
+    <BaseRoute component={component} {...baseProps} />
+  );
   /** If firebase auth returns error, we always redirect to the landing page */
   if (error) return ShowRoute(<Redirect to="/login" />);
   /** If there exists a user and they visits the login route,
    *  we redirect them back to profile */
-  if (user && baseProps.path?.includes('login'))
-    return ShowRoute(<Redirect to="/profile" />);
-  /** If a route is guarded and firebase auth returns a user,
-   * we persist the user and shows the requested route
-   */
   if (guarded && user) {
+    /*
     userCollection.get(user.uid).then((extras) =>
       setUserState({
         id: user.uid,
@@ -41,8 +41,11 @@ export const RecoilRoute = (props: RecoilRouteProps) => {
         avatar: extras?.avatar ?? (nonApplicable as string),
       })
     );
+    */
+    if (component) return ShowRouteComponent(component);
     return ShowRoute(children);
   }
+
   /** If a route is guarded and firebase auth is fetching a user
    * we show a loader until a user has been fetched
    */
@@ -52,5 +55,13 @@ export const RecoilRoute = (props: RecoilRouteProps) => {
    */
   if (guarded && (!user || error)) return ShowRoute(<Redirect to="/login" />);
   /* When a route is not guarded, we show the requested route */
+
+  if (user && baseProps.path?.includes('login'))
+    return ShowRoute(<Redirect to="/profile" />);
+  /** If a route is guarded and firebase auth returns a user,
+   * we persist the user and shows the requested route
+   */
+
+  if (component) return ShowRouteComponent(component);
   return ShowRoute(children);
 };
