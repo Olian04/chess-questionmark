@@ -13,8 +13,10 @@ const useStyles = makeStyles((theme: Theme) =>
       width: theme.measurements.navbar.width,
       borderBottomLeftRadius: theme.shape.borderRadius,
       borderBottomRightRadius: theme.shape.borderRadius,
-      zIndex: 1,
-      position: 'relative',
+      zIndex: 10,
+      top: 0,
+      left: 0,
+      position: 'sticky',
     },
   })
 );

@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-  message: string;
+  message?: string;
 }
 export const LoadingView = (props: Props) => {
   const classes = useStyles();
@@ -34,7 +34,7 @@ export const LoadingView = (props: Props) => {
       <Box className={classes.wrapper}>
         <LoadingAnimation />
         <Typography variant="body1" style={{ marginTop: '10px' }}>
-          {props.message}
+          {props.message ? props.message : 'Fetching state'}
         </Typography>
       </Box>
     </Box>

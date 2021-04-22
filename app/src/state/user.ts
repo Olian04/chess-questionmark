@@ -45,7 +45,6 @@ export const userHydrateState = selector<User>({
     const maybeUser = await getCurrentUser();
     if (maybeUser) {
       const extras = await userCollection.get(maybeUser.uid);
-      console.log(extras);
       return {
         id: maybeUser.uid,
         email: maybeUser.email,

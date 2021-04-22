@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import { profileCollection } from '../services/firebase/storage';
+import { greet } from '../services/greeter';
 import {
   profileState,
   profileStatusState,
@@ -13,6 +14,9 @@ import { ProfileView } from '../views/ProfileView';
 export const ProfilePresenter = () => {
   const user = useRecoilValue(userHydrateState);
   const [profile, setProfile] = useRecoilState(profileState);
+  const [profileStatus, setProfileStatus] = useRecoilState(profileStatusState);
+
+  const [greeting, setGreeting] = useState<string>();
 
   /*
   const profileDetails = useRecoilCallback(({ snapshot, set }) => async () => {
@@ -25,9 +29,17 @@ export const ProfilePresenter = () => {
 
   const hydrateProfile = () => {
     if (user) {
-      return profileCollection.observe(user.id, (profile) =>
-        setProfile(profile)
-      );
+      setProfileStatus('pending');
+      return profileCollection.observe(user.id, (profile) => {
+        setProfileStatus('fetching');
+        if (profile) {
+          setProfile(profile);
+          setProfileStatus('success');
+          return;
+        }
+
+        setProfileStatus('fail');
+      });
     }
   };
 
@@ -38,5 +50,16 @@ export const ProfilePresenter = () => {
     };
   }, []);
 
-  return <ProfileView user={user} profile={profile} />;
+  useEffect(() => {
+    if (user && user.id !== 'N/A') setGreeting(greet(user.name));
+  }, []);
+
+  return (
+    <ProfileView
+      user={user}
+      profile={profile}
+      isLoading={profileStatus !== 'success'}
+      greeting={greeting}
+    />
+  );
 };

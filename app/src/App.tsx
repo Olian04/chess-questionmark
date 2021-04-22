@@ -7,8 +7,6 @@ import {
 } from 'react-router-dom';
 import { Container } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
-
-import { LoadingAnimation } from './components/common/LoadingAnimation';
 import { NavigationBar } from './components/navigation/NavigationBar';
 import { LoginRoute } from './routes/LoginRoute';
 import { SignUpRoute } from './routes/SignUpRoute';
@@ -21,7 +19,7 @@ import { SettingsRoute } from './routes/SettingsRoute';
 import { ProfileRoute } from './routes/ProfileRoute';
 import { RecoilRoute } from './providers/stateProvider';
 import { BackgroundCircle } from './components/common/BackgroundCircle';
-import { GameHydrationProvider } from './providers/GameHydrationProvider';
+import { LoadingView } from './views/LoadingView';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,7 +29,6 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100vh',
       width: '100vw',
       position: 'relative',
-      overflow: 'hidden',
     },
     container: {
       height: 'calc(100vh - 60px)',
@@ -44,11 +41,11 @@ export const App = () => {
   return (
     <Router>
       <div className={classes.background}>
-        <React.Suspense fallback={<LoadingAnimation />}>
+        <React.Suspense fallback={<LoadingView />}>
           <Switch>
             <RecoilRoute path="/login">
               <Container maxWidth="sm" className={classes.container}>
-                <React.Suspense fallback={<LoadingAnimation />}>
+                <React.Suspense fallback={<LoadingView />}>
                   <Switch>
                     <RecoilRoute exact path="/login" component={LoginRoute} />
                     <RecoilRoute
@@ -77,7 +74,7 @@ export const App = () => {
                 ]}
               />
               <Container maxWidth="sm" className={classes.container}>
-                <React.Suspense fallback={<LoadingAnimation />}>
+                <React.Suspense fallback={<LoadingView />}>
                   <Switch>
                     <RecoilRoute
                       guarded

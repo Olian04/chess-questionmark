@@ -5,17 +5,25 @@ import { User } from '../types/User';
 import { Graph } from '../components/profile/Graph';
 import { Tile } from '../components/play/Tile';
 import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
-import { ThreeRowButton } from '../components/settings/ThreeRowButton';
+
+import {
+  ThreeRowButton,
+  ThreeRowButtonSkeleton,
+} from '../components/settings/ThreeRowButton';
+
 import { Gravatar } from '../components/common/Gravatar';
 import { Profile } from '../types/Profile';
 import { LoadingView } from './LoadingView';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      height: '100%',
       zIndex: 1,
       position: 'relative',
+    },
+    scrollable: {
+      overflow: 'scroll !important',
     },
     padding: {
       padding: '5px',
@@ -26,66 +34,81 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   user: User;
   profile: Profile;
+  greeting: string | undefined;
+  isLoading: boolean;
 }
 
 export const ProfileView = (props: Props) => {
   const { user, profile } = props;
   const classes = useStyles();
-
   return (
     <Grid
       container
       direction="column"
-      justify="space-evenly"
-      className={classes.container}
+      justify="space-between"
+      className={clsx(classes.container, classes.scrollable)}
       spacing={2}
     >
-      {profile && (
-        <>
-          <Grid item xs>
-            <Grid
-              container
-              alignItems="center"
-              justify="center"
-              style={{ height: '100%' }}
-            >
-              <Grid item xs>
-                <Typography variant="h4" color="textPrimary">
-                  Looking good {user.name}!
-                </Typography>
-              </Grid>
-            </Grid>
+      <>
+        <Grid item xs>
+          <Grid
+            container
+            item
+            alignItems="center"
+            justify="center"
+            className={classes.container}
+          >
+            <Typography variant="h5" color="textPrimary">
+              {props.user.name !== 'N/A' && props.greeting}
+            </Typography>
           </Grid>
+        </Grid>
 
-          <Graph
-            recentMatches={props.profile.recentMatches}
-            username={props.user.name}
-            rank={profile.rank}
-            delta={profile.rankDelta}
-          />
-          <Grid item xs>
-            <Grid container direction="row" spacing={2}>
-              <Tile text={profile.wins} subText="Wins" />
-              <Tile text={profile.losses} subText="Losses" />
-              <Tile text={profile.draws} subText="Draws" />
-            </Grid>
+        <Graph
+          recentMatches={props.profile.recentMatches}
+          username={props.user.name}
+          rank={profile.rank}
+          delta={profile.rankDelta}
+          isLoading={props.isLoading}
+        />
+        <Grid item xs>
+          <Grid container direction="row" spacing={2}>
+            <Tile
+              isLoading={props.isLoading}
+              text={profile.wins}
+              subText="Wins"
+            />
+            <Tile
+              isLoading={props.isLoading}
+              text={profile.losses}
+              subText="Losses"
+            />
+            <Tile
+              isLoading={props.isLoading}
+              text={profile.draws}
+              subText="Draws"
+            />
           </Grid>
+        </Grid>
 
-          <Grid item xs>
-            <Grid container direction="column" justify="space-evenly">
-              <Grid item xs>
-                <Typography
-                  className={classes.padding}
-                  variant="button"
-                  color="textPrimary"
-                >
-                  Recent Matches
-                </Typography>
-              </Grid>
-              <Grid item xs>
-                <List>
-                  <VerticalButtonGroup>
-                    {profile.recentMatches.map((match, i) => (
+        <Grid item xs>
+          <Grid container direction="column">
+            <Grid item xs>
+              <Typography
+                className={classes.padding}
+                variant="button"
+                color="textPrimary"
+              >
+                Recent Matches
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              <List>
+                <VerticalButtonGroup>
+                  {props.isLoading ? (
+                    <ThreeRowButtonSkeleton />
+                  ) : (
+                    profile.recentMatches.map((match, i) => (
                       <ThreeRowButton
                         key={i}
                         name={
@@ -114,15 +137,14 @@ export const ProfileView = (props: Props) => {
                           />
                         }
                       />
-                    ))}
-                  </VerticalButtonGroup>
-                </List>
-              </Grid>
+                    ))
+                  )}
+                </VerticalButtonGroup>
+              </List>
             </Grid>
           </Grid>
-        </>
-      )}
-      {!profile && <LoadingView message="fetching profile" />}
+        </Grid>
+      </>
     </Grid>
   );
 };
