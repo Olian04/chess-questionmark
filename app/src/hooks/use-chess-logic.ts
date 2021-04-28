@@ -363,6 +363,7 @@ export const useChessLogic = (conf: Config): API => {
   };
 
   const gameTimeout = (p: Winner) => {
+    /*
     clearInterval(intervalID);
     if (p === 'white') {
       setWinner('black');
@@ -370,6 +371,7 @@ export const useChessLogic = (conf: Config): API => {
       setWinner('white');
     }
     setDraggable(false);
+    */
   };
 
   const runBotTimer = () => {

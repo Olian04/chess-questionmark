@@ -37,7 +37,6 @@ interface Props {
 
 export const GameView = (props: Props) => {
   const classes = useStyles();
-
   return (
     <>
       <Snackbar />
@@ -54,6 +53,7 @@ export const GameView = (props: Props) => {
           email="test@test.yes"
           countryCode="SE"
           rating="1900"
+          isPaused={true}
         />
         <GameBoard {...props.boardProps} />
         <PlayerBar
@@ -62,6 +62,7 @@ export const GameView = (props: Props) => {
           email={props.player.email}
           countryCode={props.player.countryCode}
           rating={props.player.rating}
+          isPaused={false}
         />
       </Box>
       <Box className={classes.background} />

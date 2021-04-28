@@ -1,29 +1,12 @@
 import React from 'react';
 import { Typography, Box } from '@material-ui/core';
-import { AccessTime as AccessTimeIcon } from '@material-ui/icons';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { Gravatar } from '../common/Gravatar';
+import { Pill } from './Pill';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    timer: {
-      backgroundColor: theme.palette.primary.main,
-      borderColor: theme.palette.primary.main,
-      borderWidth: '2px',
-      borderStyle: 'solid',
-      borderRadius: '20%/50%',
-      height: '22px',
-      width: '80px',
-      paddingLeft: '5px',
-      paddingRight: '5px',
-    },
-    text: {
-      fontWeight: 'bold',
-    },
-    timerText: {
-      paddingLeft: '3px',
-    },
     avatar: {
       borderWidth: '3px',
       borderColor: '#F7F6F4',
@@ -31,6 +14,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     container: {
       height: theme.measurements.playerbar.height,
+    },
+    text: {
+      fontWeight: 'bold',
     },
   })
 );
@@ -41,6 +27,7 @@ interface Props {
   rating: number;
   countryCode: string;
   time: number;
+  isPaused: boolean;
 }
 
 export const PlayerBar = (props: Props) => {
@@ -77,23 +64,7 @@ export const PlayerBar = (props: Props) => {
           </Box>
         </Box>
       </Box>
-
-      <Box
-        color="textPrimary"
-        className={classes.timer}
-        flexShrink={1}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <AccessTimeIcon color="action" />
-        <Typography
-          color="textPrimary"
-          className={clsx(classes.text, classes.timerText)}
-        >
-          {(props.time - (props.time % 60)) / 60}:{props.time % 60}
-        </Typography>
-      </Box>
+      <Pill time={props.time} isPaused={props.isPaused} />
     </Box>
   );
 };

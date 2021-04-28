@@ -9,7 +9,7 @@ import { GameView } from '../views/GameView';
 import { Chess, Square, Move } from 'chess.js';
 import { currentGameState } from '../state/game';
 import { useHistory } from 'react-router-dom';
-import { profileState, userState } from '../state/user';
+import { profileState, userHydrateState, userState } from '../state/user';
 import { EndOfGame } from '../components/game/EndOfGame';
 import { useChessLogic } from '../hooks/use-chess-logic';
 import { migrateGameByUserID } from '../services/firebase/util/migrateDB';
@@ -22,7 +22,7 @@ import { profileCollection } from '../services/firebase/storage';
 
 export const PuzzlePresenter = () => {
   const history = useHistory();
-  const user = useRecoilValue(userState);
+  const user = useRecoilValue(userHydrateState);
   const userProfile = useRecoilValue(profileState);
   const [gameState, setGamestate] = useRecoilState(currentGameState);
   const setSnackbar = useSetRecoilState(snackbarState);
