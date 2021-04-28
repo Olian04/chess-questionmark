@@ -33,5 +33,3 @@
 * Good balance of work in the group
 * Role separation in the group (per component or per concern: views, interaction, model…)
 * Work amount and roles well documented in self-reflections
-* (groups who present in the final project presentation do not write self-reflection, we will assess the balance of work with input from project coach).
-
