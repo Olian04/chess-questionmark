@@ -34,5 +34,5 @@ export const PlayPresenter = () => {
     history.push('/puzzle');
   });
 
-  return <PlayView onClickStartPuzzle={initBoard} />;
+  return <PlayView user={user} onClickStartPuzzle={initBoard} />;
 };

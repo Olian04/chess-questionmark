@@ -7,6 +7,7 @@ import { Button } from '../components/play/Button';
 
 import MatchIcon from '/matchicon.svg';
 import AiIcon from '/aiicon.svg';
+import { User } from '../types/User';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   onClickStartPuzzle: () => void;
+  user: User;
 }
 
 export const PlayView = (props: Props) => {
@@ -53,7 +55,7 @@ export const PlayView = (props: Props) => {
           justify="center"
           style={{ height: '100%' }}
         >
-          <Typography variant="h5">Lets see what you go for Bob!</Typography>
+          <Typography variant="h5">Lets see what you go for {props.user.name}!</Typography>
         </Grid>
       </Grid>
       <Grid xs item className={classes.item}>
