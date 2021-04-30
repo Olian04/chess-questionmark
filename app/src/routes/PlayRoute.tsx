@@ -10,11 +10,7 @@ export const PlayRoute = () => {
   const setPill = useSetRecoilState(pillState);
   useEffect(() => {
     setSide('bottom');
-    setPill(0);
+    setPill(1);
   });
-  return (
-    <>
-      <PlayPresenter />
-    </>
-  );
+  return <PlayPresenter />;
 };

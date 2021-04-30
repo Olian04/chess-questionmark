@@ -1,20 +1,16 @@
 import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { SettingsProvider } from '../presenters/SettingsPresenter';
+import { AccountPresenter } from '../presenters/AccountPresenter';
 import { backgroundCircleState } from '../state/backgroundCircle';
 import { pillState } from '../state/pill';
 
-export const SettingsRoute = () => {
+export const AccountRoute = () => {
   const setSide = useSetRecoilState(backgroundCircleState);
   const setPill = useSetRecoilState(pillState);
 
   useEffect(() => {
     setSide('left');
-    setPill(2);
+    setPill(0);
   });
-  return (
-    <>
-      <SettingsProvider />
-    </>
-  );
+  return <AccountPresenter />;
 };
