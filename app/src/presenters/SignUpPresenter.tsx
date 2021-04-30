@@ -1,12 +1,13 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
+
 import { createUserWithEmailAndPassword } from '../services/firebase/auth';
+import { getGravatarUrl } from '../services/gravatar';
 import { userCollection } from '../services/firebase/storage';
 import { loginStatusState } from '../state/authentication';
 import { snackbarState } from '../state/snackbar';
 import { userState } from '../state/user';
-import { User } from '../types/User';
 import { UserCredentials } from '../types/UserCredentials';
 import { UserExtras } from '../types/UserExtras';
 import { SignUpView } from '../views/SignUpView';
@@ -17,7 +18,7 @@ export const SignUpPresenter = () => {
   const loginStatus = useRecoilValue(loginStatusState);
   const history = useHistory();
   const signUp = useRecoilCallback(
-    ({ set, snapshot }) => async (
+    ({ set }) => async (
       credentials: UserCredentials,
       extras: Partial<UserExtras>
     ) => {
@@ -56,15 +57,18 @@ export const SignUpPresenter = () => {
         email: signUpResponse.user.email as string,
         name: extras.name as string,
         phone: nonApplicable,
-        avatar: nonApplicable,
+        avatar: getGravatarUrl({
+          email: signUpResponse.user.email as string,
+          defaultImage: 'robohash',
+        }),
         team: nonApplicable,
       };
       // Creates a user-document and stores in on firestore
       await userCollection.set(signUpResponse.user.uid, {
-        name: extras.name ? extras.name : nonApplicable,
-        team: extras.team ? extras.team : nonApplicable,
-        phone: extras.phone ? extras.phone : nonApplicable,
-        avatar: extras.avatar ? extras.avatar : nonApplicable,
+        name: extras.name ? extras.name : user.name,
+        team: extras.team ? extras.team : user.team,
+        phone: extras.phone ? extras.phone : user.phone,
+        avatar: extras.avatar ? extras.avatar : user.avatar,
       });
 
       set(loginStatusState, 'success');
