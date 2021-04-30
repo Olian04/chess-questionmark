@@ -51,24 +51,12 @@ const SigninSchema = Yup.object().shape({
 
 interface Props {
   onLoginAttempt: (credentials: UserCredentials) => void;
-  loginFailed: boolean;
+  loginStatus: 'pending' | 'idle' | 'success' | 'fail';
 }
 
 export const SignInView = (props: Props) => {
   const classes = useStyles();
 
-  const loginStatus = useRecoilValue(loginStatusState);
-
-  const setSnackbar = useSetRecoilState(snackbarState);
-  useEffect(() => {
-    if (props.loginFailed) {
-      setSnackbar({
-        open: true,
-        severity: 'error',
-        message: 'Login failed',
-      });
-    }
-  }, [props.loginFailed]);
   return (
     <>
       <Snackbar />
@@ -103,8 +91,8 @@ export const SignInView = (props: Props) => {
               }}
               validationSchema={SigninSchema}
             >
-              {(props) => (
-                <form onSubmit={props.handleSubmit}>
+              {(formProps) => (
+                <form onSubmit={formProps.handleSubmit}>
                   <Grid container spacing={3}>
                     <Grid item xs={12}>
                       <RoundedTextField
@@ -116,10 +104,10 @@ export const SignInView = (props: Props) => {
                         id="email"
                         label="Email"
                         autoFocus
-                        onChange={props.handleChange}
-                        error={props.errors.email ? true : false}
+                        onChange={formProps.handleChange}
+                        error={formProps.errors.email ? true : false}
                         helperText={
-                          props.errors.email ? props.errors.email : ''
+                          formProps.errors.email ? formProps.errors.email : ''
                         }
                       />
                     </Grid>
@@ -133,10 +121,12 @@ export const SignInView = (props: Props) => {
                         type="password"
                         id="password"
                         autoComplete="current-password"
-                        onChange={props.handleChange}
-                        error={props.errors.password ? true : false}
+                        onChange={formProps.handleChange}
+                        error={formProps.errors.password ? true : false}
                         helperText={
-                          props.errors.password ? props.errors.password : ''
+                          formProps.errors.password
+                            ? formProps.errors.password
+                            : ''
                         }
                       />
                     </Grid>
@@ -151,12 +141,12 @@ export const SignInView = (props: Props) => {
                         type="submit"
                         color="secondary"
                         padding="1em"
-                        disabled={loginStatus in ['success', 'pending']}
+                        disabled={props.loginStatus in ['success', 'pending']}
                         fullWidth
                       >
                         Take me to battle
                       </LinkButton>
-                      {loginStatus === 'pending' && (
+                      {props.loginStatus === 'pending' && (
                         <CircularProgress
                           size={24}
                           className={classes.buttonProgress}
