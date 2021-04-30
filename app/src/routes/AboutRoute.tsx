@@ -1,20 +1,16 @@
 import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-
+import { AboutPresenter } from '../presenters/AboutPresenter';
 import { backgroundCircleState } from '../state/backgroundCircle';
 import { pillState } from '../state/pill';
-import { ReplayPresenter } from '../presenters/ReplayPresenter';
 
-export const ReplayRoute = () => {
+export const AboutRoute = () => {
   const setSide = useSetRecoilState(backgroundCircleState);
   const setPill = useSetRecoilState(pillState);
+
   useEffect(() => {
-    setSide('hidden');
-    setPill(1);
+    setSide('right');
+    setPill(2);
   });
-  return (
-    <>
-      <ReplayPresenter />
-    </>
-  );
+  return <AboutPresenter />;
 };

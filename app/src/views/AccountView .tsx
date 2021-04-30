@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Grid, ListItem, List } from '@material-ui/core';
+import { Grid, ListItem, List } from '@material-ui/core';
 import {
   Settings as SettingsIcon,
   AlternateEmail as AtIcon,
@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     list: {
       zIndex: 1,
+      width: '100%',
     },
     error: {
       backgroundColor: theme.palette.error.main,
@@ -35,12 +36,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   user: User;
-  onLogoutAttempt: () => void;
+  onClickLogout: () => void;
+  onChangeEmail: (newEmail: string) => void;
+  onChangePhone: (newPhone: string) => void;
+  onChangePassword: (currentPassword: string, newPassword: string) => void;
+  onChangeTeam: (newTeam: string) => void;
+  onChangeName: (newName: string) => void;
+  onChangeAvatar: (newAvatar: string) => void;
 }
 
-export const SettingsView = (props: Props) => {
+export const AccountView = (props: Props) => {
   const classes = useStyles();
-  const firebaseUser = useUserState();
   const [modal, setModal] = useState({
     open: false,
     dialogs: [
@@ -53,13 +59,6 @@ export const SettingsView = (props: Props) => {
       },
     ],
   });
-
-  const [user, setUserState] = useRecoilState(userState);
-
-  const updateUser = (key: string, value: any) => {
-    userCollection.update(props.user.id, { [key]: value as string });
-    setUserState({ ...user, [key]: value as string });
-  };
   return (
     <>
       <UpdateFieldModal
@@ -67,19 +66,6 @@ export const SettingsView = (props: Props) => {
         onDiscard={() => setModal((curr) => ({ ...curr, open: false }))}
         onSave={(fieldValues) => {
           for (const [key, value] of Object.entries(fieldValues)) {
-            switch (key) {
-              case 'email':
-                firebaseUser
-                  ?.updateEmail(value as string)
-                  .catch((e: { code: string; message: string }) =>
-                    console.log(e)
-                  );
-                setUserState({ ...user, email: value as string });
-                break;
-              default:
-                updateUser(key, value);
-                break;
-            }
           }
           setModal((curr) => ({ ...curr, open: false }));
         }}
@@ -89,7 +75,7 @@ export const SettingsView = (props: Props) => {
         direction="column"
         alignItems="center"
         alignContent="center"
-        justify="space-around"
+        justify="flex-start"
         className={classes.container}
       >
         <List className={classes.list}>
@@ -170,17 +156,30 @@ export const SettingsView = (props: Props) => {
                   })
                 }
               />
-            </VerticalButtonGroup>
-          </ListItem>
-          <SectionHeading
-            title="Help & Feedback"
-            subTitle="Reach out to us with your feedback and questions"
-            icon={<AtIcon />}
-          />
-          <ListItem>
-            <VerticalButtonGroup>
-              <TwoRowButton title="Frequently asked question" />
-              <TwoRowButton title="Contact us" />
+              <TwoRowButton
+                title="Change Password"
+                onClick={() =>
+                  setModal({
+                    open: true,
+                    dialogs: [
+                      {
+                        title: 'Current Password',
+                        fieldName: 'password',
+                        defaultValue: '',
+                        description: 'Your current password',
+                        hint: 'Current Password',
+                      },
+                      {
+                        title: 'New Password',
+                        fieldName: 'password',
+                        defaultValue: '',
+                        description: 'The desired new password',
+                        hint: 'New Password',
+                      },
+                    ],
+                  })
+                }
+              />
             </VerticalButtonGroup>
           </ListItem>
           <ListItem>
@@ -188,7 +187,7 @@ export const SettingsView = (props: Props) => {
               <TwoRowButton
                 className={classes.error}
                 title="Logout"
-                onClick={props.onLogoutAttempt}
+                onClick={props.onClickLogout}
               />
             </VerticalButtonGroup>
           </ListItem>
