@@ -28,6 +28,7 @@ interface Props {
   countryCode: string;
   time: number;
   isPaused: boolean;
+  isBlinking: boolean;
 }
 
 export const PlayerBar = (props: Props) => {
@@ -64,7 +65,11 @@ export const PlayerBar = (props: Props) => {
           </Box>
         </Box>
       </Box>
-      <Pill time={props.time} isPaused={props.isPaused} />
+      <Pill
+        time={props.time}
+        isPaused={props.isPaused}
+        isBlinking={props.isBlinking}
+      />
     </Box>
   );
 };

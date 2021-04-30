@@ -63,6 +63,7 @@ export const GameView = (props: Props) => {
           countryCode={props.player.countryCode}
           rating={props.player.rating}
           isPaused={false}
+          isBlinking={true}
         />
       </Box>
       <Box className={classes.background} />

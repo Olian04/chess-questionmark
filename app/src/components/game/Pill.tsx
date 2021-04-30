@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: '2px',
       position: 'relative',
     },
+
     '@keyframes spinMeRoundRound': {
       '0%': {
         transform: 'rotate(0deg)',
@@ -59,6 +60,25 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       '100%': {
         transform: 'rotate(360deg)',
+      },
+    },
+    timerBlinking: {
+      transform: 'scale(1)',
+      boxShadow: 'inset 0 0 0 0 rgba(223, 80, 73, 1)',
+      animation: '$doIHaveAPulseDoc 1s infinite',
+    },
+    '@keyframes doIHaveAPulseDoc': {
+      '0%': {
+        transform: 'scale(1.05)',
+        boxShadow: 'inset 0 0 0 0 rgba(223, 80, 73, 0.8)',
+      },
+      '70%': {
+        transform: 'scale(1)',
+        boxShadow: 'inset 0 0 0 10px rgba(223, 80, 73, 0.05)',
+      },
+      '100%': {
+        transform: 'scale(1.05)',
+        boxShadow: 'inset 0 0 0 0 rgba(223, 80, 73, 0)',
       },
     },
     text: {
@@ -82,6 +102,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   time: number;
   isPaused: boolean;
+  isBlinking: boolean;
 }
 
 export const Pill = (props: Props) => {
@@ -89,7 +110,13 @@ export const Pill = (props: Props) => {
   return (
     <Box
       color="textPrimary"
-      className={props.isPaused ? classes.timerInactive : classes.timerActive}
+      className={
+        props.isBlinking && !props.isPaused
+          ? clsx(classes.timerBlinking, classes.timerInactive)
+          : props.isPaused
+          ? classes.timerInactive
+          : classes.timerActive
+      }
     >
       <Box className={classes.container}>
         <AccessTimeIcon color="action" />
