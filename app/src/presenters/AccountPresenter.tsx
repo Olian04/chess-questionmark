@@ -33,6 +33,15 @@ export const AccountPresenter = () => {
     setUserState({ ...user, email: value });
   };
 
+  const updatePassword = (value: string) => {
+    firebaseUser?.updatePassword(value).catch((e: Error) => console.log(e));
+  };
+
+  const updateAvatar = (value: string) => updateUser('avatar', value);
+  const updateName = (value: string) => updateUser('name', value);
+  const updatePhone = (value: string) => updateUser('phone', value);
+  const updateTeam = (value: string) => updateUser('team', value);
+
   const logoutUser = useRecoilCallback(({ set }) => async () => {
     await signOut();
     set(loginStatusState, 'idle');
@@ -46,13 +55,11 @@ export const AccountPresenter = () => {
       user={user}
       onClickLogout={logoutUser}
       onChangeEmail={updateEmail}
-      onChangeAvatar={(value) => updateUser('avatar', value)}
-      onChangeName={(value) => updateUser('name', value)}
-      onChangePhone={(value) => updateUser('phone', value)}
-      onChangeTeam={(value) => updateUser('team', value)}
-      onChangePassword={() => {
-        throw new Error('Not yet implemented');
-      }}
+      onChangePassword={updatePassword}
+      onChangeAvatar={updateAvatar}
+      onChangeName={updateName}
+      onChangePhone={updatePhone}
+      onChangeTeam={updateTeam}
     />
   );
 };
