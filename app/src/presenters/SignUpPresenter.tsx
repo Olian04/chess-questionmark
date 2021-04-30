@@ -77,11 +77,9 @@ export const SignUpPresenter = () => {
     }
   );
   return (
-    <>
-      <SignUpView
-        onLoading={loginStatus === 'pending'}
-        onSignUpAttempt={signUp}
-      />
-    </>
+    <SignUpView
+      onLoading={loginStatus === 'pending'}
+      onSignUpAttempt={signUp}
+    />
   );
 };

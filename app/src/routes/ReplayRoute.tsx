@@ -12,9 +12,5 @@ export const ReplayRoute = () => {
     setSide('hidden');
     setPill(1);
   });
-  return (
-    <>
-      <ReplayPresenter />
-    </>
-  );
+  return <ReplayPresenter />;
 };
