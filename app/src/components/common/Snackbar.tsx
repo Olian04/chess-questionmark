@@ -1,7 +1,7 @@
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { openSnackbar, snackbarState } from '../../state/snackbar';
 import { Box } from '@material-ui/core';
 import clsx from 'clsx';

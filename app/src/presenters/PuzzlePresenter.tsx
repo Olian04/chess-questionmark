@@ -101,6 +101,7 @@ export const PuzzlePresenter = () => {
     email: user.email,
     countryCode: user.countryCode,
     rating: userProfile.rank,
+    playerIsWhite,
   };
   return (
     <>

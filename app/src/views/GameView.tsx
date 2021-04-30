@@ -32,7 +32,13 @@ interface Props {
   boardProps: BoardProps;
   topTime: number;
   botTime: number;
-  player: { name: string; email: string; countryCode: string; rating: number };
+  player: {
+    name: string;
+    email: string;
+    countryCode: string;
+    rating: number;
+    playerIsWhite: boolean;
+  };
 }
 
 export const GameView = (props: Props) => {
@@ -64,6 +70,7 @@ export const GameView = (props: Props) => {
           rating={props.player.rating}
           isPaused={false}
           isBlinking={true}
+          playerIsWhite={props.player.playerIsWhite}
         />
       </Box>
       <Box className={classes.background} />

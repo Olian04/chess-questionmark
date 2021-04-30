@@ -7,10 +7,11 @@ import { Pill } from './Pill';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    avatar: {
-      borderWidth: '3px',
-      borderColor: '#F7F6F4',
-      border: 'solid',
+    avatarWhite: {
+      boxShadow: `0 0 0 0.15em #F7F6F4, 0 0 1.2em 0.15em ${theme.palette.primary.main}`,
+    },
+    avatarBlack: {
+      boxShadow: `0 0 0 0.15em #28262F, 0 0 1.2em 0.15em ${theme.palette.primary.main}`,
     },
     container: {
       height: theme.measurements.playerbar.height,
@@ -29,6 +30,7 @@ interface Props {
   time: number;
   isPaused: boolean;
   isBlinking: boolean;
+  playerIsWhite: boolean;
 }
 
 export const PlayerBar = (props: Props) => {
@@ -46,7 +48,9 @@ export const PlayerBar = (props: Props) => {
           <Gravatar
             alt={props.name}
             variant="circular"
-            className={classes.avatar}
+            className={
+              props.playerIsWhite ? classes.avatarWhite : classes.avatarBlack
+            }
           />
         </Box>
         <Box p={1}>
@@ -60,7 +64,7 @@ export const PlayerBar = (props: Props) => {
             <img
               style={{ paddingLeft: '5px' }}
               src={`https://ipdata.co/flags/${props.countryCode.toLowerCase()}.png`}
-              height="20px"
+              height="10px"
             />
           </Box>
         </Box>
