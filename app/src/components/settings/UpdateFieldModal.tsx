@@ -10,25 +10,35 @@ import {
 } from '@material-ui/core';
 
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
+import { User } from '../../types/User';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({}));
+
+type FieldValues = {
+  name?: string;
+  email?: string;
+  phone?: string;
+  team?: string;
+  avatar?: string;
+  password?: string;
+};
 
 interface Props {
   open: boolean;
   dialogs: Array<{
     title: string;
-    fieldName: string;
+    fieldName: keyof FieldValues;
     description: string;
     defaultValue: string;
     hint: string;
   }>;
-  onSave: (value: {}) => void;
+  onSave: (value: Partial<FieldValues>) => void;
   onDiscard: () => void;
 }
 
 export const UpdateFieldModal = (props: Props) => {
   const classes = useStyles();
-  const [fieldValues, setFieldValues] = useState({});
+  const [fieldValues, setFieldValues] = useState<Partial<FieldValues>>({});
   const [isError, setIsError] = useState(false);
 
   return (

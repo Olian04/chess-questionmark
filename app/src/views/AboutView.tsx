@@ -1,21 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Grid, ListItem, List } from '@material-ui/core';
-import {
-  Settings as SettingsIcon,
-  AlternateEmail as AtIcon,
-} from '@material-ui/icons';
+import { AlternateEmail as AtIcon } from '@material-ui/icons';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
 import { SectionHeading } from '../components/settings/SectionHeading';
-import { UpdateFieldModal } from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
-import { User } from '../types/User';
-import { Gravatar } from '../components/common/Gravatar';
-import { useUserState } from '../hooks/use-user-state';
-import { userCollection } from '../services/firebase/storage';
-import { userState } from '../state/user';
-import { useRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,7 +21,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface Props {}
+interface Props {
+  onClickViewSource: () => void;
+  onClickFAQ: () => void;
+  onClickContactUs: () => void;
+}
 
 export const AboutView = (props: Props) => {
   const classes = useStyles();
@@ -52,9 +46,15 @@ export const AboutView = (props: Props) => {
         />
         <ListItem>
           <VerticalButtonGroup>
-            <TwoRowButton title="Frequently asked question" />
-            <TwoRowButton title="Contact us" />
-            <TwoRowButton title="View Source" />
+            <TwoRowButton
+              title="Frequently asked question"
+              onClick={props.onClickFAQ}
+            />
+            <TwoRowButton title="Contact us" onClick={props.onClickContactUs} />
+            <TwoRowButton
+              title="View Source"
+              onClick={props.onClickViewSource}
+            />
           </VerticalButtonGroup>
         </ListItem>
       </List>

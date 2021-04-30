@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { Grid, ListItem, List } from '@material-ui/core';
-import {
-  Settings as SettingsIcon,
-  AlternateEmail as AtIcon,
-} from '@material-ui/icons';
+import { Settings as SettingsIcon } from '@material-ui/icons';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
@@ -12,10 +9,6 @@ import { UpdateFieldModal } from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
 import { User } from '../types/User';
 import { Gravatar } from '../components/common/Gravatar';
-import { useUserState } from '../hooks/use-user-state';
-import { userCollection } from '../services/firebase/storage';
-import { userState } from '../state/user';
-import { useRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,12 +30,12 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   user: User;
   onClickLogout: () => void;
-  onChangeEmail: (newEmail: string) => void;
-  onChangePhone: (newPhone: string) => void;
-  onChangePassword: (currentPassword: string, newPassword: string) => void;
   onChangeTeam: (newTeam: string) => void;
   onChangeName: (newName: string) => void;
+  onChangeEmail: (newEmail: string) => void;
+  onChangePhone: (newPhone: string) => void;
   onChangeAvatar: (newAvatar: string) => void;
+  onChangePassword: (newPassword: string) => void;
 }
 
 export const AccountView = (props: Props) => {
@@ -62,10 +55,27 @@ export const AccountView = (props: Props) => {
   return (
     <>
       <UpdateFieldModal
-        {...modal}
+        open={modal.open}
+        dialogs={modal.dialogs as any}
         onDiscard={() => setModal((curr) => ({ ...curr, open: false }))}
         onSave={(fieldValues) => {
-          for (const [key, value] of Object.entries(fieldValues)) {
+          if (fieldValues.name) {
+            props.onChangeName(fieldValues.name);
+          }
+          if (fieldValues.avatar) {
+            props.onChangeAvatar(fieldValues.avatar);
+          }
+          if (fieldValues.email) {
+            props.onChangeEmail(fieldValues.email);
+          }
+          if (fieldValues.phone) {
+            props.onChangePhone(fieldValues.phone);
+          }
+          if (fieldValues.team) {
+            props.onChangeTeam(fieldValues.team);
+          }
+          if (fieldValues.password) {
+            props.onChangePassword(fieldValues.password);
           }
           setModal((curr) => ({ ...curr, open: false }));
         }}
@@ -162,13 +172,6 @@ export const AccountView = (props: Props) => {
                   setModal({
                     open: true,
                     dialogs: [
-                      {
-                        title: 'Current Password',
-                        fieldName: 'password',
-                        defaultValue: '',
-                        description: 'Your current password',
-                        hint: 'Current Password',
-                      },
                       {
                         title: 'New Password',
                         fieldName: 'password',
