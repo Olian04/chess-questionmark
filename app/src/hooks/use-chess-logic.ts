@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { GameView } from '../views/GameView';
 import { Chess, Square, Move as ChessMove } from 'chess.js';
@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { EndOfGame } from '../components/game/EndOfGame';
 import { stockfishEngine } from '../lib/stockfish/engine';
 import { BoardProps } from '../types/BoardProps';
+import { SetStateAction } from 'react';
 
 interface Config {
   initialFEN: string;
@@ -27,6 +28,7 @@ interface API {
     opponent: number;
   };
   boardProps: BoardProps;
+  handleResign: () => void;
 }
 
 interface SquareStylingProps {
@@ -78,6 +80,11 @@ export const useChessLogic = (conf: Config): API => {
         },
       }),
     };
+  };
+
+  const handleResign = () => {
+    const winner = player === 'white' ? 'black' : 'white';
+    setWinner(winner);
   };
 
   const boardProps = {
@@ -319,7 +326,7 @@ export const useChessLogic = (conf: Config): API => {
           setApiHistory((h) => [
             ...h,
             {
-              player: 'human',
+              player: 'ai',
               fen: game.fen(),
             },
           ]);
@@ -363,7 +370,6 @@ export const useChessLogic = (conf: Config): API => {
   };
 
   const gameTimeout = (p: Winner) => {
-    /*
     clearInterval(intervalID);
     if (p === 'white') {
       setWinner('black');
@@ -371,7 +377,6 @@ export const useChessLogic = (conf: Config): API => {
       setWinner('white');
     }
     setDraggable(false);
-    */
   };
 
   const runBotTimer = () => {
@@ -446,5 +451,6 @@ export const useChessLogic = (conf: Config): API => {
       dropSquareStyle,
       squareStyles,
     },
+    handleResign,
   };
 };

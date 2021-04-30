@@ -9,7 +9,7 @@ import {
   getPlayerObserver,
 } from '../services/firebase/realtimeDB';
 import { currentGameState } from '../state/game';
-import { userState } from '../state/user';
+import { userHydrateState, userState } from '../state/user';
 import { LiveGame } from '../types/live/LiveGame';
 import { PlayView } from '../views/PlayView';
 
@@ -19,7 +19,7 @@ export const PlayPresenter = () => {
   const [playerCount, setPlayerCount] = useState(-1);
 
   const initBoard = useRecoilCallback(({ snapshot, set }) => async () => {
-    const { id: userId } = await snapshot.getPromise(userState);
+    const { id: userId } = await snapshot.getPromise(userHydrateState);
     const game = await snapshot.getPromise(currentGameState);
     if (game.state === 'ended') {
       const fenString = await fetchRandomPuzzle();

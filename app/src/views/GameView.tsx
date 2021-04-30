@@ -7,6 +7,7 @@ import { PlayerBar } from '../components/game/PlayerBar';
 import { GameBoard } from '../components/game/GameBoard';
 import { Snackbar } from '../components/common/Snackbar';
 import { User } from '../types/User';
+import { Overview } from '../components/game/Overview';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,6 +40,9 @@ interface Props {
     rating: number;
     playerIsWhite: boolean;
   };
+  previousPlayer: string;
+  currentMove: number;
+  handleResign: () => void;
 }
 
 export const GameView = (props: Props) => {
@@ -53,13 +57,10 @@ export const GameView = (props: Props) => {
         justifyContent="space-between"
         className={classes.container}
       >
-        <PlayerBar
-          time={props.topTime}
-          name="Player 1"
-          email="test@test.yes"
-          countryCode="SE"
-          rating="1900"
-          isPaused={true}
+        <Overview
+          currentPlayerIsHuman={props.previousPlayer === 'ai'}
+          currentMove={props.currentMove}
+          handleResign={props.handleResign}
         />
         <GameBoard {...props.boardProps} />
         <PlayerBar

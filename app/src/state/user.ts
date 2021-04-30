@@ -44,6 +44,7 @@ export const userHydrateState = selector<User>({
       return state;
 
     const maybeUser = await getCurrentUser();
+
     if (maybeUser) {
       const extras = await userCollection.get(maybeUser.uid);
       return {
@@ -56,6 +57,7 @@ export const userHydrateState = selector<User>({
         countryCode: extras.countryCode,
       } as User;
     }
+
     return defaultUserState;
   },
   set: ({ set }, newValue) => {

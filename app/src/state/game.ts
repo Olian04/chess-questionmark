@@ -1,8 +1,7 @@
 import { selector, atom } from 'recoil';
-import { fetchRandomPuzzle } from '../services/chess';
 import { getLiveGameByUserID } from '../services/firebase/realtimeDB';
 import { LiveGame } from '../types/live/LiveGame';
-import { userState } from './user';
+import { userHydrateState, userState } from './user';
 
 const fallbackGameState: LiveGame = {
   turn: 'playerOne',
@@ -13,14 +12,20 @@ const fallbackGameState: LiveGame = {
   playerTwo: '',
 };
 
-export const currentGameState = atom<LiveGame>({
-  key: 'GAME_STATE',
-  default: selector({
-    key: 'GAME_STATE/DEFAULT',
-    get: async ({ get }) => {
-      const user = get(userState);
-      const maybeGame = await getLiveGameByUserID(user.id);
-      return maybeGame ?? fallbackGameState;
-    },
-  }),
+const currentGameBaseState = atom<LiveGame>({
+  key: 'GAME_BASE_STATE',
+  default: fallbackGameState,
+});
+
+export const currentGameState = selector<LiveGame>({
+  key: 'GAME_SELECTOR',
+  get: async ({ get }) => {
+    const user = await get(userHydrateState);
+    console.log(user);
+    const maybeGame = await getLiveGameByUserID(user.id);
+    return maybeGame ?? get(currentGameBaseState);
+  },
+  set: async ({ set }, newValue) => {
+    set(currentGameBaseState, newValue);
+  },
 });

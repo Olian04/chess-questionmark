@@ -18,13 +18,12 @@ import {
   getLiveGameByUserID,
 } from '../services/firebase/realtimeDB';
 import { snackbarState } from '../state/snackbar';
-import { profileCollection } from '../services/firebase/storage';
 
 export const PuzzlePresenter = () => {
   const history = useHistory();
   const user = useRecoilValue(userHydrateState);
   const userProfile = useRecoilValue(profileState);
-  const [gameState, setGamestate] = useRecoilState(currentGameState);
+  const gameState = useRecoilValue(currentGameState);
   const setSnackbar = useSetRecoilState(snackbarState);
   const [winnerDialogueOpen, setWinnerDialogueOpen] = useState<boolean>(false);
   const [playerIsWhite] = useState(
@@ -49,16 +48,18 @@ export const PuzzlePresenter = () => {
   }, []);
 
   const endGame = useRecoilCallback(({ reset, snapshot }) => async () => {
-    setWinnerDialogueOpen(true);
-    const { id: userID } = await snapshot.getPromise(userState);
-    await updateLiveGameByUserID(userID, {
-      winner:
-        gameLogic.boardProps.orientation === gameLogic.boardProps.winner
-          ? 'playerOne'
-          : 'playerTwo',
-    });
-    await migrateGameByUserID(userID);
-    reset(currentGameState);
+    if (gameLogic.boardProps.winner !== 'N/A') {
+      setWinnerDialogueOpen(true);
+      const { id: userID } = await snapshot.getPromise(userHydrateState);
+      await updateLiveGameByUserID(userID, {
+        winner:
+          gameLogic.boardProps.orientation === gameLogic.boardProps.winner
+            ? 'playerOne'
+            : 'playerTwo',
+      });
+      await migrateGameByUserID(userID);
+      reset(currentGameState);
+    }
   });
 
   const addMoveToGameState = useRecoilCallback(
@@ -95,7 +96,6 @@ export const PuzzlePresenter = () => {
       message: `You are playing as ${playerIsWhite ? 'white' : 'black'}`,
     });
   }, [gameLogic.boardProps.orientation]);
-
   const userInfo = {
     name: user.name,
     email: user.email,
@@ -103,6 +103,7 @@ export const PuzzlePresenter = () => {
     rating: userProfile.rank,
     playerIsWhite,
   };
+
   return (
     <>
       <EndOfGame
@@ -118,6 +119,9 @@ export const PuzzlePresenter = () => {
         topTime={gameLogic.timeLeft.opponent}
         botTime={gameLogic.timeLeft.self}
         boardProps={gameLogic.boardProps}
+        previousPlayer={gameLogic.history[gameLogic.history.length - 1].player}
+        currentMove={gameLogic.history.length}
+        handleResign={gameLogic.handleResign}
       />
     </>
   );
