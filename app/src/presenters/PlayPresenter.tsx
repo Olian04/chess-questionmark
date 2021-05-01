@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilCallback } from 'recoil';
+import { useRecoilCallback, waitForAll } from 'recoil';
 
 import { fetchRandomPuzzle } from '../services/chess';
 import {
@@ -21,6 +21,7 @@ export const PlayPresenter = () => {
   const initBoard = useRecoilCallback(({ snapshot, set }) => async () => {
     const { id: userId } = await snapshot.getPromise(userHydrateState);
     const game = await snapshot.getPromise(currentGameState);
+
     if (game.state === 'ended') {
       const fenString = await fetchRandomPuzzle();
 
