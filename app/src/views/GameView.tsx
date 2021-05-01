@@ -49,7 +49,6 @@ interface Props {
 
 export const GameView = (props: Props) => {
   const classes = useStyles();
-  console.log(props.previousPlayer);
   return (
     <>
       <Snackbar />
