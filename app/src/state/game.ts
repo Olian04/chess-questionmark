@@ -1,5 +1,8 @@
-import { selector, atom } from 'recoil';
-import { getLiveGameByUserID } from '../services/firebase/realtimeDB';
+import { selector, atom, GetRecoilValue } from 'recoil';
+import {
+  createLiveGame,
+  getLiveGameByUserID,
+} from '../services/firebase/realtimeDB';
 import { LiveGame } from '../types/live/LiveGame';
 import { userHydrateState, userState } from './user';
 
@@ -22,11 +25,29 @@ export const currentGameState = selector<LiveGame>({
   get: async ({ get }) => {
     const user = await get(userHydrateState);
     const maybeGame = await getLiveGameByUserID(user.id);
-    console.warn('GET:', maybeGame);
     return maybeGame ?? get(currentGameBaseState);
   },
   set: async ({ set }, newValue) => {
-    console.warn('SET', newValue);
     set(currentGameBaseState, newValue);
   },
 });
+
+export const requestGame = atom<LiveGame>({
+  key: 'REQUEST_GAME',
+  default: selector<LiveGame>({
+    key: 'REQUEST_GAME_SELECTOR',
+    get: async ({ get }) => {
+      const game = await fetchGame(get);
+      return game;
+    },
+    set: ({ set }, newGame) => {
+      set(requestGame, newGame);
+    },
+  }),
+});
+
+const fetchGame = async (get: GetRecoilValue) => {
+  const user = await get(userHydrateState);
+  const maybeGame = await getLiveGameByUserID(user.id);
+  return maybeGame ?? fallbackGameState;
+};

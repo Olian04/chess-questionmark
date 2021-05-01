@@ -11,6 +11,7 @@ import {
   currentGameBaseState,
   currentGameState,
   fallbackGameState,
+  requestGame,
 } from '../state/game';
 import { useHistory } from 'react-router-dom';
 import { profileState, userHydrateState, userState } from '../state/user';
@@ -27,7 +28,8 @@ export const PuzzlePresenter = () => {
   const history = useHistory();
   const user = useRecoilValue(userHydrateState);
   const userProfile = useRecoilValue(profileState);
-  const gameState = useRecoilValue(currentGameState);
+  //const gameState = useRecoilValue(currentGameState);
+  const gameState = useRecoilValue(requestGame);
   const setSnackbar = useSetRecoilState(snackbarState);
   const [winnerDialogueOpen, setWinnerDialogueOpen] = useState<boolean>(false);
   const [playerIsWhite] = useState(
@@ -60,16 +62,19 @@ export const PuzzlePresenter = () => {
           gameLogic.boardProps.orientation === gameLogic.boardProps.winner
             ? 'playerOne'
             : 'playerTwo',
+        state: 'ended',
       });
       await migrateGameByUserID(userID);
-      set(currentGameState, fallbackGameState);
+      //set(currentGameState, fallbackGameState);
+      //reset(requestGame);
+      set(requestGame, fallbackGameState);
     }
   });
 
   const addMoveToGameState = useRecoilCallback(
     ({ snapshot, set }) => async () => {
       const { id: userID } = await snapshot.getPromise(userState);
-      const gameState = await snapshot.getPromise(currentGameState);
+      const gameState = await snapshot.getPromise(requestGame);
       await updateLiveGameByUserID(userID, {
         history: [
           ...gameState.history,
@@ -77,7 +82,7 @@ export const PuzzlePresenter = () => {
         ],
       });
       const newGameState = await getLiveGameByUserID(userID);
-      if (newGameState !== null) set(currentGameState, newGameState);
+      if (newGameState !== null) set(requestGame, newGameState);
     }
   );
 

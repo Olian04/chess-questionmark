@@ -8,7 +8,7 @@ import {
   getGameObserver,
   getPlayerObserver,
 } from '../services/firebase/realtimeDB';
-import { currentGameState } from '../state/game';
+import { currentGameState, requestGame } from '../state/game';
 import { userHydrateState, userState } from '../state/user';
 import { LiveGame } from '../types/live/LiveGame';
 import { PlayView } from '../views/PlayView';
@@ -20,9 +20,8 @@ export const PlayPresenter = () => {
 
   const initBoard = useRecoilCallback(({ snapshot, set }) => async () => {
     const { id: userId } = await snapshot.getPromise(userHydrateState);
-    const game = await snapshot.getPromise(currentGameState);
-
-    if (game.state === 'ended') {
+    const game = await snapshot.getPromise(requestGame);
+    if (game.state === 'ended' && game.winner === 'N/A') {
       const fenString = await fetchRandomPuzzle();
 
       const newGame: LiveGame = {
@@ -34,7 +33,7 @@ export const PlayPresenter = () => {
         history: [fenString],
       };
 
-      set(currentGameState, newGame);
+      await set(requestGame, newGame);
       await createLiveGame(newGame);
     }
     history.push('/puzzle');

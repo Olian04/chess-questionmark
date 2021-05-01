@@ -42,6 +42,7 @@ export const getLiveGameByUserID = async (
   const maybeGameInfo = await __getGameByUserID(userID);
   if (maybeGameInfo) {
     const [_, gameData] = maybeGameInfo;
+    if (gameData.state === 'ended' && gameData.winner === 'N/A') return null;
     return gameData;
   }
   return null;

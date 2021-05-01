@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { GameView } from '../views/GameView';
-import { currentGameState } from '../state/game';
+import { currentGameState, requestGame } from '../state/game';
 import { Chess, Square, Move } from 'chess.js';
 import { Winner } from '../types/Winner';
 import { Player } from '../types/Player';
@@ -17,7 +17,8 @@ type SquareStylingProps = {
 };
 
 export const GamePresenter = () => {
-  const [gamestate, setGamestate] = useRecoilState(currentGameState);
+  // const [gamestate, setGamestate] = useRecoilState(currentGameState);
+  const [gamestate, setGamestate] = useRecoilState(requestGame);
   const [player, setPlayer] = useState('white' as Player);
 
   const [botTimeLeft, setBotTimeLeft] = useState(startTimeLeft);

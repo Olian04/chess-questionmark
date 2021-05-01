@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       zIndex: 20,
       transition: 'visible 0.5s ease-in',
+      pointerEvents: 'none',
     },
     wrapper: {
       height: '100%',
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(2),
       minWidth: '90%',
       position: 'absolute',
+      pointerEvents: 'auto',
     },
     open: {
       opacity: 1,
@@ -40,11 +42,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     visible: {
       visible: 'visible',
-      pointerEvents: 'auto',
     },
     hidden: {
       visible: 'hidden',
-      pointerEvents: 'none',
     },
   })
 );
