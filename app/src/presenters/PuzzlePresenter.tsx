@@ -43,7 +43,7 @@ export const PuzzlePresenter = () => {
     initialFEN,
     previousFENStrings,
     playerColor: playerIsWhite ? 'white' : 'black',
-    timerLength: 59,
+    timerLength: 15,
     timerIncreaseOnMove: 5,
   });
 

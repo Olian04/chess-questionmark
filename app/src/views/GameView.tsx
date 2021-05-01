@@ -49,6 +49,7 @@ interface Props {
 
 export const GameView = (props: Props) => {
   const classes = useStyles();
+  console.log(props.previousPlayer);
   return (
     <>
       <Snackbar />
@@ -60,7 +61,7 @@ export const GameView = (props: Props) => {
         className={classes.container}
       >
         <Overview
-          currentPlayerIsHuman={props.previousPlayer === 'ai'}
+          currentPlayerIsHuman={props.currentMove % 2 === 1}
           currentMove={props.currentMove}
           handleResign={props.handleResign}
         />
