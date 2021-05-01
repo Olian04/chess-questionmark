@@ -62,7 +62,7 @@ export const getGameObserver = (callback: (a: number) => void) => {
   const doc = db.ref('/games');
   doc.on('value', (snapshot) => {
     const games = snapshot.val();
-    const amountOfGames = Object.keys(games).length;
+    const amountOfGames = games === null ? 0 : Object.keys(games).length;
     callback(amountOfGames);
   });
   return { unsubscribe: () => doc.off('value') };
@@ -72,16 +72,20 @@ export const getPlayerObserver = (callback: (a: number) => void) => {
   const doc = db.ref('/games');
   doc.on('value', (snapshot) => {
     const games = snapshot.val();
-    const gamesArray = Object.entries(games) as [
-      string,
-      { playerOne: string; playerTwo: string }
-    ][];
-    const players = new Set();
-    for (const [_, value] of gamesArray) {
-      if (value.playerOne !== 'AI') players.add(value.playerOne);
-      if (value.playerTwo !== 'AI') players.add(value.playerTwo);
+    if (games === null) {
+      callback(0);
+    } else {
+      const gamesArray = Object.entries(games) as [
+        string,
+        { playerOne: string; playerTwo: string }
+      ][];
+      const players = new Set();
+      for (const [_, value] of gamesArray) {
+        if (value.playerOne !== 'AI') players.add(value.playerOne);
+        if (value.playerTwo !== 'AI') players.add(value.playerTwo);
+      }
+      callback(players.size);
     }
-    callback(players.size);
   });
   return { unsubscribe: () => doc.off('value') };
 };

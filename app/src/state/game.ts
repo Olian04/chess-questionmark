@@ -3,7 +3,7 @@ import { getLiveGameByUserID } from '../services/firebase/realtimeDB';
 import { LiveGame } from '../types/live/LiveGame';
 import { userHydrateState, userState } from './user';
 
-const fallbackGameState: LiveGame = {
+export const fallbackGameState: LiveGame = {
   turn: 'playerOne',
   winner: 'N/A',
   state: 'ended',
@@ -12,7 +12,7 @@ const fallbackGameState: LiveGame = {
   playerTwo: '',
 };
 
-const currentGameBaseState = atom<LiveGame>({
+export const currentGameBaseState = atom<LiveGame>({
   key: 'GAME_BASE_STATE',
   default: fallbackGameState,
 });
@@ -21,11 +21,12 @@ export const currentGameState = selector<LiveGame>({
   key: 'GAME_SELECTOR',
   get: async ({ get }) => {
     const user = await get(userHydrateState);
-    console.log(user);
     const maybeGame = await getLiveGameByUserID(user.id);
+    console.warn('GET:', maybeGame);
     return maybeGame ?? get(currentGameBaseState);
   },
   set: async ({ set }, newValue) => {
+    console.warn('SET', newValue);
     set(currentGameBaseState, newValue);
   },
 });

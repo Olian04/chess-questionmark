@@ -7,7 +7,11 @@ import {
 } from 'recoil';
 import { GameView } from '../views/GameView';
 import { Chess, Square, Move } from 'chess.js';
-import { currentGameState } from '../state/game';
+import {
+  currentGameBaseState,
+  currentGameState,
+  fallbackGameState,
+} from '../state/game';
 import { useHistory } from 'react-router-dom';
 import { profileState, userHydrateState, userState } from '../state/user';
 import { EndOfGame } from '../components/game/EndOfGame';
@@ -47,7 +51,7 @@ export const PuzzlePresenter = () => {
     }
   }, []);
 
-  const endGame = useRecoilCallback(({ reset, snapshot }) => async () => {
+  const endGame = useRecoilCallback(({ set, snapshot }) => async () => {
     if (gameLogic.boardProps.winner !== 'N/A') {
       setWinnerDialogueOpen(true);
       const { id: userID } = await snapshot.getPromise(userHydrateState);
@@ -58,7 +62,7 @@ export const PuzzlePresenter = () => {
             : 'playerTwo',
       });
       await migrateGameByUserID(userID);
-      reset(currentGameState);
+      set(currentGameState, fallbackGameState);
     }
   });
 
@@ -73,7 +77,7 @@ export const PuzzlePresenter = () => {
         ],
       });
       const newGameState = await getLiveGameByUserID(userID);
-      set(currentGameState, newGameState);
+      if (newGameState !== null) set(currentGameState, newGameState);
     }
   );
 
