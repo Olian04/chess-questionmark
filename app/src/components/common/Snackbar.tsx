@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     open: {
       opacity: 1,
-      bottom: 0,
+      bottom: '8.8%',
     },
     closed: {
       opacity: 0,

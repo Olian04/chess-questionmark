@@ -131,6 +131,10 @@ export const PuzzlePresenter = () => {
         previousPlayer={gameLogic.history[gameLogic.history.length - 1].player}
         currentMove={gameLogic.history.length}
         handleResign={gameLogic.handleResign}
+        isPaused={
+          gameLogic.history[gameLogic.history.length - 1].player === 'ai'
+        }
+        isBlinking={gameLogic.timeLeft.self <= 60 / 6}
       />
     </>
   );

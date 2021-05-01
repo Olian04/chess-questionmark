@@ -43,6 +43,8 @@ interface Props {
   previousPlayer: string;
   currentMove: number;
   handleResign: () => void;
+  isPaused: boolean;
+  isBlinking: boolean;
 }
 
 export const GameView = (props: Props) => {
@@ -69,8 +71,8 @@ export const GameView = (props: Props) => {
           email={props.player.email}
           countryCode={props.player.countryCode}
           rating={props.player.rating}
-          isPaused={false}
-          isBlinking={true}
+          isPaused={props.isPaused}
+          isBlinking={props.isBlinking}
           playerIsWhite={props.player.playerIsWhite}
         />
       </Box>
