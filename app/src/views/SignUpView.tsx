@@ -26,6 +26,8 @@ import { UserExtras } from '../types/UserExtras';
 import { UserCredentials } from '../types/UserCredentials';
 import { Snackbar } from '../components/common/Snackbar';
 import { snackbarState } from '../state/snackbar';
+import { CommonModal } from '../components/common/CommonModal';
+import { modalState } from '../state/modal';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
@@ -75,6 +77,7 @@ export const SignUpView = (props: Props) => {
   const classes = useStyles();
 
   const [checked, setChecked] = useState(false);
+  const setModal = useSetRecoilState(modalState);
 
   const handleCheckbox = (
     formik: any,
@@ -93,8 +96,32 @@ export const SignUpView = (props: Props) => {
   }, [props.signUpFailed]);
   */
 
+  const handleModal = (type: string) => {
+    if (type === 'terms') {
+      setModal({
+        open: true,
+        title: 'Terms of service',
+        content: [
+          'Upon signup to "chess?", you hereby agree to give the creators of "chess?" an automatic A if your firstname starts on either of: M, C, A, E, W, P, S, H.',
+          'These terms are valid throughout year 2021.',
+        ],
+      });
+    }
+    if (type === 'policy') {
+      setModal({
+        open: true,
+        title: 'Privacy policy',
+        content: [
+          "If you are concern of your identity, don't use a valid email.",
+          "We don't verify it anyways. Lol",
+        ],
+      });
+    }
+  };
+
   return (
     <>
+      <CommonModal />
       <Snackbar />
       <Container className={classes.container}>
         <Grid
@@ -213,8 +240,19 @@ export const SignUpView = (props: Props) => {
                             label={
                               <Typography>
                                 I agree to the{' '}
-                                <StyledLink to="#">Terms</StyledLink> and <br />
-                                <StyledLink to="#">Privacy Policy</StyledLink>
+                                <StyledLink
+                                  to="#"
+                                  onClick={() => handleModal('terms')}
+                                >
+                                  Terms
+                                </StyledLink>{' '}
+                                and <br />
+                                <StyledLink
+                                  to="#"
+                                  onClick={() => handleModal('policy')}
+                                >
+                                  Privacy Policy
+                                </StyledLink>
                               </Typography>
                             }
                           />
