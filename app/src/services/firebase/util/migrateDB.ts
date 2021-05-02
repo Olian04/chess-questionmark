@@ -1,9 +1,6 @@
 import { createStorageGame, profileCollection } from '../storage';
 import { getLiveGameByUserID, deleteLiveGameByUserID } from '../realtimeDB';
-import { User } from '../../../types/User';
-import { LiveGame } from '../../../types/live/LiveGame';
-import { StorageGame } from '../../../types/storage/StorageGame';
-import { getMaterialCostFromFen } from '../../chess';
+import { getAbsMaterialCostFromFen } from '../../chess';
 
 export const migrateGameByUserID = async (userID: string) => {
   const liveGame = await getLiveGameByUserID(userID);
@@ -23,7 +20,7 @@ export const migrateGameByUserID = async (userID: string) => {
     }[liveGame.winner];
 
     const fen = liveGame.history[liveGame.history.length - 1];
-    const material = getMaterialCostFromFen(fen);
+    const material = getAbsMaterialCostFromFen(fen);
 
     const id = await createStorageGame({
       history: liveGame.history,

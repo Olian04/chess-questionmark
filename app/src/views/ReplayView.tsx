@@ -10,6 +10,7 @@ import { PlayArrow, SkipNext, SkipPrevious, Pause } from '@material-ui/icons';
 import { PlayerBar } from '../components/game/PlayerBar';
 import { GameBoard } from '../components/game/GameBoard';
 import { Overview } from '../components/game/Overview';
+import { Graph } from '../components/replay/Graph';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,12 +29,29 @@ const useStyles = makeStyles((theme: Theme) =>
       background: 'linear-gradient(180deg, #918F99 14.58%, #28262F 79.69%)',
       zIndex: 0,
     },
+    wrapper: {
+      position: 'relative',
+      top: 0,
+      left: 0,
+      width: '100%',
+      marginTop: '15px',
+    },
+    graph: {
+      position: 'absolute',
+      zIndex: 0,
+      top: 0,
+      left: 0,
+      height: '60px',
+      width: '100%',
+      transform: 'translateY(-25%)',
+    },
   })
 );
 
 const ReplaySlider = withStyles({
   root: {
     height: 4,
+    zIndex: 2,
   },
   track: {
     color: '#F1E8E6',
@@ -72,11 +90,11 @@ interface Props {
     playerIsWhite: boolean;
   };
   handleGoBack: () => void;
+  materialData: number[];
 }
 
 export const ReplayView = (props: Props) => {
   const classes = useStyles();
-
   return (
     <>
       <Box
@@ -123,14 +141,18 @@ export const ReplayView = (props: Props) => {
               <SkipNext fontSize="large" color="action" />
             </Button>
           </Box>
-
-          <ReplaySlider
-            marks={true}
-            min={1}
-            max={props.max}
-            value={props.turn}
-            onChange={(_, v) => props.onSlider(v as number)}
-          />
+          <Box className={classes.wrapper}>
+            <ReplaySlider
+              marks={true}
+              min={1}
+              max={props.max}
+              value={props.turn}
+              onChange={(_, v) => props.onSlider(v as number)}
+            />
+            <Box className={classes.graph}>
+              <Graph data={props.materialData} />
+            </Box>
+          </Box>
         </Box>
 
         <PlayerBar

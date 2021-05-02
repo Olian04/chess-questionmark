@@ -29,7 +29,6 @@ export const updateLiveGameByUserID = async (
   userID: string,
   partialGame: Partial<LiveGame>
 ) => {
-  console.warn('UPDATING:', userID);
   const maybeGameInfo = await __getGameByUserID(userID);
   if (maybeGameInfo) {
     const [gameId] = maybeGameInfo;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
+import { getMaterialCostFromFen } from '../services/chess';
 import { getStorageGameByID } from '../services/firebase/storage';
 import { profileState, requestProfile, userHydrateState } from '../state/user';
 import { LoadingView } from '../views/LoadingView';
@@ -21,6 +22,7 @@ export const ReplayPresenter = () => {
   const [gameHistory, setGameHistory] = useState<string[]>([]);
   const [gameOwner, setGameOwner] = useState(true);
   const [player, setPlayer] = useState<Player>();
+  const [materialData, setMaterialData] = useState<number[]>([]);
 
   const { id: gameID } = useParams<{ id: string }>();
 
@@ -84,6 +86,10 @@ export const ReplayPresenter = () => {
       setPlayer(userInfo);
       setGameOwner(true);
       setGameHistory(game.history);
+
+      const materialData = game.history.map(getMaterialCostFromFen);
+      setMaterialData(materialData);
+
       return;
     }
 
@@ -116,6 +122,7 @@ export const ReplayPresenter = () => {
           playing={playing}
           player={player as Player}
           handleGoBack={() => history.push('/profile')}
+          materialData={materialData}
         />
       ) : gameOwner && gameHistory.length === 0 ? (
         <LoadingView message="Fetching game" />

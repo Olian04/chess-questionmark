@@ -89,7 +89,7 @@ export const PlayView = (props: Props) => {
           container
           justify="space-between"
           spacing={1}
-          style={{ height: '100%' }}
+          style={{ height: '100%', marginTop: '5px' }}
           alignContent="flex-end"
         >
           <Grid item xs={12} sm={6}>

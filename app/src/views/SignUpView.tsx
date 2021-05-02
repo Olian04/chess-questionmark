@@ -50,6 +50,12 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: -12,
       marginLeft: -12,
     },
+    link: {
+      color: theme.palette.secondary.main,
+      '&:hover, &:focus': {
+        PointerEvent: 'cursor',
+      },
+    },
   })
 );
 
@@ -240,19 +246,19 @@ export const SignUpView = (props: Props) => {
                             label={
                               <Typography>
                                 I agree to the{' '}
-                                <StyledLink
-                                  to="#"
+                                <span
                                   onClick={() => handleModal('terms')}
+                                  className={classes.link}
                                 >
                                   Terms
-                                </StyledLink>{' '}
-                                and <br />
-                                <StyledLink
-                                  to="#"
+                                </span>
+                                {' and '}
+                                <span
                                   onClick={() => handleModal('policy')}
+                                  className={classes.link}
                                 >
                                   Privacy Policy
-                                </StyledLink>
+                                </span>
                               </Typography>
                             }
                           />
