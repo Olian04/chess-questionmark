@@ -90,8 +90,7 @@ export const App = () => {
                     />
                     <RecoilRoute
                       guarded
-                      exact
-                      path="/replay"
+                      path="/replay/:id"
                       component={ReplayRoute}
                     />
                     <RecoilRoute

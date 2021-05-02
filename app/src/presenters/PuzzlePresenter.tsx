@@ -73,7 +73,7 @@ export const PuzzlePresenter = () => {
 
   const addMoveToGameState = useRecoilCallback(
     ({ snapshot, set }) => async () => {
-      const { id: userID } = await snapshot.getPromise(userState);
+      const { id: userID } = await snapshot.getPromise(userHydrateState);
       const gameState = await snapshot.getPromise(requestGame);
       await updateLiveGameByUserID(userID, {
         history: [
@@ -116,7 +116,7 @@ export const PuzzlePresenter = () => {
   return (
     <>
       <EndOfGame
-        winner={gameLogic.boardProps.winner}
+        winner={gameLogic.boardProps.winner === 'white' && playerIsWhite}
         onClick={() => {
           setWinnerDialogueOpen(false);
           history.push('/play');

@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
+import { getStorageGameByID } from '../services/firebase/storage';
+import { profileState, requestProfile, userHydrateState } from '../state/user';
+import { LoadingView } from '../views/LoadingView';
 import { ReplayView } from '../views/ReplayView';
+
+type Player = {
+  name: string;
+  email: string;
+  countryCode: string;
+  rating: number;
+  playerIsWhite: boolean;
+};
 
 export const ReplayPresenter = () => {
   const [turn, setTurn] = useState(1);
   const [intervalID, setIntervalID] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const hist = [
-    'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-    'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1',
-    'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2',
-    'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2',
-  ];
+  const [gameHistory, setGameHistory] = useState<string[]>([]);
+  const [gameOwner, setGameOwner] = useState(true);
+  const [player, setPlayer] = useState<Player>();
+
+  const { id: gameID } = useParams<{ id: string }>();
 
   const play = () => {
     let t = turn;
@@ -31,7 +43,7 @@ export const ReplayPresenter = () => {
     if (playing) {
       pause();
     } else {
-      if (turn >= hist.length) return;
+      if (turn >= gameHistory.length) return;
       play();
     }
   };
@@ -51,24 +63,64 @@ export const ReplayPresenter = () => {
     pause();
   };
 
+  const history = useHistory();
+
+  const hydrateGame = useRecoilCallback(({ snapshot }) => async () => {
+    const user = await snapshot.getPromise(userHydrateState);
+    const userProfile = await snapshot.getPromise(requestProfile);
+    const game = await getStorageGameByID(gameID);
+
+    if (
+      game &&
+      (game.winner.name === user.name || game.loser.name === user.name)
+    ) {
+      const userInfo = {
+        name: user.name,
+        email: user.email,
+        countryCode: user.countryCode,
+        rating: userProfile.rank,
+        playerIsWhite: game.history[0]?.split(' ')?.[1] === 'w' ?? true,
+      };
+      setPlayer(userInfo);
+      setGameOwner(true);
+      setGameHistory(game.history);
+      return;
+    }
+
+    setGameOwner(false);
+    setTimeout(() => history.push('/profile'), 2500);
+  });
+
   useEffect(() => {
-    if (turn >= hist.length) {
+    if (turn >= gameHistory.length) {
       pause();
     }
   }, [turn]);
 
+  useEffect(() => {
+    (async () => await hydrateGame())();
+  }, []);
   return (
-    <ReplayView
-      fen={hist[turn - 1]}
-      turn={turn}
-      start={turn <= 1}
-      end={turn >= hist.length}
-      onPrevious={() => previous()}
-      onPlay={() => playPause()}
-      onNext={() => next()}
-      onSlider={(v: number) => sliderUpdate(v)}
-      max={hist.length}
-      playing={playing}
-    />
+    <>
+      {gameOwner && gameHistory.length > 0 ? (
+        <ReplayView
+          fen={gameHistory[turn - 1]}
+          turn={turn}
+          start={turn <= 1}
+          end={turn >= gameHistory.length}
+          onPrevious={() => previous()}
+          onPlay={() => playPause()}
+          onNext={() => next()}
+          onSlider={(v: number) => sliderUpdate(v)}
+          max={gameHistory.length}
+          playing={playing}
+          player={player as Player}
+        />
+      ) : gameOwner && gameHistory.length === 0 ? (
+        <LoadingView message="Fetching game" />
+      ) : (
+        <LoadingView message="Foreign ID! Redirecting.." />
+      )}
+    </>
   );
 };

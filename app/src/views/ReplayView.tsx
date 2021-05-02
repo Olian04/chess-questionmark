@@ -64,6 +64,13 @@ interface Props {
   end: boolean;
   max: number;
   playing: boolean;
+  player: {
+    name: string;
+    email: string;
+    countryCode: string;
+    rating: number;
+    playerIsWhite: boolean;
+  };
 }
 
 export const ReplayView = (props: Props) => {
@@ -78,14 +85,7 @@ export const ReplayView = (props: Props) => {
         justifyContent="space-between"
         className={classes.container}
       >
-        <PlayerBar
-          email=""
-          time={0}
-          email=""
-          name="Player 1"
-          countryCode="SE"
-          rating="1900"
-        />
+        <Box />
         <GameBoard
           position={props.fen}
           transitionDuration={400}
@@ -128,12 +128,14 @@ export const ReplayView = (props: Props) => {
         </Box>
 
         <PlayerBar
-          email=""
+          email={props.player.email}
           time={0}
-          email=""
-          name="Player 2"
-          countryCode="SE"
-          rating="2000"
+          name={props.player.name}
+          countryCode={props.player.countryCode}
+          rating={props.player.rating}
+          isPaused={true}
+          isBlinking={false}
+          playerIsWhite={props.player.playerIsWhite}
         />
       </Box>
       <Box className={classes.background} />

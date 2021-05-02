@@ -6,6 +6,7 @@ type User = {
   avatar?: string;
 };
 export interface StorageGameLocal {
+  id: string;
   history: string[];
   winner: User;
   loser: User;

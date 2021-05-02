@@ -21,7 +21,9 @@ export const createStorageGame = (game: StorageGameRemote) => {
 export const getStorageGameByID = async (matchID: string) => {
   const document = await db.doc(`/games/${matchID}`).get();
   const data = document.data() as StorageGameRemote;
+  if (!data) return null;
   return {
+    id: matchID,
     winner: await getUserByID(data.winnerID),
     loser: await getUserByID(data.loserID),
     history: data.history,

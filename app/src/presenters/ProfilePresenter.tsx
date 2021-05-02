@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import { profileCollection } from '../services/firebase/storage';
 import { greet } from '../services/greeter';
@@ -17,6 +18,8 @@ export const ProfilePresenter = () => {
   const [profileStatus, setProfileStatus] = useRecoilState(profileStatusState);
 
   const [greeting, setGreeting] = useState<string>();
+
+  const history = useHistory();
 
   /*
   const profileDetails = useRecoilCallback(({ snapshot, set }) => async () => {
@@ -43,6 +46,10 @@ export const ProfilePresenter = () => {
     }
   };
 
+  const handleReplay = (id: string) => {
+    history.push(`/replay/${id}`);
+  };
+
   useEffect(() => {
     const unsubscribe = hydrateProfile();
     return () => {
@@ -60,6 +67,7 @@ export const ProfilePresenter = () => {
       profile={profile}
       isLoading={profileStatus !== 'success'}
       greeting={greeting}
+      handleReplay={handleReplay}
     />
   );
 };

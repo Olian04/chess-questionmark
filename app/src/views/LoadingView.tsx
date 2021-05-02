@@ -33,7 +33,11 @@ export const LoadingView = (props: Props) => {
     <Box className={classes.container}>
       <Box className={classes.wrapper}>
         <LoadingAnimation />
-        <Typography variant="body1" style={{ marginTop: '10px' }}>
+        <Typography
+          variant="body1"
+          style={{ marginTop: '10px' }}
+          align="center"
+        >
           {props.message ? props.message : 'Fetching state'}
         </Typography>
       </Box>

@@ -36,11 +36,16 @@ interface Props {
   profile: Profile;
   greeting: string | undefined;
   isLoading: boolean;
+  handleReplay: (a: string) => void;
 }
 
 export const ProfileView = (props: Props) => {
   const { user, profile } = props;
   const classes = useStyles();
+
+  const reversed = (array: Array<any>) =>
+    array.map((item, i) => array[array.length - 1 - i]);
+
   return (
     <Grid
       container
@@ -108,36 +113,39 @@ export const ProfileView = (props: Props) => {
                   {props.isLoading ? (
                     <ThreeRowButtonSkeleton />
                   ) : (
-                    profile.recentMatches.map((match, i) => (
-                      <ThreeRowButton
-                        key={i}
-                        name={
-                          user.name === match.winner.name
-                            ? match.loser.name
-                            : match.winner.name
-                        }
-                        delta={
-                          user.name === match.winner.name
-                            ? match.material
-                            : -1 * match.material
-                        }
-                        avatar={
-                          <Gravatar
-                            variant="circular"
-                            opponent={{
-                              email:
-                                user.name === match.winner.name
-                                  ? match.loser.email
-                                  : match.winner.email,
-                              avatar:
-                                user.name === match.winner.name
-                                  ? match.loser.avatar
-                                  : match.winner.avatar,
-                            }}
-                          />
-                        }
-                      />
-                    ))
+                    reversed(profile.recentMatches)
+                      .slice(0, 5)
+                      .map((match) => (
+                        <ThreeRowButton
+                          key={match.id}
+                          name={
+                            user.name === match.winner.name
+                              ? match.loser.name
+                              : match.winner.name
+                          }
+                          delta={
+                            user.name === match.winner.name
+                              ? match.material
+                              : -1 * match.material
+                          }
+                          avatar={
+                            <Gravatar
+                              variant="circular"
+                              opponent={{
+                                email:
+                                  user.name === match.winner.name
+                                    ? match.loser.email
+                                    : match.winner.email,
+                                avatar:
+                                  user.name === match.winner.name
+                                    ? match.loser.avatar
+                                    : match.winner.avatar,
+                              }}
+                            />
+                          }
+                          handleClick={() => props.handleReplay(match.id)}
+                        />
+                      ))
                   )}
                 </VerticalButtonGroup>
               </List>

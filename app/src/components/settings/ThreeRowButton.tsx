@@ -20,6 +20,7 @@ interface Props extends ButtonProps {
   rank?: string;
   delta?: number | undefined;
   avatar?: JSX.Element;
+  handleClick: () => void;
 }
 
 export const ThreeRowButtonSkeleton = () => {
@@ -63,7 +64,15 @@ export const ThreeRowButtonSkeleton = () => {
 
 export const ThreeRowButton = (props: Props) => {
   const classes = useStyles();
-  const { name, rank, delta, avatar, className, ...innerProps } = props;
+  const {
+    name,
+    rank,
+    delta,
+    avatar,
+    className,
+    handleClick,
+    ...innerProps
+  } = props;
   return (
     <>
       {!name && <ThreeRowButtonSkeleton />}
@@ -73,6 +82,7 @@ export const ThreeRowButton = (props: Props) => {
           endIcon={<PlayCircleOutline height="40px" width="40px" />}
           margin={0.1}
           className={clsx(className || '', classes.button)}
+          onClick={handleClick}
           {...innerProps}
         >
           <Grid item container direction="column" xs>

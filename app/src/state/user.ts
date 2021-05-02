@@ -70,6 +70,22 @@ export const profileState = atom<Profile>({
   default: defaultProfileState,
 });
 
+export const requestProfile = atom<Profile>({
+  key: 'REQUEST_PROFILE',
+  default: selector<Profile>({
+    key: 'REQUEST_PROFILE_SELECTOR',
+    get: async ({ get }) => {
+      const user = await get(userHydrateState);
+      const profile = await profileCollection.get(user.id);
+      console.warn(user, profile);
+      return profile ?? defaultProfileState;
+    },
+    set: ({ set }, newValue) => {
+      set(requestProfile, newValue);
+    },
+  }),
+});
+
 export const profileStatusState = atom<
   'idle' | 'pending' | 'fetching' | 'success' | 'fail'
 >({
