@@ -1,7 +1,7 @@
 import React from 'react';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { Box, Button, Typography } from '@material-ui/core';
-import { CancelSharp } from '@material-ui/icons';
+import { CancelSharp, KeyboardBackspace } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,6 +28,7 @@ interface Props {
   currentMove: number;
   currentPlayerIsHuman: boolean;
   handleResign: () => void;
+  isReplay?: boolean;
 }
 export const Overview = (props: Props) => {
   const classes = useStyles();
@@ -46,10 +47,10 @@ export const Overview = (props: Props) => {
       >
         <Button
           variant="text"
-          startIcon={<CancelSharp />}
+          startIcon={props.isReplay ? <KeyboardBackspace /> : <CancelSharp />}
           onClick={props.handleResign}
         >
-          Resign
+          {props.isReplay ? 'Profile' : 'Resign'}
         </Button>
         <Box>
           <Typography className={classes.text}>

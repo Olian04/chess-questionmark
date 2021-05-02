@@ -7,9 +7,9 @@ import {
   withStyles,
 } from '@material-ui/core/styles';
 import { PlayArrow, SkipNext, SkipPrevious, Pause } from '@material-ui/icons';
-
 import { PlayerBar } from '../components/game/PlayerBar';
 import { GameBoard } from '../components/game/GameBoard';
+import { Overview } from '../components/game/Overview';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -71,6 +71,7 @@ interface Props {
     rating: number;
     playerIsWhite: boolean;
   };
+  handleGoBack: () => void;
 }
 
 export const ReplayView = (props: Props) => {
@@ -85,7 +86,12 @@ export const ReplayView = (props: Props) => {
         justifyContent="space-between"
         className={classes.container}
       >
-        <Box />
+        <Overview
+          currentMove={props.turn}
+          currentPlayerIsHuman={props.turn % 2 === 1}
+          handleResign={props.handleGoBack}
+          isReplay
+        />
         <GameBoard
           position={props.fen}
           transitionDuration={400}

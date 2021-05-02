@@ -115,6 +115,7 @@ export const ReplayPresenter = () => {
           max={gameHistory.length}
           playing={playing}
           player={player as Player}
+          handleGoBack={() => history.push('/profile')}
         />
       ) : gameOwner && gameHistory.length === 0 ? (
         <LoadingView message="Fetching game" />
