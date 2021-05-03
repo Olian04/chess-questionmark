@@ -17,7 +17,6 @@ import {
   getLiveGameByUserID,
 } from '../services/firebase/realtimeDB';
 import { snackbarState } from '../state/snackbar';
-import { getTime } from 'date-fns';
 
 export const PuzzlePresenter = () => {
   const history = useHistory();
@@ -38,6 +37,9 @@ export const PuzzlePresenter = () => {
     previousFENStrings,
     playerColor: playerIsWhite ? 'white' : 'black',
     timerLength: gameState.timeLeft,
+    diffculty:
+      userProfile.rank /
+      (userProfile.losses + userProfile.wins + userProfile.draws),
     timerIncreaseOnMove: 5,
   });
 

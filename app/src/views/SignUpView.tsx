@@ -118,7 +118,7 @@ export const SignUpView = (props: Props) => {
         open: true,
         title: 'Privacy policy',
         content: [
-          "If you are concern of your identity, don't use a valid email.",
+          "If you are concerned of your identity, don't use a valid email.",
           "We don't verify it anyways. Lol",
         ],
       });

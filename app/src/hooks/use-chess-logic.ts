@@ -14,6 +14,7 @@ interface Config {
   timerLength: number;
   timerIncreaseOnMove: number;
   playerColor: 'white' | 'black';
+  diffculty: number;
 }
 
 type Move = {
@@ -275,6 +276,7 @@ export const useChessLogic = (conf: Config): API => {
       if (!game.game_over()) {
         if (turn !== player) {
           uciCmd('position fen ' + game.fen());
+          /*
           if (time && time.wtime) {
             uciCmd(
               'go ' +
@@ -288,9 +290,19 @@ export const useChessLogic = (conf: Config): API => {
                 ' binc ' +
                 time.binc
             );
+            
           } else {
             uciCmd('go ' + (time.depth ? 'depth ' + time.depth : ''));
           }
+          */
+          const depthDerivedFromRating = Math.min(
+            Math.floor(conf.diffculty / 50),
+            7
+          );
+          setTimeout(
+            () => uciCmd(`go depth ${depthDerivedFromRating}`),
+            Math.random() * 5000
+          );
         }
         if (game.history().length >= 2 && !time.depth && !time.nodes) {
           startClock();
