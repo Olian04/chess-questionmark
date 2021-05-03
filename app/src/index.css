@@ -3,7 +3,6 @@
 html,
 body {
   margin: 0;
-  overflow: scroll;
   background-color: #28262f;
   font-family: BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;

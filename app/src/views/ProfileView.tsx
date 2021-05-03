@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme: Theme) =>
       zIndex: 1,
       position: 'relative',
     },
-    scrollable: {
-      overflow: 'scroll !important',
-    },
     padding: {
       padding: '5px',
     },
@@ -51,7 +48,7 @@ export const ProfileView = (props: Props) => {
       container
       direction="column"
       justify="space-between"
-      className={clsx(classes.container, classes.scrollable)}
+      className={classes.container}
       spacing={2}
     >
       <>
