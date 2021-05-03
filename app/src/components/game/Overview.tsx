@@ -50,7 +50,7 @@ export const Overview = (props: Props) => {
           startIcon={props.isReplay ? <KeyboardBackspace /> : <CancelSharp />}
           onClick={props.handleResign}
         >
-          {props.isReplay ? 'Profile' : 'Resign'}
+          {props.isReplay ? 'Go Back' : 'Resign'}
         </Button>
         <Box>
           <Typography className={classes.text}>

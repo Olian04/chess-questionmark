@@ -6,6 +6,6 @@ import { LoginPresenter } from '../presenters/LoginPresenter';
 
 export const LoginRoute = () => {
   const setSide = useSetRecoilState(backgroundCircleState);
-  useEffect(() => setSide('top'));
+  useEffect(() => setSide('bottom'));
   return <LoginPresenter />;
 };

@@ -61,11 +61,13 @@ export const PlayerBar = (props: Props) => {
             <Typography variant="caption" color="textPrimary">
               Rating: {props.rating}
             </Typography>
-            <img
-              style={{ paddingLeft: '5px' }}
-              src={`https://ipdata.co/flags/${props.countryCode.toLowerCase()}.png`}
-              height="10px"
-            />
+            {props.countryCode ? (
+              <img
+                style={{ paddingLeft: '5px' }}
+                src={`https://ipdata.co/flags/${props.countryCode.toLowerCase()}.png`}
+                height="10px"
+              />
+            ) : null}
           </Box>
         </Box>
       </Box>

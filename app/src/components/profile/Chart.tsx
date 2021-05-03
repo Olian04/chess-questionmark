@@ -64,8 +64,8 @@ const getChart = (
             display: false,
           },
           yAxes: {
-            min: Math.max(...data) - 10,
-            max: Math.max(...data) + 10,
+            min: Math.min(...transformedData) - 10,
+            max: Math.max(...transformedData) + 10,
             grid: {
               display: false,
             },

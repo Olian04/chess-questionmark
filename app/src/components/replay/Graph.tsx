@@ -24,6 +24,9 @@ const createGraph = (
         ],
       },
       options: {
+        animation: {
+          duration: 0,
+        },
         responsive: true,
         maintainAspectRatio: false,
         legend: {
@@ -35,6 +38,8 @@ const createGraph = (
           },
           yAxes: {
             display: false,
+            min: -1 * Math.max(...data.map(Math.abs)),
+            max: Math.max(...data.map(Math.abs)),
           },
         },
         plugins: {
@@ -68,16 +73,26 @@ export const Graph = (props: Props) => {
     if (graphRef.current && graph) {
       const ctx = graphRef.current.getContext('2d');
       if (ctx) {
+        const start = {
+          x: 0,
+          y: 0,
+        };
+        const end = {
+          x: 0,
+          y: graphRef.current.clientHeight,
+        };
         const gradient = ctx.createLinearGradient(
-          0,
-          0,
-          0,
-          graphRef.current.clientHeight
+          start.x,
+          start.y,
+          end.x,
+          end.y
         );
         gradient.addColorStop(0, 'rgba(237,210,203,1)');
         gradient.addColorStop(1, 'rgba(84, 60, 82, 1)');
 
-        const currentGraph = createGraph(ctx, props.data, { gradient });
+        const currentGraph = createGraph(ctx, props.data, {
+          gradient,
+        });
         setGraph(currentGraph);
         return () => {
           currentGraph.destroy();

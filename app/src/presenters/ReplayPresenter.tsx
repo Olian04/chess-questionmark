@@ -94,7 +94,7 @@ export const ReplayPresenter = () => {
     }
 
     setGameOwner(false);
-    setTimeout(() => history.push('/profile'), 2500);
+    setTimeout(() => history.push('/play'), 2500);
   });
 
   useEffect(() => {
@@ -106,6 +106,7 @@ export const ReplayPresenter = () => {
   useEffect(() => {
     (async () => await hydrateGame())();
   }, []);
+
   return (
     <>
       {gameOwner && gameHistory.length > 0 ? (
@@ -121,8 +122,8 @@ export const ReplayPresenter = () => {
           max={gameHistory.length}
           playing={playing}
           player={player as Player}
-          handleGoBack={() => history.push('/profile')}
-          materialData={materialData}
+          handleGoBack={() => history.push('/play')}
+          materialData={[0, ...materialData]}
         />
       ) : gameOwner && gameHistory.length === 0 ? (
         <LoadingView message="Fetching game" />

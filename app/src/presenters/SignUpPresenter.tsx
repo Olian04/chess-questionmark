@@ -89,7 +89,7 @@ export const SignUpPresenter = () => {
       set(loginStatusState, 'success');
       set(userHydrateState, user);
       set(profileState, defaultProfileState);
-      history.push('/profile');
+      history.push('/play');
     }
   );
   return (
