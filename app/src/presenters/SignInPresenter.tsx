@@ -66,7 +66,7 @@ export const SignInPresenter = () => {
 
   useEffect(() => {
     if (loginStatus === 'success') {
-      history.push('/profile');
+      history.push('/play');
     }
   }, [loginStatus]);
 

@@ -8,7 +8,6 @@ import { NavigationBar } from './components/navigation/NavigationBar';
 import { LoginRoute } from './routes/LoginRoute';
 import { SignUpRoute } from './routes/SignUpRoute';
 import { SignInRoute } from './routes/SignInRoute';
-import { PlayRoute } from './routes/PlayRoute';
 import { PuzzleRoute } from './routes/PuzzleRoute';
 import { ReplayRoute } from './routes/ReplayRoute';
 import { AccountRoute } from './routes/AccountRoute';
@@ -76,10 +75,9 @@ export const App = () => {
                   <RecoilRoute exact path="/replay" component={ReplayRoute} />
                   <RecoilRoute exact path="/account" component={AccountRoute} />
                   <RecoilRoute exact path="/about" component={AboutRoute} />
-                  <RecoilRoute exact path="/play" component={PlayRoute} />
-                  <RecoilRoute exact path="/profile" component={ProfileRoute} />
+                  <RecoilRoute exact path="/play" component={ProfileRoute} />
                   <RecoilRoute exact path="/">
-                    <Redirect to="/profile" />
+                    <Redirect to="/play" />
                   </RecoilRoute>
                 </Switch>
               </React.Suspense>

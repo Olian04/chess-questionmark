@@ -26,7 +26,7 @@ export const RecoilRoute = (props: RecoilRouteProps) => {
   /** If there exists a user and they visits the login route,
    *  we redirect them back to profile */
   if (user && baseProps.path?.includes('login'))
-    return ShowRoute(<Redirect to="/profile" />);
+    return ShowRoute(<Redirect to="/play" />);
   /** If a route is guarded and firebase auth returns a user,
    * we persist the user and shows the requested route
    */

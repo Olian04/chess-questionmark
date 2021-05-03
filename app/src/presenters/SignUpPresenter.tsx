@@ -73,7 +73,7 @@ export const SignUpPresenter = () => {
 
       set(loginStatusState, 'success');
       set(userState, user);
-      history.push('/profile');
+      history.push('/play');
     }
   );
   return (
