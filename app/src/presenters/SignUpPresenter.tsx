@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
+
 import { createUserWithEmailAndPassword } from '../services/firebase/auth';
 import {
   profileCollection,
@@ -9,8 +10,13 @@ import {
 import { fetchCountryCode } from '../services/ipdata';
 import { loginStatusState } from '../state/authentication';
 import { snackbarState } from '../state/snackbar';
-import { defaultProfileState, profileState, userState } from '../state/user';
+import {
+  defaultProfileState,
+  profileState,
+  userHydrateState,
+} from '../state/user';
 import { User } from '../types/User';
+import { getGravatarUrl } from '../services/gravatar';
 import { UserCredentials } from '../types/UserCredentials';
 import { UserExtras } from '../types/UserExtras';
 import { SignUpView } from '../views/SignUpView';
@@ -21,7 +27,7 @@ export const SignUpPresenter = () => {
   const loginStatus = useRecoilValue(loginStatusState);
   const history = useHistory();
   const signUp = useRecoilCallback(
-    ({ set, snapshot }) => async (
+    ({ set }) => async (
       credentials: UserCredentials,
       extras: Partial<UserExtras>
     ) => {
@@ -61,34 +67,35 @@ export const SignUpPresenter = () => {
         id: signUpResponse.user.uid as string,
         email: signUpResponse.user.email as string,
         name: extras.name as string,
-        team: extras.team ? extras.team : nonApplicable,
-        phone: extras.phone ? extras.phone : nonApplicable,
-        avatar: extras.avatar ? extras.avatar : nonApplicable,
+        phone: nonApplicable,
+        avatar: getGravatarUrl({
+          email: signUpResponse.user.email as string,
+          defaultImage: 'robohash',
+        }),
+        team: nonApplicable,
         countryCode: countryCode,
       };
 
       await profileCollection.set(signUpResponse.user.uid, defaultProfileState);
       // Creates a user-document and stores in on firestore
       await userCollection.set(signUpResponse.user.uid, {
-        name: extras.name ? extras.name : nonApplicable,
-        team: extras.team ? extras.team : nonApplicable,
-        phone: extras.phone ? extras.phone : nonApplicable,
-        avatar: extras.avatar ? extras.avatar : nonApplicable,
-        countryCode: countryCode,
+        countryCode: user.countryCode,
+        name: extras.name ? extras.name : user.name,
+        team: extras.team ? extras.team : user.team,
+        phone: extras.phone ? extras.phone : user.phone,
+        avatar: extras.avatar ? extras.avatar : user.avatar,
       });
 
       set(loginStatusState, 'success');
-      set(userState, user);
+      set(userHydrateState, user);
       set(profileState, defaultProfileState);
       history.push('/profile');
     }
   );
   return (
-    <>
-      <SignUpView
-        onLoading={loginStatus === 'pending'}
-        onSignUpAttempt={signUp}
-      />
-    </>
+    <SignUpView
+      onLoading={loginStatus === 'pending'}
+      onSignUpAttempt={signUp}
+    />
   );
 };

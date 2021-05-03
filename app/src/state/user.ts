@@ -31,7 +31,7 @@ export const defaultProfileState = {
   recentMatches: [],
 };
 
-export const userState = atom<User>({
+const userState = atom<User>({
   key: 'USER',
   default: defaultUserState,
 });

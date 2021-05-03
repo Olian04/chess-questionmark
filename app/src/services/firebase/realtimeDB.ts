@@ -1,14 +1,9 @@
-import firebase from 'firebase';
 import { app } from '.';
 import 'firebase/database';
 import { Md5 } from 'md5-typescript';
 import { LiveGame } from '../../types/live/LiveGame';
-import { User } from '../../types/User';
-import React from 'react';
 
 const db = app.database();
-
-const getValue = async (path: string) => await (await db.ref(path).get()).val();
 
 const __getGameByUserID = async (userID: string) => {
   const snap = await db.ref('/games').get();

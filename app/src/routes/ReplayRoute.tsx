@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
+
 import { backgroundCircleState } from '../state/backgroundCircle';
 import { pillState } from '../state/pill';
 import { ReplayPresenter } from '../presenters/ReplayPresenter';
@@ -11,9 +12,5 @@ export const ReplayRoute = () => {
     setSide('hidden');
     setPill(1);
   });
-  return (
-    <>
-      <ReplayPresenter />
-    </>
-  );
+  return <ReplayPresenter />;
 };

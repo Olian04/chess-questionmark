@@ -1,23 +1,29 @@
-import { getTime } from 'date-fns';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useRecoilCallback, waitForAll } from 'recoil';
-
+import { useHistory } from 'react-router';
+import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import { fetchRandomPuzzle } from '../services/chess';
+import { createLiveGame } from '../services/firebase/realtimeDB';
+import { profileCollection } from '../services/firebase/storage';
+import { greet } from '../services/greeter';
+import { requestGame } from '../state/game';
 import {
-  createLiveGame,
-  getGameObserver,
-  getPlayerObserver,
-} from '../services/firebase/realtimeDB';
-import { currentGameState, requestGame } from '../state/game';
-import { userHydrateState, userState } from '../state/user';
+  profileState,
+  profileStatusState,
+  requestProfile,
+  userHydrateState,
+} from '../state/user';
 import { LiveGame } from '../types/live/LiveGame';
+import { Profile } from '../types/Profile';
 import { PlayView } from '../views/PlayView';
 
 export const PlayPresenter = () => {
+  const user = useRecoilValue(userHydrateState);
+  const [profile, setProfile] = useRecoilState(requestProfile);
+  const [profileStatus, setProfileStatus] = useRecoilState(profileStatusState);
+
+  const [greeting, setGreeting] = useState<string>();
+
   const history = useHistory();
-  const [gameCount, setGameCount] = useState(-1);
-  const [playerCount, setPlayerCount] = useState(-1);
 
   const initBoard = useRecoilCallback(({ snapshot, set }) => async () => {
     const { id: userId } = await snapshot.getPromise(userHydrateState);
@@ -43,23 +49,45 @@ export const PlayPresenter = () => {
     history.push('/puzzle');
   });
 
+  const hydrateProfile = () => {
+    if (user) {
+      setProfileStatus('pending');
+      return profileCollection.observe(user.id, (profile) => {
+        setProfileStatus('fetching');
+        if (profile) {
+          setProfile(profile);
+          setProfileStatus('success');
+          return;
+        }
+
+        setProfileStatus('fail');
+      });
+    }
+  };
+
+  const handleReplay = (id: string) => {
+    history.push(`/replay/${id}`);
+  };
+
   useEffect(() => {
-    const observer = getGameObserver((count) => setGameCount(count));
-
-    return () => observer.unsubscribe();
-  }, [gameCount]);
+    const unsubscribe = hydrateProfile();
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
-    const observer = getPlayerObserver((count) => setPlayerCount(count));
-
-    return () => observer.unsubscribe();
-  }, [playerCount]);
+    if (user && user.id !== 'N/A') setGreeting(greet(user.name));
+  }, []);
 
   return (
     <PlayView
+      user={user}
+      profile={profile}
+      isLoading={profileStatus !== 'success'}
+      greeting={greeting}
+      handleReplay={handleReplay}
       onClickStartPuzzle={initBoard}
-      gameCount={gameCount}
-      playerCount={playerCount}
     />
   );
 };

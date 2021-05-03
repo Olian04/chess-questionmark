@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
-import { BoardProps } from '../types/Board';
+import { BoardProps } from '../types/BoardProps';
 import { PlayerBar } from '../components/game/PlayerBar';
 import { GameBoard } from '../components/game/GameBoard';
 import { Snackbar } from '../components/common/Snackbar';

@@ -2,8 +2,7 @@ import React, { ReactComponentElement, ReactNode } from 'react';
 import { Redirect, Route as BaseRoute, RouteProps } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { useAuthState } from '../hooks/use-auth-state';
-import { userCollection } from '../services/firebase/storage';
-import { userState } from '../state/user';
+import { userHydrateState } from '../state/user';
 import { LoadingView } from '../views/LoadingView';
 
 interface RecoilRouteProps extends RouteProps {
@@ -16,7 +15,7 @@ export const RecoilRoute = (props: RecoilRouteProps) => {
   const { children, guarded, component, ...baseProps } = props;
 
   const [user, loading, error] = useAuthState();
-  const setUserState = useSetRecoilState(userState);
+  const setUserState = useSetRecoilState(userHydrateState);
 
   const ShowRoute = (children: ReactNode) => (
     <BaseRoute {...baseProps}>{children}</BaseRoute>
@@ -30,18 +29,6 @@ export const RecoilRoute = (props: RecoilRouteProps) => {
   /** If there exists a user and they visits the login route,
    *  we redirect them back to profile */
   if (guarded && user) {
-    /*
-    userCollection.get(user.uid).then((extras) =>
-      setUserState({
-        id: user.uid,
-        name: extras.name as string,
-        email: user.email as string,
-        phone: extras?.phone ?? (nonApplicable as string),
-        team: extras?.team ?? (nonApplicable as string),
-        avatar: extras?.avatar ?? (nonApplicable as string),
-      })
-    );
-    */
     if (component) return ShowRouteComponent(component);
     return ShowRoute(children);
   }

@@ -1,105 +1,167 @@
 import React from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, List, Typography } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
-
+import { User } from '../types/User';
+import { Graph } from '../components/profile/Graph';
 import { Tile } from '../components/play/Tile';
+import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
 import { Button } from '../components/play/Button';
-
-import MatchIcon from '/matchicon.svg';
 import AiIcon from '/aiicon.svg';
+
+import {
+  ThreeRowButton,
+  ThreeRowButtonSkeleton,
+} from '../components/settings/ThreeRowButton';
+
+import { Gravatar } from '../components/common/Gravatar';
+import { Profile } from '../types/Profile';
+import { LoadingView } from './LoadingView';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    fillHeight: {
-      height: '100%',
-      paddingLeft: '15px',
-      paddingRight: '15px',
-      flexWrap: 'nowrap',
-    },
-    button: {
-      backgroundColor: theme.palette.background.paper,
-      color: theme.palette.primary.contrastText,
-    },
-    item: {
+    container: {
       zIndex: 1,
+      position: 'relative',
     },
-    paper: {
-      textAlign: 'center',
-      backgroundColor: theme.palette.background.paper,
-      padding: theme.spacing(2),
+    padding: {
+      padding: '5px',
     },
   })
 );
 
 interface Props {
+  user: User;
+  profile: Profile;
+  greeting: string | undefined;
+  isLoading: boolean;
+  handleReplay: (a: string) => void;
   onClickStartPuzzle: () => void;
-  gameCount: number;
-  playerCount: number;
 }
 
 export const PlayView = (props: Props) => {
+  const { user, profile } = props;
   const classes = useStyles();
+
+  const reversed = (array: Array<any>) =>
+    array.map((item, i) => array[array.length - 1 - i]);
 
   return (
     <Grid
       container
       direction="column"
-      className={classes.fillHeight}
-      spacing={1}
-      justify="flex-start"
+      justify="space-between"
+      className={classes.container}
+      spacing={2}
     >
-      <Grid xs item className={classes.item}>
-        <Grid
-          container
-          alignItems="center"
-          justify="center"
-          style={{ height: '100%' }}
-        >
-          <Typography variant="h5">Lets see what you go for Bob!</Typography>
+      <>
+        <Grid item xs>
+          <Grid
+            container
+            item
+            alignItems="center"
+            justify="center"
+            className={classes.container}
+          >
+            <Typography variant="h5" color="textPrimary">
+              {props.user.name !== 'N/A' && props.greeting}
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid xs item className={classes.item}>
-        <Grid container direction="column" spacing={1}>
-          <Button
-            onClick={() => {}}
-            text="Create a match"
-            subText="Start a regular match"
-            icon={MatchIcon}
-          />
-          <Button
-            onClick={() => {}}
-            text="Join a match"
-            subText={
-              <p>
-                There are currently <b>18</b> rooms open
-              </p>
-            }
-            icon={MatchIcon}
-          />
+
+        <Grid item xs>
           <Button
             onClick={props.onClickStartPuzzle}
             text="Beat our AI"
-            subText="Battle your way up from a randomized blunder"
+            subText={<p>Battle your way up from a randomized blunder</p>}
             icon={AiIcon}
           />
         </Grid>
-      </Grid>
-      <Grid xs item className={classes.item}>
-        <Grid
-          container
-          justify="space-between"
-          spacing={1}
-          style={{ height: '100%', marginTop: '5px' }}
-          alignContent="flex-end"
-        >
-          <Grid item xs={12} sm={6}>
-            <Tile text={props.playerCount} subText="Players" />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Tile text={props.gameCount} subText="Games in play" />
+
+        <Graph
+          recentMatches={props.profile.recentMatches}
+          username={props.user.name}
+          rank={profile.rank}
+          delta={profile.rankDelta}
+          isLoading={props.isLoading}
+        />
+        <Grid item xs>
+          <Grid container direction="row" spacing={2}>
+            <Tile
+              isLoading={props.isLoading}
+              text={profile.wins}
+              subText="Wins"
+            />
+            <Tile
+              isLoading={props.isLoading}
+              text={profile.losses}
+              subText="Losses"
+            />
+            <Tile
+              isLoading={props.isLoading}
+              text={profile.draws}
+              subText="Draws"
+            />
           </Grid>
         </Grid>
-      </Grid>
+
+        <Grid item xs>
+          <Grid container direction="column">
+            <Grid item xs>
+              <Typography
+                className={classes.padding}
+                variant="button"
+                color="textPrimary"
+              >
+                Recent Matches
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              <List>
+                <VerticalButtonGroup>
+                  {props.isLoading ? (
+                    <ThreeRowButtonSkeleton />
+                  ) : (
+                    reversed(profile.recentMatches)
+                      .slice(0, 5)
+                      .map((match) => (
+                        <ThreeRowButton
+                          key={match.id}
+                          name={
+                            user.name === match.winner.name
+                              ? match.loser.name
+                              : match.winner.name
+                          }
+                          delta={
+                            user.name === match.winner.name
+                              ? match.material
+                              : -1 * match.material
+                          }
+                          avatar={
+                            <Gravatar
+                              variant="circular"
+                              opponent={{
+                                email:
+                                  user.name === match.winner.name
+                                    ? match.loser.email
+                                    : match.winner.email,
+                                avatar:
+                                  user.name === match.winner.name
+                                    ? match.loser.avatar
+                                    : match.winner.avatar,
+                              }}
+                            />
+                          }
+                          handleClick={() => props.handleReplay(match.id)}
+                        />
+                      ))
+                  )}
+                </VerticalButtonGroup>
+              </List>
+            </Grid>
+          </Grid>
+        </Grid>
+      </>
     </Grid>
   );
 };

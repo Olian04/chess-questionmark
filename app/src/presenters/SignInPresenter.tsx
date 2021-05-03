@@ -1,20 +1,32 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
+import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { userState } from '../state/user';
+import { userHydrateState } from '../state/user';
 import { loginStatusState } from '../state/authentication';
 import { SignInView } from '../views/SignInView';
 import { signInWithEmailAndPassword } from '../services/firebase/auth';
 import { UserCredentials } from '../types/UserCredentials';
 import { userCollection } from '../services/firebase/storage';
+import { snackbarState } from '../state/snackbar';
 
 export const SignInPresenter = () => {
+  const setSnackbar = useSetRecoilState(snackbarState);
   const loginStatus = useRecoilValue(loginStatusState);
   const history = useHistory();
 
+  useEffect(() => {
+    if (loginStatus === 'fail') {
+      setSnackbar({
+        open: true,
+        severity: 'error',
+        message: 'Login failed',
+      });
+    }
+  }, [loginStatus]);
+
   const loginUser = useRecoilCallback(
-    ({ snapshot, set }) => async (credentials: UserCredentials) => {
+    ({ set }) => async (credentials: UserCredentials) => {
       if (loginStatus in ['pending', 'success']) return;
 
       set(loginStatusState, 'pending');
@@ -38,34 +50,32 @@ export const SignInPresenter = () => {
         return;
       }
 
-      const { name, phone, team, avatar } = await userCollection.get(
-        loginResponse.user.uid
-      );
+      const {
+        name,
+        phone,
+        team,
+        avatar,
+        countryCode,
+      } = await userCollection.get(loginResponse.user.uid);
 
       set(loginStatusState, 'success');
-      set(userState, {
+      set(userHydrateState, {
         id: loginResponse.user?.uid as string,
         email: loginResponse.user?.email as string,
-        name: name as string,
-        phone: phone as string,
-        team: team as string,
-        avatar: avatar as string,
+        name,
+        phone,
+        team,
+        avatar,
+        countryCode,
       });
     }
   );
 
   useEffect(() => {
     if (loginStatus === 'success') {
-      history.push('/profile');
+      history.push('/play');
     }
   }, [loginStatus]);
 
-  return (
-    <>
-      <SignInView
-        loginFailed={loginStatus === 'fail'}
-        onLoginAttempt={loginUser}
-      />
-    </>
-  );
+  return <SignInView loginStatus={loginStatus} onLoginAttempt={loginUser} />;
 };

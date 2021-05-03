@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { Avatar, Grid, ListItem, List } from '@material-ui/core';
-import {
-  Settings as SettingsIcon,
-  AlternateEmail as AtIcon,
-} from '@material-ui/icons';
+import { Grid, ListItem, List } from '@material-ui/core';
+import { Settings as SettingsIcon } from '@material-ui/icons';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
@@ -12,20 +9,16 @@ import { UpdateFieldModal } from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
 import { User } from '../types/User';
 import { Gravatar } from '../components/common/Gravatar';
-import { useUserState } from '../hooks/use-user-state';
-import { userCollection } from '../services/firebase/storage';
-import { userState } from '../state/user';
-import { useRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       height: '100%',
-      overflowY: 'scroll',
       flexWrap: 'nowrap',
     },
     list: {
       zIndex: 1,
+      width: '100%',
     },
     error: {
       backgroundColor: theme.palette.error.main,
@@ -35,12 +28,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   user: User;
-  onLogoutAttempt: () => void;
+  onClickLogout: () => void;
+  onChangeTeam: (newTeam: string) => void;
+  onChangeName: (newName: string) => void;
+  onChangeEmail: (newEmail: string) => void;
+  onChangePhone: (newPhone: string) => void;
+  onChangeAvatar: (newAvatar: string) => void;
+  onChangePassword: (newPassword: string) => void;
 }
 
-export const SettingsView = (props: Props) => {
+export const AccountView = (props: Props) => {
   const classes = useStyles();
-  const firebaseUser = useUserState();
   const [modal, setModal] = useState({
     open: false,
     dialogs: [
@@ -53,33 +51,30 @@ export const SettingsView = (props: Props) => {
       },
     ],
   });
-
-  const [user, setUserState] = useRecoilState(userState);
-
-  const updateUser = (key: string, value: any) => {
-    userCollection.update(props.user.id, { [key]: value as string });
-    setUserState({ ...user, [key]: value as string });
-  };
   return (
     <>
       <UpdateFieldModal
-        {...modal}
+        open={modal.open}
+        dialogs={modal.dialogs as any}
         onDiscard={() => setModal((curr) => ({ ...curr, open: false }))}
         onSave={(fieldValues) => {
-          for (const [key, value] of Object.entries(fieldValues)) {
-            switch (key) {
-              case 'email':
-                firebaseUser
-                  ?.updateEmail(value as string)
-                  .catch((e: { code: string; message: string }) =>
-                    console.log(e)
-                  );
-                setUserState({ ...user, email: value as string });
-                break;
-              default:
-                updateUser(key, value);
-                break;
-            }
+          if (fieldValues.name) {
+            props.onChangeName(fieldValues.name);
+          }
+          if (fieldValues.avatar) {
+            props.onChangeAvatar(fieldValues.avatar);
+          }
+          if (fieldValues.email) {
+            props.onChangeEmail(fieldValues.email);
+          }
+          if (fieldValues.phone) {
+            props.onChangePhone(fieldValues.phone);
+          }
+          if (fieldValues.team) {
+            props.onChangeTeam(fieldValues.team);
+          }
+          if (fieldValues.password) {
+            props.onChangePassword(fieldValues.password);
           }
           setModal((curr) => ({ ...curr, open: false }));
         }}
@@ -89,7 +84,7 @@ export const SettingsView = (props: Props) => {
         direction="column"
         alignItems="center"
         alignContent="center"
-        justify="space-around"
+        justify="flex-start"
         className={classes.container}
       >
         <List className={classes.list}>
@@ -170,17 +165,23 @@ export const SettingsView = (props: Props) => {
                   })
                 }
               />
-            </VerticalButtonGroup>
-          </ListItem>
-          <SectionHeading
-            title="Help & Feedback"
-            subTitle="Reach out to us with your feedback and questions"
-            icon={<AtIcon />}
-          />
-          <ListItem>
-            <VerticalButtonGroup>
-              <TwoRowButton title="Frequently asked question" />
-              <TwoRowButton title="Contact us" />
+              <TwoRowButton
+                title="Change Password"
+                onClick={() =>
+                  setModal({
+                    open: true,
+                    dialogs: [
+                      {
+                        title: 'New Password',
+                        fieldName: 'password',
+                        defaultValue: '',
+                        description: 'The desired new password',
+                        hint: 'New Password',
+                      },
+                    ],
+                  })
+                }
+              />
             </VerticalButtonGroup>
           </ListItem>
           <ListItem>
@@ -188,7 +189,7 @@ export const SettingsView = (props: Props) => {
               <TwoRowButton
                 className={classes.error}
                 title="Logout"
-                onClick={props.onLogoutAttempt}
+                onClick={props.onClickLogout}
               />
             </VerticalButtonGroup>
           </ListItem>

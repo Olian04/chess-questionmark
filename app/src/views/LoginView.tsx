@@ -1,10 +1,9 @@
 import React from 'react';
 import { Container, Grid, Typography } from '@material-ui/core';
-
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { LinkButton } from '../components/common/LinkButton';
-import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
+
+import { LinkButton } from '../components/common/LinkButton';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,16 +27,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const LoginView = () => {
-  const classes = useStyles();
-  const history = useHistory();
+interface Props {
+  onClickSignUp: () => void;
+  onClickSignIn: () => void;
+}
 
-  const handleSignUp = () => {
-    history.push('/login/sign-up');
-  };
-  const handleSignIn = () => {
-    history.push('/login/sign-in');
-  };
+export const LoginView = (props: Props) => {
+  const classes = useStyles();
 
   return (
     <Container maxWidth="sm" className={classes.container}>
@@ -58,7 +54,11 @@ export const LoginView = () => {
           </Typography>
         </Grid>
         <Grid item>
-          <LinkButton color="primary" width="160px" onClick={handleSignUp}>
+          <LinkButton
+            color="primary"
+            width="160px"
+            onClick={props.onClickSignUp}
+          >
             Sign up!
           </LinkButton>
         </Grid>
@@ -78,7 +78,7 @@ export const LoginView = () => {
             className={classes.loginButton}
             fullWidth
             padding="1.25em"
-            onClick={handleSignIn}
+            onClick={props.onClickSignIn}
           >
             Login
           </LinkButton>

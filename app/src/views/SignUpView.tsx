@@ -183,9 +183,10 @@ export const SignUpView = (props: Props) => {
                         id="ingameName"
                         label="In-game Name"
                         onChange={formikProps.handleChange}
-                        error={formikProps.errors.name ? true : false}
+                        onBlur={formikProps.handleBlur}
+                        error={formikProps.errors.name && formikProps.touched.name ? true : false}
                         helperText={
-                          formikProps.errors.name ? formikProps.errors.name : ''
+                          formikProps.errors.name && formikProps.touched.name ? formikProps.errors.name : ''
                         }
                         autoFocus
                       />
@@ -200,9 +201,10 @@ export const SignUpView = (props: Props) => {
                         id="email"
                         label="Email"
                         onChange={formikProps.handleChange}
-                        error={formikProps.errors.email ? true : false}
+                        onBlur={formikProps.handleBlur}
+                        error={formikProps.errors.email && formikProps.touched.email ? true : false}
                         helperText={
-                          formikProps.errors.email
+                          formikProps.errors.email && formikProps.touched.email
                             ? formikProps.errors.email
                             : ''
                         }
@@ -219,9 +221,10 @@ export const SignUpView = (props: Props) => {
                         id="password"
                         autoComplete="current-password"
                         onChange={formikProps.handleChange}
-                        error={formikProps.errors.password ? true : false}
+                        onBlur={formikProps.handleBlur}
+                        error={formikProps.errors.password && formikProps.touched.password ? true : false}
                         helperText={
-                          formikProps.errors.password
+                          formikProps.errors.password && formikProps.touched.password
                             ? formikProps.errors.password
                             : ''
                         }
@@ -230,7 +233,7 @@ export const SignUpView = (props: Props) => {
                     <Grid item xs={12}>
                       <FormGroup>
                         <FormControl
-                          error={formikProps.errors.agreeOnTerms ? true : false}
+                          error={formikProps.errors.agreeOnTerms && formikProps.touched.agreeOnTerms ? true : false}
                         >
                           <FormControlLabel
                             control={
@@ -239,6 +242,7 @@ export const SignUpView = (props: Props) => {
                                 onChange={(event, checked) =>
                                   handleCheckbox(formikProps, event, checked)
                                 }
+                                onBlur = {formikProps.handleBlur}
                                 value={formikProps.values.agreeOnTerms}
                                 name="agreeOnTerms"
                               />
@@ -264,9 +268,9 @@ export const SignUpView = (props: Props) => {
                           />
                         </FormControl>
                         <FormHelperText
-                          error={formikProps.errors.agreeOnTerms ? true : false}
+                          error={formikProps.errors.agreeOnTerms && formikProps.touched.agreeOnTerms ? true : false}
                         >
-                          {formikProps.errors.agreeOnTerms
+                          {formikProps.errors.agreeOnTerms && formikProps.touched.agreeOnTerms
                             ? formikProps.errors.agreeOnTerms
                             : ''}
                         </FormHelperText>

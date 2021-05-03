@@ -1,13 +1,13 @@
 import firebase from 'firebase';
 import { app } from '.';
 import 'firebase/firestore';
-import { User } from '../../types/User';
 import { Profile } from '../../types/Profile';
 import { UserExtras } from '../../types/UserExtras';
 import {
   StorageGameLocal,
   StorageGameRemote,
 } from '../../types/storage/StorageGame';
+import { User } from '../../types/User';
 
 const db = app.firestore();
 

@@ -8,7 +8,7 @@ import {
 import { GameView } from '../views/GameView';
 import { fallbackGameState, requestGame } from '../state/game';
 import { useHistory } from 'react-router-dom';
-import { profileState, userHydrateState, userState } from '../state/user';
+import { profileState, userHydrateState } from '../state/user';
 import { EndOfGame } from '../components/game/EndOfGame';
 import { useChessLogic } from '../hooks/use-chess-logic';
 import { migrateGameByUserID } from '../services/firebase/util/migrateDB';
@@ -83,7 +83,10 @@ export const PuzzlePresenter = () => {
       }
 
       const newGameState = await getLiveGameByUserID(userID);
-      if (newGameState !== null) set(requestGame, newGameState);
+      if (newGameState === null) {
+        throw new Error(`This should never happen... Run for your lives!!`);
+      }
+      set(requestGame, newGameState);
     }
   );
 
