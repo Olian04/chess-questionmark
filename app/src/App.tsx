@@ -12,7 +12,7 @@ import { PuzzleRoute } from './routes/PuzzleRoute';
 import { ReplayRoute } from './routes/ReplayRoute';
 import { AccountRoute } from './routes/AccountRoute';
 import { AboutRoute } from './routes/AboutRoute';
-import { ProfileRoute } from './routes/ProfileRoute';
+import { PlayRoute } from './routes/PlayRoute';
 import { RecoilRoute } from './providers/stateProvider';
 import { BackgroundCircle } from './components/common/BackgroundCircle';
 
@@ -75,7 +75,7 @@ export const App = () => {
                   <RecoilRoute exact path="/replay" component={ReplayRoute} />
                   <RecoilRoute exact path="/account" component={AccountRoute} />
                   <RecoilRoute exact path="/about" component={AboutRoute} />
-                  <RecoilRoute exact path="/play" component={ProfileRoute} />
+                  <RecoilRoute exact path="/play" component={PlayRoute} />
                   <RecoilRoute exact path="/">
                     <Redirect to="/play" />
                   </RecoilRoute>

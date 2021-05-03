@@ -34,7 +34,7 @@ interface Props {
   onClickStartPuzzle: () => void;
 }
 
-export const ProfileView = (props: Props) => {
+export const PlayView = (props: Props) => {
   const classes = useStyles();
 
   const profile = useRecoilValue(profileState);

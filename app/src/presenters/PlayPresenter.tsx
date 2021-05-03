@@ -7,9 +7,9 @@ import { profileCollection } from '../services/firebase/storage';
 import { currentGameState } from '../state/game';
 import { profileState, profileStatusState, userState } from '../state/user';
 import { LiveGame } from '../types/live/LiveGame';
-import { ProfileView } from '../views/ProfileView';
+import { PlayView } from '../views/PlayView';
 
-export const ProfileProvider = () => {
+export const PlayProvider = () => {
   const user = useRecoilValue(userState);
   const profileStatus = useRecoilValue(profileStatusState);
   const history = useHistory();
@@ -69,7 +69,7 @@ export const ProfileProvider = () => {
     history.push('/puzzle');
   });
   return (
-    <ProfileView
+    <PlayView
       user={user}
       profileExists={profileStatus === 'success'}
       fetchDetails={profileDetails}
