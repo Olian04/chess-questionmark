@@ -64,7 +64,7 @@ export const App = () => {
             <NavigationBar
               menuItems={[
                 { title: 'Play', to: '/play' },
-                { title: 'Profile', to: '/profile' },
+                { title: 'Play', to: '/profile' },
                 { title: 'Settings', to: '/settings' },
               ]}
             />

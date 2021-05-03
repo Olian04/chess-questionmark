@@ -5,13 +5,14 @@ import { User } from '../types/User';
 import { Graph } from '../components/profile/Graph';
 import { Tile } from '../components/play/Tile';
 import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
-
+import AiIcon from '/aiicon.svg';
 import { ThreeRowButton } from '../components/settings/ThreeRowButton';
 
 import BlankAvatar from '/preview.svg';
 import { Gravatar } from '../components/common/Gravatar';
 import { useRecoilValue } from 'recoil';
 import { profileState } from '../state/user';
+import { Button } from '../components/play/Button';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,6 +31,7 @@ interface Props {
   user: User;
   profileExists: boolean;
   fetchDetails: () => void;
+  onClickStartPuzzle: () => void;
 }
 
 export const ProfileView = (props: Props) => {
@@ -74,6 +76,19 @@ export const ProfileView = (props: Props) => {
           <Tile text={profile.losses} subText="Losses" />
           <Tile text={profile.draws} subText="Draws" />
         </Grid>
+      </Grid>
+
+      <Grid item xs>
+      <Button
+            onClick={props.onClickStartPuzzle}
+            text="Beat our AI"
+            subText={
+              <p>
+                Battle your way up from a randomized blunder
+              </p>
+            }
+            icon={AiIcon}
+          />
       </Grid>
 
       <Grid item xs>
