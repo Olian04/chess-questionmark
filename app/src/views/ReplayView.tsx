@@ -164,6 +164,7 @@ export const ReplayView = (props: Props) => {
           isPaused={true}
           isBlinking={false}
           playerIsWhite={props.player.playerIsWhite}
+          isReplay
         />
       </Box>
       <Box className={classes.background} />

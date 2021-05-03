@@ -31,6 +31,7 @@ interface Props {
   isPaused: boolean;
   isBlinking: boolean;
   playerIsWhite: boolean;
+  isReplay?: boolean;
 }
 
 export const PlayerBar = (props: Props) => {
@@ -71,11 +72,15 @@ export const PlayerBar = (props: Props) => {
           </Box>
         </Box>
       </Box>
-      <Pill
-        time={props.time}
-        isPaused={props.isPaused}
-        isBlinking={props.isBlinking}
-      />
+      {props.isReplay ? (
+        ''
+      ) : (
+        <Pill
+          time={props.time}
+          isPaused={props.isPaused}
+          isBlinking={props.isBlinking}
+        />
+      )}
     </Box>
   );
 };
