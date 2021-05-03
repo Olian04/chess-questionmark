@@ -103,6 +103,7 @@ interface Props {
   time: number;
   isPaused: boolean;
   isBlinking: boolean;
+  timeRef: any;
 }
 
 export const Pill = (props: Props) => {
@@ -121,6 +122,7 @@ export const Pill = (props: Props) => {
       <Box className={classes.container}>
         <AccessTimeIcon color="action" />
         <Typography
+          ref={props.timeRef}
           color="textPrimary"
           className={clsx(classes.text, classes.timerText)}
         >

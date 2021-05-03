@@ -45,6 +45,7 @@ interface Props {
   handleResign: () => void;
   isPaused: boolean;
   isBlinking: boolean;
+  timeRef: React.MutableRefObject<HTMLParagraphElement | undefined>;
 }
 
 export const GameView = (props: Props) => {
@@ -66,6 +67,7 @@ export const GameView = (props: Props) => {
         />
         <GameBoard {...props.boardProps} />
         <PlayerBar
+          timeRef={props.timeRef}
           time={props.botTime}
           name={props.player.name}
           email={props.player.email}

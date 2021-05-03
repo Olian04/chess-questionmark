@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {
-  useRecoilCallback,
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from 'recoil';
+import React, { useState, useEffect, useRef } from 'react';
+import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
 import { GameView } from '../views/GameView';
 import { fallbackGameState, requestGame } from '../state/game';
 import { useHistory } from 'react-router-dom';
@@ -32,6 +27,9 @@ export const PuzzlePresenter = () => {
     gameState?.history?.[gameState?.history?.length - 1]
   );
   const [previousFENStrings] = useState(gameState?.history);
+
+  const timerIncreaseOnMove = 5;
+
   const gameLogic = useChessLogic({
     initialFEN,
     previousFENStrings,
@@ -40,7 +38,7 @@ export const PuzzlePresenter = () => {
     diffculty:
       userProfile.rank /
       (userProfile.losses + userProfile.wins + userProfile.draws),
-    timerIncreaseOnMove: 5,
+    timerIncreaseOnMove,
   });
 
   useEffect(() => {
@@ -66,17 +64,22 @@ export const PuzzlePresenter = () => {
   });
 
   const addMoveToGameState = useRecoilCallback(
-    ({ snapshot, set }) => async () => {
+    ({ snapshot, set }) => async (onUnmount?: { timeLeft: number }) => {
       const { id: userID } = await snapshot.getPromise(userHydrateState);
       const gameState = await snapshot.getPromise(requestGame);
       const latestState = gameLogic.history[gameLogic.history.length - 1];
-      if (latestState.player === 'human') {
+      if (onUnmount) {
         await updateLiveGameByUserID(userID, {
-          history: [...gameState.history, latestState.fen],
-          timeLeft: gameLogic.timeLeft.self,
+          timeLeft: onUnmount.timeLeft,
         });
       }
-      if (latestState.player === 'ai') {
+      if (!onUnmount && latestState.player === 'human') {
+        await updateLiveGameByUserID(userID, {
+          history: [...gameState.history, latestState.fen],
+          timeLeft: gameLogic.timeLeft.self + timerIncreaseOnMove,
+        });
+      }
+      if (!onUnmount && latestState.player === 'ai') {
         await updateLiveGameByUserID(userID, {
           history: [...gameState.history, latestState.fen],
         });
@@ -102,6 +105,18 @@ export const PuzzlePresenter = () => {
     }
   }, [gameLogic.history]);
 
+  const timeRef = useRef<HTMLParagraphElement>();
+
+  useEffect(() => {
+    return () => {
+      if (timeRef.current) {
+        const [minutes, seconds] = timeRef.current.innerText.split(':');
+        const timeLeft = parseInt(minutes) * 60 + parseInt(seconds);
+        addMoveToGameState({ timeLeft: timeLeft });
+      }
+    };
+  }, []);
+
   useEffect(() => {
     setSnackbar({
       open: true,
@@ -109,6 +124,7 @@ export const PuzzlePresenter = () => {
       message: `You are playing as ${playerIsWhite ? 'white' : 'black'}`,
     });
   }, [gameLogic.boardProps.orientation]);
+
   const userInfo = {
     name: user.name,
     email: user.email,
@@ -128,6 +144,7 @@ export const PuzzlePresenter = () => {
         open={winnerDialogueOpen}
       />
       <GameView
+        timeRef={timeRef}
         player={userInfo}
         topTime={gameLogic.timeLeft.opponent}
         botTime={gameLogic.timeLeft.self}

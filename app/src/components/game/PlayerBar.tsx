@@ -32,6 +32,7 @@ interface Props {
   isBlinking: boolean;
   playerIsWhite: boolean;
   isReplay?: boolean;
+  timeRef?: React.MutableRefObject<HTMLParagraphElement | undefined>;
 }
 
 export const PlayerBar = (props: Props) => {
@@ -76,6 +77,7 @@ export const PlayerBar = (props: Props) => {
         ''
       ) : (
         <Pill
+          timeRef={props.timeRef}
           time={props.time}
           isPaused={props.isPaused}
           isBlinking={props.isBlinking}
