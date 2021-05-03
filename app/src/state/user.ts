@@ -1,14 +1,11 @@
 import { atom, selector, selectorFamily } from 'recoil';
 import { Profile } from '../types/Profile';
 import { User } from '../types/User';
-import { auth, getCurrentUser } from '../services/firebase/auth';
+import { getCurrentUser } from '../services/firebase/auth';
 import {
   userCollection,
-  getStorageGameByID,
   profileCollection,
 } from '../services/firebase/storage';
-import { StorageGameLocal } from '../types/storage/StorageGame';
-import { loginStatusState } from './authentication';
 
 const notApplicable = 'N/A';
 
@@ -78,10 +75,7 @@ export const requestProfile = atom<Profile>({
       const user = await get(userHydrateState);
       const profile = await profileCollection.get(user.id);
       return profile ?? defaultProfileState;
-    },
-    set: ({ set }, newValue) => {
-      set(requestProfile, newValue);
-    },
+    }
   }),
 });
 

@@ -3,7 +3,7 @@ import { Avatar, AvatarProps } from '@material-ui/core';
 import { Md5 } from 'md5-typescript';
 import { useRecoilValue } from 'recoil';
 
-import { userHydrateState, userState } from '../../state/user';
+import { userHydrateState } from '../../state/user';
 import { getGravatarUrl } from '../../services/gravatar';
 
 interface Props extends AvatarProps {

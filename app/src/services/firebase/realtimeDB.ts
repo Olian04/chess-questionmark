@@ -50,7 +50,7 @@ export const deleteLiveGameByUserID = async (userID: string) => {
     return db
       .ref(`/games/${gameId}`)
       .remove()
-      .then(() => {});
+      .then(() => { });
   }
 };
 

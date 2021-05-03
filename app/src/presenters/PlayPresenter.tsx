@@ -7,13 +7,11 @@ import { profileCollection } from '../services/firebase/storage';
 import { greet } from '../services/greeter';
 import { requestGame } from '../state/game';
 import {
-  profileState,
   profileStatusState,
   requestProfile,
   userHydrateState,
 } from '../state/user';
 import { LiveGame } from '../types/live/LiveGame';
-import { Profile } from '../types/Profile';
 import { PlayView } from '../views/PlayView';
 
 export const PlayPresenter = () => {

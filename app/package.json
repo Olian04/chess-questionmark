@@ -16,6 +16,7 @@
     "@react-hook/window-size": "^3.0.7",
     "@types/chart.js": "^2.9.32",
     "@types/chess.js": "^0.10.1",
+    "@types/date-fns": "^2.6.0",
     "@types/firebase": "^3.2.1",
     "@types/styled-components": "^5.1.7",
     "chart.js": "^3.1.0",

@@ -1,6 +1,5 @@
-import { atom, selector } from 'recoil';
+import { atom } from 'recoil';
 import { UserCredentials } from '../types/UserCredentials';
-import { profileState, userState } from './user';
 
 export const loginCredentialsState = atom<UserCredentials | null>({
   key: 'LOGIN_CREDENTIALS',
