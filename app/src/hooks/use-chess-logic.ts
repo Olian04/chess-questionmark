@@ -434,7 +434,6 @@ export const useChessLogic = (conf: Config): API => {
   useEffect(() => {
     if (!apiHistory.length) return;
     const lastState = apiHistory[apiHistory.length - 1];
-    console.warn(lastState);
     if (lastState.player === 'ai') {
       //stopTopTimer();
       runBotTimer();
