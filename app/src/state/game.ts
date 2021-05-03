@@ -14,7 +14,7 @@ export const fallbackGameState: LiveGame = {
   history: [],
   playerOne: '',
   playerTwo: '',
-  timestamp: getTime(new Date()),
+  timeLeft: getTime(new Date()),
 };
 
 export const currentGameBaseState = atom<LiveGame>({

@@ -20,14 +20,13 @@ import { LinkButton } from '../components/common/LinkButton';
 import { StyledLink } from '../components/common/CustomLink';
 import * as Yup from 'yup';
 import { green } from '@material-ui/core/colors';
-import { userState } from '../state/user';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { UserExtras } from '../types/UserExtras';
 import { UserCredentials } from '../types/UserCredentials';
 import { Snackbar } from '../components/common/Snackbar';
-import { snackbarState } from '../state/snackbar';
 import { CommonModal } from '../components/common/CommonModal';
 import { modalState } from '../state/modal';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
@@ -242,7 +241,7 @@ export const SignUpView = (props: Props) => {
                                 onChange={(event, checked) =>
                                   handleCheckbox(formikProps, event, checked)
                                 }
-                                onBlur = {formikProps.handleBlur}
+                                onBlur={formikProps.handleBlur}
                                 value={formikProps.values.agreeOnTerms}
                                 name="agreeOnTerms"
                               />
