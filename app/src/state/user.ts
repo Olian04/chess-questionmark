@@ -75,10 +75,7 @@ export const requestProfile = atom<Profile>({
       const user = await get(userHydrateState);
       const profile = await profileCollection.get(user.id);
       return profile ?? defaultProfileState;
-    },
-    set: ({ set }, newValue) => {
-      set(requestProfile, newValue);
-    },
+    }
   }),
 });
 

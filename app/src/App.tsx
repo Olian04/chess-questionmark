@@ -61,7 +61,7 @@ export const App = () => {
               </React.Suspense>
             </Container>
           </RecoilRoute>
-          <RecoilRoute guarded path="/">
+          <RecoilRoute path="/">
             <NavigationBar
               menuItems={[
                 { title: 'Account', to: '/account' },
