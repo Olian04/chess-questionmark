@@ -1,3 +1,4 @@
+import { getTime } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilCallback, waitForAll } from 'recoil';
@@ -24,6 +25,8 @@ export const PlayPresenter = () => {
     if (game.state === 'ended' && game.winner === 'N/A') {
       const fenString = await fetchRandomPuzzle();
 
+      const timeLeft = 15 * 60;
+
       const newGame: LiveGame = {
         turn: 'playerOne',
         playerOne: userId,
@@ -31,6 +34,7 @@ export const PlayPresenter = () => {
         winner: 'N/A',
         state: 'playing',
         history: [fenString],
+        timeLeft,
       };
 
       await set(requestGame, newGame);

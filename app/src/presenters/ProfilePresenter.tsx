@@ -6,6 +6,7 @@ import { greet } from '../services/greeter';
 import {
   profileState,
   profileStatusState,
+  requestProfile,
   userHydrateState,
   userState,
 } from '../state/user';
@@ -14,7 +15,7 @@ import { ProfileView } from '../views/ProfileView';
 
 export const ProfilePresenter = () => {
   const user = useRecoilValue(userHydrateState);
-  const [profile, setProfile] = useRecoilState(profileState);
+  const [profile, setProfile] = useRecoilState(requestProfile);
   const [profileStatus, setProfileStatus] = useRecoilState(profileStatusState);
 
   const [greeting, setGreeting] = useState<string>();

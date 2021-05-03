@@ -421,20 +421,26 @@ export const useChessLogic = (conf: Config): API => {
 
   useEffect(() => {
     if (!apiHistory.length) return;
-    if (apiHistory[apiHistory.length - 1].player === 'human') {
-      stopTopTimer();
+    const lastState = apiHistory[apiHistory.length - 1];
+    console.warn(lastState);
+    if (lastState.player === 'ai') {
+      //stopTopTimer();
       runBotTimer();
     } else {
       stopBotTimer();
-      runTopTimer();
+      //runTopTimer();
     }
-  }, [apiHistory]);
+  }, [apiHistory.length]);
 
   useEffect(() => {
     if (winner) {
       clearInterval(intervalID);
     }
   }, [winner]);
+
+  useEffect(() => {
+    if (game.turn() === conf.playerColor[0]) runBotTimer();
+  }, []);
 
   return {
     history: apiHistory,

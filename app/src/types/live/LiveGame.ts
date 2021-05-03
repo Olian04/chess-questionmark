@@ -7,4 +7,5 @@ export interface LiveGame {
   turn: 'playerOne' | 'playerTwo';
   state: 'playing' | 'ended';
   winner: 'playerOne' | 'playerTwo' | 'N/A';
+  timeLeft: number;
 }

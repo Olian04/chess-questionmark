@@ -6,13 +6,7 @@ import {
   useSetRecoilState,
 } from 'recoil';
 import { GameView } from '../views/GameView';
-import { Chess, Square, Move } from 'chess.js';
-import {
-  currentGameBaseState,
-  currentGameState,
-  fallbackGameState,
-  requestGame,
-} from '../state/game';
+import { fallbackGameState, requestGame } from '../state/game';
 import { useHistory } from 'react-router-dom';
 import { profileState, userHydrateState, userState } from '../state/user';
 import { EndOfGame } from '../components/game/EndOfGame';
@@ -23,12 +17,12 @@ import {
   getLiveGameByUserID,
 } from '../services/firebase/realtimeDB';
 import { snackbarState } from '../state/snackbar';
+import { getTime } from 'date-fns';
 
 export const PuzzlePresenter = () => {
   const history = useHistory();
   const user = useRecoilValue(userHydrateState);
   const userProfile = useRecoilValue(profileState);
-  //const gameState = useRecoilValue(currentGameState);
   const gameState = useRecoilValue(requestGame);
   const setSnackbar = useSetRecoilState(snackbarState);
   const [winnerDialogueOpen, setWinnerDialogueOpen] = useState<boolean>(false);
@@ -43,7 +37,7 @@ export const PuzzlePresenter = () => {
     initialFEN,
     previousFENStrings,
     playerColor: playerIsWhite ? 'white' : 'black',
-    timerLength: 59,
+    timerLength: gameState.timeLeft,
     timerIncreaseOnMove: 5,
   });
 
@@ -65,8 +59,6 @@ export const PuzzlePresenter = () => {
         state: 'ended',
       });
       await migrateGameByUserID(userID);
-      //set(currentGameState, fallbackGameState);
-      //reset(requestGame);
       set(requestGame, fallbackGameState);
     }
   });
@@ -75,12 +67,19 @@ export const PuzzlePresenter = () => {
     ({ snapshot, set }) => async () => {
       const { id: userID } = await snapshot.getPromise(userHydrateState);
       const gameState = await snapshot.getPromise(requestGame);
-      await updateLiveGameByUserID(userID, {
-        history: [
-          ...gameState.history,
-          gameLogic.history[gameLogic.history.length - 1].fen,
-        ],
-      });
+      const latestState = gameLogic.history[gameLogic.history.length - 1];
+      if (latestState.player === 'human') {
+        await updateLiveGameByUserID(userID, {
+          history: [...gameState.history, latestState.fen],
+          timeLeft: gameLogic.timeLeft.self,
+        });
+      }
+      if (latestState.player === 'ai') {
+        await updateLiveGameByUserID(userID, {
+          history: [...gameState.history, latestState.fen],
+        });
+      }
+
       const newGameState = await getLiveGameByUserID(userID);
       if (newGameState !== null) set(requestGame, newGameState);
     }

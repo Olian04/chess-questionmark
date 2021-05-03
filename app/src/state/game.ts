@@ -1,10 +1,11 @@
+import { getTime } from 'date-fns';
 import { selector, atom, GetRecoilValue } from 'recoil';
 import {
   createLiveGame,
   getLiveGameByUserID,
 } from '../services/firebase/realtimeDB';
 import { LiveGame } from '../types/live/LiveGame';
-import { userHydrateState, userState } from './user';
+import { userHydrateState } from './user';
 
 export const fallbackGameState: LiveGame = {
   turn: 'playerOne',
@@ -13,6 +14,7 @@ export const fallbackGameState: LiveGame = {
   history: [],
   playerOne: '',
   playerTwo: '',
+  timestamp: getTime(new Date()),
 };
 
 export const currentGameBaseState = atom<LiveGame>({
