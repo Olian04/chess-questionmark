@@ -11,7 +11,8 @@ import { SignInRoute } from './routes/SignInRoute';
 import { PlayRoute } from './routes/PlayRoute';
 import { PuzzleRoute } from './routes/PuzzleRoute';
 import { ReplayRoute } from './routes/ReplayRoute';
-import { SettingsRoute } from './routes/SettingsRoute';
+import { AccountRoute } from './routes/AccountRoute';
+import { AboutRoute } from './routes/AboutRoute';
 import { ProfileRoute } from './routes/ProfileRoute';
 import { RecoilRoute } from './providers/stateProvider';
 import { BackgroundCircle } from './components/common/BackgroundCircle';
@@ -63,9 +64,9 @@ export const App = () => {
           <RecoilRoute guarded path="/">
             <NavigationBar
               menuItems={[
+                { title: 'Account', to: '/account' },
                 { title: 'Play', to: '/play' },
-                { title: 'Play', to: '/profile' },
-                { title: 'Settings', to: '/settings' },
+                { title: 'About', to: '/about' },
               ]}
             />
             <Container maxWidth="sm" className={classes.container}>
@@ -73,11 +74,8 @@ export const App = () => {
                 <Switch>
                   <RecoilRoute exact path="/puzzle" component={PuzzleRoute} />
                   <RecoilRoute exact path="/replay" component={ReplayRoute} />
-                  <RecoilRoute
-                    exact
-                    path="/settings"
-                    component={SettingsRoute}
-                  />
+                  <RecoilRoute exact path="/account" component={AccountRoute} />
+                  <RecoilRoute exact path="/about" component={AboutRoute} />
                   <RecoilRoute exact path="/play" component={PlayRoute} />
                   <RecoilRoute exact path="/profile" component={ProfileRoute} />
                   <RecoilRoute exact path="/">
