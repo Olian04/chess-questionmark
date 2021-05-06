@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 
 interface Props {
   winner: boolean;
+  cause: string;
   open: boolean;
   onClick: () => void;
 }
@@ -16,7 +17,10 @@ export const EndOfGame = (props: Props) => {
     <Dialog open={props.open} onClose={props.onClick}>
       <DialogContent>
         <DialogContentText>
-          {props.winner ? 'You won!' : 'You lost!'}
+          {(props.winner ? 'You won' : 'You lost') +
+            ' due to ' +
+            props.cause +
+            '.'}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
