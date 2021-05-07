@@ -1,22 +1,19 @@
 import React from 'react';
-import { Grid, List, Typography } from '@material-ui/core';
+import { Avatar, Grid, List, Typography } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
+
+import AiIcon from '/aiicon.svg';
 import { User } from '../types/User';
 import { Graph } from '../components/profile/Graph';
 import { Tile } from '../components/play/Tile';
 import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
 import { Button } from '../components/play/Button';
-import AiIcon from '/aiicon.svg';
-
 import {
   ThreeRowButton,
   ThreeRowButtonSkeleton,
 } from '../components/settings/ThreeRowButton';
-
-import { Gravatar } from '../components/common/Gravatar';
 import { Profile } from '../types/Profile';
-import { LoadingView } from './LoadingView';
-import clsx from 'clsx';
+import { getGravatarUrl } from '../services/gravatar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -138,18 +135,13 @@ export const PlayView = (props: Props) => {
                               : -1 * match.material
                           }
                           avatar={
-                            <Gravatar
+                            <Avatar
                               variant="circular"
-                              opponent={{
-                                email:
-                                  user.name === match.winner.name
-                                    ? match.loser.email
-                                    : match.winner.email,
-                                avatar:
-                                  user.name === match.winner.name
-                                    ? match.loser.avatar
-                                    : match.winner.avatar,
-                              }}
+                              src={getGravatarUrl({
+                                defaultImage: 'retro',
+                                email: user.email,
+                                forceDefault: true,
+                              })}
                             />
                           }
                           handleClick={() => props.handleReplay(match.id)}

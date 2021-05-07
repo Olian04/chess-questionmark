@@ -6,8 +6,8 @@ import { BoardProps } from '../types/BoardProps';
 import { PlayerBar } from '../components/game/PlayerBar';
 import { GameBoard } from '../components/game/GameBoard';
 import { Snackbar } from '../components/common/Snackbar';
-import { User } from '../types/User';
 import { Overview } from '../components/game/Overview';
+import { User } from '../types/User';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
+  user: User;
   boardProps: BoardProps;
   topTime: number;
   botTime: number;
@@ -70,7 +71,7 @@ export const GameView = (props: Props) => {
           timeRef={props.timeRef}
           time={props.botTime}
           name={props.player.name}
-          email={props.player.email}
+          avatar={props.user.avatar}
           countryCode={props.player.countryCode}
           rating={props.player.rating}
           isPaused={props.isPaused}

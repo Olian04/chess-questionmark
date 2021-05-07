@@ -1,8 +1,6 @@
 import React from 'react';
-import { Typography, Box } from '@material-ui/core';
+import { Typography, Box, Avatar } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
-import { Gravatar } from '../common/Gravatar';
 import { Pill } from './Pill';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   name: string;
-  email: string;
+  avatar: string;
   rating: number;
   countryCode: string;
   time: number;
@@ -47,12 +45,13 @@ export const PlayerBar = (props: Props) => {
     >
       <Box display="flex" width="100%">
         <Box p={1}>
-          <Gravatar
+          <Avatar
             alt={props.name}
             variant="circular"
             className={
               props.playerIsWhite ? classes.avatarWhite : classes.avatarBlack
             }
+            src={props.avatar}
           />
         </Box>
         <Box p={1}>
