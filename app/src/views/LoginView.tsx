@@ -4,6 +4,8 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
 import { LinkButton } from '../components/common/LinkButton';
+import { ReplayComponent } from '../components/common/ReplayComponent';
+import { RandomGame } from '../types/RandomGame';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   onClickSignUp: () => void;
   onClickSignIn: () => void;
+  game: RandomGame;
 }
 
 export const LoginView = (props: Props) => {
@@ -45,12 +48,24 @@ export const LoginView = (props: Props) => {
         spacing={1}
       >
         <Grid item>
-          <Typography variant="h4">Lets start!</Typography>
+          <ReplayComponent
+            fen={props.game.history[0]}
+            size={0.3}
+            player={{
+              name: props.game.player.name ?? 'N/A',
+              email: 'N/A',
+              countryCode: props.game.player.countryCode ?? 'SE',
+              rating: props.game.player.rank ?? -1,
+              playerIsWhite: true,
+            }}
+          />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4">Welcome to chess?</Typography>
         </Grid>
         <Grid item xs={10}>
           <Typography variant="subtitle1">
-            Reshape your chess skills by playing against <b>others</b> and
-            aswell as our <b>blunderAI</b>.
+            Sign up and play a game against our <b>BlunderAI</b>
           </Typography>
         </Grid>
         <Grid item>

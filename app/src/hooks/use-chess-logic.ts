@@ -295,9 +295,9 @@ export const useChessLogic = (conf: Config): API => {
             uciCmd('go ' + (time.depth ? 'depth ' + time.depth : ''));
           }
           */
-          const depthDerivedFromRating = Math.min(
+          const depthDerivedFromRating = Math.max(
             Math.floor(conf.diffculty / 50),
-            7
+            1
           );
           setTimeout(
             () => uciCmd(`go depth ${depthDerivedFromRating}`),

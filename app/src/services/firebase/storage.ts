@@ -8,6 +8,8 @@ import {
   StorageGameRemote,
 } from '../../types/storage/StorageGame';
 import { User } from '../../types/User';
+import { RandomGame } from '../../types/RandomGame';
+import { fallbackRandomGameState } from '../../state/game';
 
 const db = app.firestore();
 
@@ -54,6 +56,27 @@ const getMatches = async (recentMatches: string[]) => {
     );
   }
   return recentMatches;
+};
+
+export const fetchRandomGame = async (): Promise<RandomGame> => {
+  const collection = db.collection('games');
+  const games = await collection.get();
+  const random = Math.floor(Math.random() * games.size);
+  let game = fallbackRandomGameState;
+  let count = 0;
+  games.forEach((document) => {
+    const maybeGame = document.data();
+    if (maybeGame.history.length >= 6 && random < count) game = maybeGame;
+  });
+  const countries = ['US', 'SE', 'NO', 'CA', 'FR', 'PL', 'RU'];
+  return {
+    history: game.history,
+    player: {
+      name: 'anonymous',
+      rank: 2000 - Math.floor(Math.random() * 600),
+      countryCode: countries[Math.floor(Math.random() * countries.length)],
+    },
+  };
 };
 
 export const profileCollection = {
