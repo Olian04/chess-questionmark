@@ -145,6 +145,7 @@ export const PuzzlePresenter = () => {
       />
       <GameView
         timeRef={timeRef}
+        user={user}
         player={userInfo}
         topTime={gameLogic.timeLeft.opponent}
         botTime={gameLogic.timeLeft.self}

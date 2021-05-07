@@ -16,6 +16,7 @@ type Player = {
 };
 
 export const ReplayPresenter = () => {
+  const user = useRecoilValue(userHydrateState);
   const [turn, setTurn] = useState(1);
   const [intervalID, setIntervalID] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -111,6 +112,7 @@ export const ReplayPresenter = () => {
     <>
       {gameOwner && gameHistory.length > 0 ? (
         <ReplayView
+          user={user}
           fen={gameHistory[turn - 1]}
           turn={turn}
           start={turn <= 1}

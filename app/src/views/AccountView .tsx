@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, ListItem, List } from '@material-ui/core';
+import { Grid, ListItem, List, Avatar } from '@material-ui/core';
 import { Settings as SettingsIcon } from '@material-ui/icons';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
@@ -11,7 +11,6 @@ import {
 } from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
 import { User } from '../types/User';
-import { Gravatar } from '../components/common/Gravatar';
 import { UserCredentials } from '../types/UserCredentials';
 import { Snackbar } from '../components/common/Snackbar';
 
@@ -110,7 +109,9 @@ export const AccountView = (props: Props) => {
               <TwoRowButton
                 title={props.user.name}
                 subTitle={props.user.team}
-                startIcon={<Gravatar alt="Bob" variant="rounded" />}
+                startIcon={
+                  <Avatar alt="Bob" variant="rounded" src={props.user.avatar} />
+                }
                 onClick={() =>
                   setModal({
                     open: true,
