@@ -1,6 +1,8 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilCallback, useRecoilState } from 'recoil';
+import { useRecoilCallback, useRecoilState, useSetRecoilState } from 'recoil';
+
+import { useChangePassword } from '../hooks/use-change-password';
 import { useUserState } from '../hooks/use-user-state';
 import { signOut } from '../services/firebase/auth';
 import { userCollection } from '../services/firebase/storage';
@@ -12,10 +14,16 @@ import {
   userHydrateState,
 } from '../state/user';
 import { AccountView } from '../views/AccountView ';
+import { SignupSchema } from '../util/signupSchema';
+import { ValidationError } from 'yup';
+import { UserCredentials } from '../types/UserCredentials';
+import { snackbarState } from '../state/snackbar';
 
 export const AccountPresenter = () => {
+  const setSnackbar = useSetRecoilState(snackbarState);
   const history = useHistory();
   const firebaseUser = useUserState();
+  const changePassword = useChangePassword();
   const [user, setUserState] = useRecoilState(userHydrateState);
 
   const updateUser = (key: string, value: string) => {
@@ -33,8 +41,19 @@ export const AccountPresenter = () => {
     setUserState({ ...user, email: value });
   };
 
-  const updatePassword = (value: string) => {
-    firebaseUser?.updatePassword(value).catch((e: Error) => console.log(e));
+  const updatePassword = (cred: UserCredentials, newPassword: string) => {
+    const isSuccess = changePassword(cred, newPassword);
+    if (isSuccess) {
+      setSnackbar({
+        message: 'Password updated',
+        severity: 'success',
+      });
+    } else {
+      setSnackbar({
+        message: 'Failed to update password',
+        severity: 'error',
+      });
+    }
   };
 
   const updateAvatar = (value: string) => updateUser('avatar', value);
@@ -50,6 +69,20 @@ export const AccountPresenter = () => {
     history.push('/');
   });
 
+  const validatePassword = (newPassword: string) => {
+    try {
+      SignupSchema.validateSync({
+        email: 'hgfdsa@hgfds.hgfds',
+        name: 'kjhgfdsa',
+        password: newPassword,
+      });
+      return null;
+    } catch (err) {
+      const e = err as ValidationError;
+      return e.errors[0];
+    }
+  };
+
   return (
     <AccountView
       user={user}
@@ -60,6 +93,7 @@ export const AccountPresenter = () => {
       onChangeName={updateName}
       onChangePhone={updatePhone}
       onChangeTeam={updateTeam}
+      validateNewPassword={validatePassword}
     />
   );
 };

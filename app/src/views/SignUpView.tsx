@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Checkbox,
@@ -14,13 +14,14 @@ import {
 } from '@material-ui/core';
 import { Formik } from 'formik';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
+import { useSetRecoilState } from 'recoil';
+
+import { SignupSchema } from '../util/signupSchema';
 import { RoundedTextField } from '../components/common/RoundedTextField';
 import Logo from '/sign-up-logo.svg';
 import { LinkButton } from '../components/common/LinkButton';
 import { StyledLink } from '../components/common/CustomLink';
-import * as Yup from 'yup';
-import { green } from '@material-ui/core/colors';
-import { useSetRecoilState } from 'recoil';
 import { UserExtras } from '../types/UserExtras';
 import { UserCredentials } from '../types/UserCredentials';
 import { Snackbar } from '../components/common/Snackbar';
@@ -57,18 +58,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-const SignupSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(3, 'Name is too short')
-    .max(20, 'Name is too long')
-    .required('Name is required'),
-  email: Yup.string().email('Invalid email').required('Email is required'),
-  password: Yup.string()
-    .min(8, 'Password needs to be atleast 8 characters long')
-    .required('Password is required'),
-  agreeOnTerms: Yup.boolean().oneOf([true], 'Term of conditions are required'),
-});
 
 interface Props {
   onLoading: boolean;
@@ -183,9 +172,15 @@ export const SignUpView = (props: Props) => {
                         label="In-game Name"
                         onChange={formikProps.handleChange}
                         onBlur={formikProps.handleBlur}
-                        error={formikProps.errors.name && formikProps.touched.name ? true : false}
+                        error={
+                          formikProps.errors.name && formikProps.touched.name
+                            ? true
+                            : false
+                        }
                         helperText={
-                          formikProps.errors.name && formikProps.touched.name ? formikProps.errors.name : ''
+                          formikProps.errors.name && formikProps.touched.name
+                            ? formikProps.errors.name
+                            : ''
                         }
                         autoFocus
                       />
@@ -201,7 +196,11 @@ export const SignUpView = (props: Props) => {
                         label="Email"
                         onChange={formikProps.handleChange}
                         onBlur={formikProps.handleBlur}
-                        error={formikProps.errors.email && formikProps.touched.email ? true : false}
+                        error={
+                          formikProps.errors.email && formikProps.touched.email
+                            ? true
+                            : false
+                        }
                         helperText={
                           formikProps.errors.email && formikProps.touched.email
                             ? formikProps.errors.email
@@ -221,9 +220,15 @@ export const SignUpView = (props: Props) => {
                         autoComplete="current-password"
                         onChange={formikProps.handleChange}
                         onBlur={formikProps.handleBlur}
-                        error={formikProps.errors.password && formikProps.touched.password ? true : false}
+                        error={
+                          formikProps.errors.password &&
+                          formikProps.touched.password
+                            ? true
+                            : false
+                        }
                         helperText={
-                          formikProps.errors.password && formikProps.touched.password
+                          formikProps.errors.password &&
+                          formikProps.touched.password
                             ? formikProps.errors.password
                             : ''
                         }
@@ -232,7 +237,12 @@ export const SignUpView = (props: Props) => {
                     <Grid item xs={12}>
                       <FormGroup>
                         <FormControl
-                          error={formikProps.errors.agreeOnTerms && formikProps.touched.agreeOnTerms ? true : false}
+                          error={
+                            formikProps.errors.agreeOnTerms &&
+                            formikProps.touched.agreeOnTerms
+                              ? true
+                              : false
+                          }
                         >
                           <FormControlLabel
                             control={
@@ -267,9 +277,15 @@ export const SignUpView = (props: Props) => {
                           />
                         </FormControl>
                         <FormHelperText
-                          error={formikProps.errors.agreeOnTerms && formikProps.touched.agreeOnTerms ? true : false}
+                          error={
+                            formikProps.errors.agreeOnTerms &&
+                            formikProps.touched.agreeOnTerms
+                              ? true
+                              : false
+                          }
                         >
-                          {formikProps.errors.agreeOnTerms && formikProps.touched.agreeOnTerms
+                          {formikProps.errors.agreeOnTerms &&
+                          formikProps.touched.agreeOnTerms
                             ? formikProps.errors.agreeOnTerms
                             : ''}
                         </FormHelperText>
