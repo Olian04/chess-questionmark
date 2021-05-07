@@ -5,10 +5,15 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
 import { SectionHeading } from '../components/settings/SectionHeading';
-import { UpdateFieldModal } from '../components/settings/UpdateFieldModal';
+import {
+  UpdateFieldModal,
+  DialogProps,
+} from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
 import { User } from '../types/User';
 import { Gravatar } from '../components/common/Gravatar';
+import { UserCredentials } from '../types/UserCredentials';
+import { Snackbar } from '../components/common/Snackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,25 +39,22 @@ interface Props {
   onChangeEmail: (newEmail: string) => void;
   onChangePhone: (newPhone: string) => void;
   onChangeAvatar: (newAvatar: string) => void;
-  onChangePassword: (newPassword: string) => void;
+  onChangePassword: (cred: UserCredentials, newPassword: string) => void;
+  validateNewPassword: (newPassword: string) => string | null;
 }
 
 export const AccountView = (props: Props) => {
   const classes = useStyles();
-  const [modal, setModal] = useState({
+  const [modal, setModal] = useState<{
+    open: boolean;
+    dialogs: DialogProps[];
+  }>({
     open: false,
-    dialogs: [
-      {
-        title: '...',
-        fieldName: '...',
-        defaultValue: '...',
-        description: '...',
-        hint: '...',
-      },
-    ],
+    dialogs: [],
   });
   return (
     <>
+      <Snackbar />
       <UpdateFieldModal
         open={modal.open}
         dialogs={modal.dialogs as any}
@@ -73,8 +75,18 @@ export const AccountView = (props: Props) => {
           if (fieldValues.team) {
             props.onChangeTeam(fieldValues.team);
           }
-          if (fieldValues.password) {
-            props.onChangePassword(fieldValues.password);
+          if (
+            fieldValues.newPassword &&
+            fieldValues.password &&
+            fieldValues.email
+          ) {
+            props.onChangePassword(
+              {
+                password: fieldValues.password,
+                email: fieldValues.email,
+              },
+              fieldValues.newPassword
+            );
           }
           setModal((curr) => ({ ...curr, open: false }));
         }}
@@ -106,6 +118,7 @@ export const AccountView = (props: Props) => {
                       {
                         title: 'Update display name',
                         defaultValue: props.user.name,
+                        fieldType: 'text',
                         fieldName: 'name',
                         description: 'Change display name',
                         hint: 'Display name',
@@ -113,6 +126,7 @@ export const AccountView = (props: Props) => {
                       {
                         title: 'Change team',
                         defaultValue: props.user.team,
+                        fieldType: 'text',
                         fieldName: 'team',
                         description: 'Change team association',
                         hint: 'Change Team',
@@ -120,6 +134,7 @@ export const AccountView = (props: Props) => {
                       {
                         title: 'Change Avatar',
                         defaultValue: props.user.avatar,
+                        fieldType: 'text',
                         fieldName: 'avatar',
                         description: 'Change avatar url (unsafe)',
                         hint: 'Change Avatar',
@@ -138,6 +153,7 @@ export const AccountView = (props: Props) => {
                       {
                         title: 'Update Email',
                         defaultValue: props.user.email,
+                        fieldType: 'text',
                         fieldName: 'email',
                         description:
                           'Change the email address associated with your account. Note that this change will update your login credentials.',
@@ -156,6 +172,7 @@ export const AccountView = (props: Props) => {
                     dialogs: [
                       {
                         title: 'Update Phone Number',
+                        fieldType: 'text',
                         fieldName: 'phone',
                         defaultValue: props.user.phone,
                         description: 'Update your registered phone number',
@@ -172,11 +189,24 @@ export const AccountView = (props: Props) => {
                     open: true,
                     dialogs: [
                       {
-                        title: 'New Password',
+                        title: 'Login',
+                        fieldType: 'text',
+                        fieldName: 'email',
+                        description: 'Login again to re-authenticate your self',
+                        hint: 'Email',
+                      },
+                      {
+                        fieldType: 'password',
                         fieldName: 'password',
-                        defaultValue: '',
+                        hint: 'Current Password',
+                      },
+                      {
+                        title: 'New Password',
+                        fieldType: 'password',
+                        fieldName: 'newPassword',
                         description: 'The desired new password',
                         hint: 'New Password',
+                        validate: props.validateNewPassword,
                       },
                     ],
                   })

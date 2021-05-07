@@ -7,17 +7,15 @@ import {
 } from '@material-ui/core';
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+
 import { RoundedTextField } from '../components/common/RoundedTextField';
 import { LinkButton } from '../components/common/LinkButton';
 import { StyledLink } from '../components/common/CustomLink';
 import { UserCredentials } from '../types/UserCredentials';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { green } from '@material-ui/core/colors';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { loginStatusState } from '../state/authentication';
 import { Snackbar } from '../components/common/Snackbar';
-import { snackbarState } from '../state/snackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
