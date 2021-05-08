@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Slider, Button, Box } from '@material-ui/core';
 import {
   Theme,
@@ -95,6 +95,7 @@ interface Props {
 
 export const ReplayView = (props: Props) => {
   const classes = useStyles();
+
   return (
     <>
       <Box
