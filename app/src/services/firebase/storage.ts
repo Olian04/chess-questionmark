@@ -67,6 +67,7 @@ export const fetchRandomGame = async (): Promise<RandomGame> => {
   games.forEach((document) => {
     const maybeGame = document.data();
     if (maybeGame.history.length >= 6 && random < count) game = maybeGame;
+    count++;
   });
   const countries = ['US', 'SE', 'NO', 'CA', 'FR', 'PL', 'RU'];
   return {

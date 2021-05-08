@@ -11,17 +11,19 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       top: 0,
       left: 0,
-      height: '100vh',
-      width: '100vw',
+      bottom: 0,
+      right: 0,
+      height: '100%',
       position: 'absolute',
       zIndex: 20,
       transition: 'visible 0.5s ease-in',
       pointerEvents: 'none',
     },
     wrapper: {
-      height: '100%',
-      width: '100%',
-
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
       display: 'flex',
       justifyContent: 'center',
     },
@@ -38,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     closed: {
       opacity: 0,
-      bottom: -50,
+      bottom: 0,
     },
     visible: {
       visible: 'visible',
@@ -72,13 +74,13 @@ export const Snackbar = () => {
   }, [snackbar.open]);
 
   return (
-    <Box
-      className={clsx(
-        classes.container,
-        snackbar.open ? classes.visible : classes.hidden
-      )}
-    >
-      <Box className={classes.wrapper}>
+    <Box className={classes.container}>
+      <Box
+        className={clsx(
+          classes.wrapper,
+          snackbar.open ? classes.visible : classes.hidden
+        )}
+      >
         <Box
           className={clsx(
             classes.snackbar,

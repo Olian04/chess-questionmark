@@ -14,10 +14,7 @@ import { UserCredentials } from '../types/UserCredentials';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { green } from '@material-ui/core/colors';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { loginStatusState } from '../state/authentication';
 import { Snackbar } from '../components/common/Snackbar';
-import { snackbarState } from '../state/snackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,6 +26,8 @@ const useStyles = makeStyles((theme: Theme) =>
     gridBase: {
       zIndex: 1,
       position: 'relative',
+      marginLeft: theme.spacing(-0.5),
+      marginRight: theme.spacing(-0.5),
     },
     wrapper: {
       position: 'relative',
@@ -59,13 +58,11 @@ export const SignInView = (props: Props) => {
 
   return (
     <>
-      <Snackbar />
       <Container className={classes.container}>
         <Grid
           container
           direction="column"
           justify="center"
-          spacing={1}
           alignItems="center"
           className={classes.gridBase}
         >

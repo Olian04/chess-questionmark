@@ -37,6 +37,8 @@ const useStyles = makeStyles((theme: Theme) =>
     gridBase: {
       zIndex: 1,
       position: 'relative',
+      marginLeft: theme.spacing(-0.5),
+      marginRight: theme.spacing(-0.5),
     },
     wrapper: {
       position: 'relative',
@@ -92,14 +94,6 @@ export const SignUpView = (props: Props) => {
     setChecked(checked);
     formik.handleChange(event);
   };
-  /*
-  const setSnackbar = useSetRecoilState(snackbarState);
-  useEffect(() => {
-    if (props.signUpFailed) {
-      setSnackbar({ open: true });
-    }
-  }, [props.signUpFailed]);
-  */
 
   const handleModal = (type: string) => {
     if (type === 'terms') {
@@ -127,13 +121,11 @@ export const SignUpView = (props: Props) => {
   return (
     <>
       <CommonModal />
-      <Snackbar />
       <Container className={classes.container}>
         <Grid
           container
           direction="column"
           justify="center"
-          spacing={1}
           alignItems="center"
           className={classes.gridBase}
         >
@@ -183,9 +175,15 @@ export const SignUpView = (props: Props) => {
                         label="In-game Name"
                         onChange={formikProps.handleChange}
                         onBlur={formikProps.handleBlur}
-                        error={formikProps.errors.name && formikProps.touched.name ? true : false}
+                        error={
+                          formikProps.errors.name && formikProps.touched.name
+                            ? true
+                            : false
+                        }
                         helperText={
-                          formikProps.errors.name && formikProps.touched.name ? formikProps.errors.name : ''
+                          formikProps.errors.name && formikProps.touched.name
+                            ? formikProps.errors.name
+                            : ''
                         }
                         autoFocus
                       />
@@ -201,7 +199,11 @@ export const SignUpView = (props: Props) => {
                         label="Email"
                         onChange={formikProps.handleChange}
                         onBlur={formikProps.handleBlur}
-                        error={formikProps.errors.email && formikProps.touched.email ? true : false}
+                        error={
+                          formikProps.errors.email && formikProps.touched.email
+                            ? true
+                            : false
+                        }
                         helperText={
                           formikProps.errors.email && formikProps.touched.email
                             ? formikProps.errors.email
@@ -221,9 +223,15 @@ export const SignUpView = (props: Props) => {
                         autoComplete="current-password"
                         onChange={formikProps.handleChange}
                         onBlur={formikProps.handleBlur}
-                        error={formikProps.errors.password && formikProps.touched.password ? true : false}
+                        error={
+                          formikProps.errors.password &&
+                          formikProps.touched.password
+                            ? true
+                            : false
+                        }
                         helperText={
-                          formikProps.errors.password && formikProps.touched.password
+                          formikProps.errors.password &&
+                          formikProps.touched.password
                             ? formikProps.errors.password
                             : ''
                         }
@@ -232,7 +240,12 @@ export const SignUpView = (props: Props) => {
                     <Grid item xs={12}>
                       <FormGroup>
                         <FormControl
-                          error={formikProps.errors.agreeOnTerms && formikProps.touched.agreeOnTerms ? true : false}
+                          error={
+                            formikProps.errors.agreeOnTerms &&
+                            formikProps.touched.agreeOnTerms
+                              ? true
+                              : false
+                          }
                         >
                           <FormControlLabel
                             control={
@@ -267,9 +280,15 @@ export const SignUpView = (props: Props) => {
                           />
                         </FormControl>
                         <FormHelperText
-                          error={formikProps.errors.agreeOnTerms && formikProps.touched.agreeOnTerms ? true : false}
+                          error={
+                            formikProps.errors.agreeOnTerms &&
+                            formikProps.touched.agreeOnTerms
+                              ? true
+                              : false
+                          }
                         >
-                          {formikProps.errors.agreeOnTerms && formikProps.touched.agreeOnTerms
+                          {formikProps.errors.agreeOnTerms &&
+                          formikProps.touched.agreeOnTerms
                             ? formikProps.errors.agreeOnTerms
                             : ''}
                         </FormHelperText>
