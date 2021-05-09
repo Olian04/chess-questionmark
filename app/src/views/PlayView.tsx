@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   user: User;
   profile: Profile;
+  liveGame: boolean;
   greeting: string | undefined;
   isLoading: boolean;
   handleReplay: (a: string) => void;
@@ -45,6 +46,13 @@ export const PlayView = (props: Props) => {
 
   const reversed = (array: Array<any>) =>
     array.map((item, i) => array[array.length - 1 - i]);
+
+  const buttonMainText = props.liveGame ? 'Continue' : 'Beat our AI';
+  const buttonSubText = props.liveGame ? (
+    <p>You currently have an ongoing game</p>
+  ) : (
+    <p>Battle your way up from a randomized blunder</p>
+  );
 
   return (
     <Grid
@@ -72,8 +80,8 @@ export const PlayView = (props: Props) => {
         <Grid item xs>
           <Button
             onClick={props.onClickStartPuzzle}
-            text="Beat our AI"
-            subText={<p>Battle your way up from a randomized blunder</p>}
+            text={buttonMainText}
+            subText={buttonSubText}
             icon={AiIcon}
           />
         </Grid>
