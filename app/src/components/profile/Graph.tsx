@@ -46,13 +46,17 @@ export const Graph = (props: Props) => {
   const classes = useStyles();
 
   const delta = props.delta === 'N/A' ? 0 : props.delta;
-  const rankHistory = props.recentMatches.map(
-    (match) => startRank + getTick(props.username, match)
+  const rankHistory = [
+    startRank,
+    ...props.recentMatches.map((match) => getTick(props.username, match)),
+  ];
+  const rankUpdates = rankHistory.map((match, i) =>
+    rankHistory.slice(0, i + 1).reduce((a, b) => a + b)
   );
 
   return (
     <Grid item xs className={classes.container}>
-      {!props.isLoading && <Chart data={[startRank, ...rankHistory]} />}
+      {!props.isLoading && <Chart data={rankUpdates} />}
       <Box className={classes.wrapper}>
         <Typography variant="h5" color="textPrimary">
           <b>Ranking</b>
