@@ -87,6 +87,7 @@ export const useChessLogic = (conf: Config): API => {
 
   const handleResign = () => {
     const winner = player === 'white' ? 'black' : 'white';
+    setEndCause('resignation');
     setWinner(winner);
   };
 
