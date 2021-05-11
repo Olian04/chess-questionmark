@@ -5,7 +5,6 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { BoardProps } from '../types/BoardProps';
 import { PlayerBar } from '../components/game/PlayerBar';
 import { GameBoard } from '../components/game/GameBoard';
-import { Snackbar } from '../components/common/Snackbar';
 import { Overview } from '../components/game/Overview';
 import { User } from '../types/User';
 
@@ -53,7 +52,6 @@ export const GameView = (props: Props) => {
   const classes = useStyles();
   return (
     <>
-      <Snackbar />
       <Box
         display="flex"
         flexDirection="column"
