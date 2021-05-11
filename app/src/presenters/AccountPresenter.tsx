@@ -18,6 +18,7 @@ import { SignupSchema } from '../util/signupSchema';
 import { ValidationError } from 'yup';
 import { UserCredentials } from '../types/UserCredentials';
 import { snackbarState } from '../state/snackbar';
+import { capitalize } from '../util/stringManimpulation';
 
 export const AccountPresenter = () => {
   const setSnackbar = useSetRecoilState(snackbarState);
@@ -26,14 +27,27 @@ export const AccountPresenter = () => {
   const changePassword = useChangePassword();
   const [user, setUserState] = useRecoilState(userHydrateState);
 
-  const updateUser = (key: string, value: string) => {
-    userCollection.update(user.id, {
-      [key]: value,
-    });
-    setUserState({
-      ...user,
-      [key]: value,
-    });
+  const updateUser = async (key: string, value: string) => {
+    try {
+      setUserState({
+        ...user,
+        [key]: value,
+      });
+      await userCollection.update(user.id, {
+        [key]: value,
+      });
+      setSnackbar({
+        open: true,
+        message: `${capitalize(key)} updated`,
+        severity: 'success',
+      });
+    } catch (err) {
+      setSnackbar({
+        open: true,
+        message: `An error occurred when updating ${key}`,
+        severity: 'error',
+      });
+    }
   };
 
   const updateEmail = (value: string) => {
@@ -45,11 +59,13 @@ export const AccountPresenter = () => {
     const isSuccess = changePassword(cred, newPassword);
     if (isSuccess) {
       setSnackbar({
+        open: true,
         message: 'Password updated',
         severity: 'success',
       });
     } else {
       setSnackbar({
+        open: true,
         message: 'Failed to update password',
         severity: 'error',
       });
