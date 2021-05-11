@@ -1,0 +1,5 @@
+tried to click on pieces instead of dragging
+got into a bug where stockfish may have resigned?
+took a while to understand what was going on (why the board starts like it does)
+maybe show when a king is in check
+suggestion to let the user change the timer
