@@ -2,8 +2,6 @@ import React from 'react';
 import { Avatar, AvatarProps } from '@material-ui/core';
 import { Md5 } from 'md5-typescript';
 import { useRecoilValue } from 'recoil';
-
-import { userHydrateState } from '../../state/user';
 import { getGravatarUrl } from '../../services/gravatar';
 
 interface Props extends AvatarProps {
@@ -31,8 +29,9 @@ export const Gravatar = (props: Props) => {
     return <Avatar {...innerProps} src={url} />;
   }
 
-  const { email, avatar } = useRecoilValue(userHydrateState);
-
+  const email = 'mock@mock.nu';
+  const avatar =
+    'https://static.toiimg.com/photo/msid-67586673/67586673.jpg?3918697';
   if (!avatar || avatar === 'N/A') {
     const url = getGravatarUrl({ defaultImage, email });
     return <Avatar {...innerProps} src={url} />;

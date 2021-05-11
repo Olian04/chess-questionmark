@@ -10,6 +10,7 @@ import {
 import { User } from '../../types/User';
 import { RandomGame } from '../../types/RandomGame';
 import { fallbackRandomGameState } from '../../state/game';
+import { defaultProfileState } from '../../state/user';
 
 const db = app.firestore();
 
@@ -66,7 +67,9 @@ export const fetchRandomGame = async (): Promise<RandomGame> => {
   let count = 0;
   games.forEach((document) => {
     const maybeGame = document.data();
-    if (maybeGame.history.length >= 6 && random < count) game = maybeGame;
+    if (maybeGame.history.length >= 6 && random < count) {
+      game = maybeGame as RandomGame;
+    }
     count++;
   });
   const countries = ['US', 'SE', 'NO', 'CA', 'FR', 'PL', 'RU'];
@@ -83,9 +86,9 @@ export const fetchRandomGame = async (): Promise<RandomGame> => {
 export const profileCollection = {
   collection: db.collection('profiles'),
   get: async function (id: string) {
-    if (id === 'N/A') return null;
+    if (id === 'N/A') return defaultProfileState;
     const document = await this.collection.doc(id).get();
-    if (!document.exists) return null;
+    if (!document.exists) return defaultProfileState;
 
     const data = document.data() as {
       rank: number;
@@ -160,20 +163,26 @@ export const profileCollection = {
 
 export const userCollection = {
   collection: db.collection('users'),
-  get: async function (id: string) {
-    const document = await this.collection.doc(id).get();
-    if (!document.exists) throw new Error('Document does not exist');
+  has: async (id: string) => {
+    const document = await userCollection.collection.doc(id).get();
+    return document.exists;
+  },
+  get: async (id: string) => {
+    const document = await userCollection.collection.doc(id).get();
+    if (!document.exists) {
+      throw new Error(`Document with id "${id}" does not exist`);
+    }
 
     return document.data() as UserExtras;
   },
-  set: async function (id: string, document: Partial<UserExtras>) {
-    await this.collection
+  set: async (id: string, document: Partial<UserExtras>) => {
+    return userCollection.collection
       .doc(id)
       .set(document)
       .catch((e) => console.log(e));
   },
-  update: async function (id: string, document: Partial<UserExtras>) {
-    await this.collection
+  update: async (id: string, document: Partial<UserExtras>) => {
+    return userCollection.collection
       .doc(id)
       .update(document)
       .catch((e) => console.log(e));

@@ -23,7 +23,6 @@ import { green } from '@material-ui/core/colors';
 import { useSetRecoilState } from 'recoil';
 import { UserExtras } from '../types/UserExtras';
 import { UserCredentials } from '../types/UserCredentials';
-import { Snackbar } from '../components/common/Snackbar';
 import { CommonModal } from '../components/common/CommonModal';
 import { modalState } from '../state/modal';
 

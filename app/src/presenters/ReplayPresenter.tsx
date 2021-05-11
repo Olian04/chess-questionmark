@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { getMaterialCostFromFen } from '../services/chess';
 import { getStorageGameByID } from '../services/firebase/storage';
-import { profileState, requestProfile, userHydrateState } from '../state/user';
+import { profileState, profileData, userState } from '../state/user';
 import { LoadingView } from '../views/LoadingView';
 import { ReplayView } from '../views/ReplayView';
 
@@ -16,6 +16,7 @@ type Player = {
 };
 
 export const ReplayPresenter = () => {
+  const user = useRecoilValue(userState);
   const [turn, setTurn] = useState(1);
   const [intervalID, setIntervalID] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -68,8 +69,11 @@ export const ReplayPresenter = () => {
   const history = useHistory();
 
   const hydrateGame = useRecoilCallback(({ snapshot }) => async () => {
-    const user = await snapshot.getPromise(userHydrateState);
-    const userProfile = await snapshot.getPromise(requestProfile);
+    const user = await snapshot.getPromise(userState);
+    const userProfile = await snapshot.getPromise(profileData(user.id));
+    if (userProfile === null) {
+      throw new Error(`Unexected null profile in replay presenter`);
+    }
     const game = await getStorageGameByID(gameID);
 
     if (
@@ -111,6 +115,7 @@ export const ReplayPresenter = () => {
     <>
       {gameOwner && gameHistory.length > 0 ? (
         <ReplayView
+          user={user}
           fen={gameHistory[turn - 1]}
           turn={turn}
           start={turn <= 1}

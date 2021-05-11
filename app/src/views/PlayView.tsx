@@ -15,8 +15,6 @@ import {
 
 import { Gravatar } from '../components/common/Gravatar';
 import { Profile } from '../types/Profile';
-import { LoadingView } from './LoadingView';
-import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-  user: User;
+  username: string;
   profile: Profile;
   greeting: string | undefined;
   isLoading: boolean;
@@ -40,7 +38,6 @@ interface Props {
 }
 
 export const PlayView = (props: Props) => {
-  const { user, profile } = props;
   const classes = useStyles();
 
   const reversed = (array: Array<any>) =>
@@ -64,7 +61,7 @@ export const PlayView = (props: Props) => {
             className={classes.container}
           >
             <Typography variant="h5" color="textPrimary">
-              {props.user.name !== 'N/A' && props.greeting}
+              {props.username !== 'N/A' && props.greeting}
             </Typography>
           </Grid>
         </Grid>
@@ -80,26 +77,26 @@ export const PlayView = (props: Props) => {
 
         <Graph
           recentMatches={props.profile.recentMatches}
-          username={props.user.name}
-          rank={profile.rank}
-          delta={profile.rankDelta}
+          username={props.username}
+          rank={props.profile.rank}
+          delta={props.profile.rankDelta}
           isLoading={props.isLoading}
         />
         <Grid item xs>
           <Grid container direction="row" spacing={2}>
             <Tile
               isLoading={props.isLoading}
-              text={profile.wins}
+              text={props.profile.wins}
               subText="Wins"
             />
             <Tile
               isLoading={props.isLoading}
-              text={profile.losses}
+              text={props.profile.losses}
               subText="Losses"
             />
             <Tile
               isLoading={props.isLoading}
-              text={profile.draws}
+              text={props.profile.draws}
               subText="Draws"
             />
           </Grid>
@@ -122,18 +119,18 @@ export const PlayView = (props: Props) => {
                   {props.isLoading ? (
                     <ThreeRowButtonSkeleton />
                   ) : (
-                    reversed(profile.recentMatches)
+                    reversed(props.profile.recentMatches)
                       .slice(0, 5)
                       .map((match) => (
                         <ThreeRowButton
                           key={match.id}
                           name={
-                            user.name === match.winner.name
+                            props.username === match.winner.name
                               ? match.loser.name
                               : match.winner.name
                           }
                           delta={
-                            user.name === match.winner.name
+                            props.username === match.winner.name
                               ? match.material
                               : -1 * match.material
                           }
@@ -142,11 +139,11 @@ export const PlayView = (props: Props) => {
                               variant="circular"
                               opponent={{
                                 email:
-                                  user.name === match.winner.name
+                                  props.username === match.winner.name
                                     ? match.loser.email
                                     : match.winner.email,
                                 avatar:
-                                  user.name === match.winner.name
+                                  props.username === match.winner.name
                                     ? match.loser.avatar
                                     : match.winner.avatar,
                               }}

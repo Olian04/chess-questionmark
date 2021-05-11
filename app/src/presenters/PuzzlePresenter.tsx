@@ -3,7 +3,7 @@ import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
 import { GameView } from '../views/GameView';
 import { fallbackGameState, requestGame } from '../state/game';
 import { useHistory } from 'react-router-dom';
-import { profileState, userHydrateState } from '../state/user';
+import { currentUserIDState, profileState, userState } from '../state/user';
 import { EndOfGame } from '../components/game/EndOfGame';
 import { useChessLogic } from '../hooks/use-chess-logic';
 import { migrateGameByUserID } from '../services/firebase/util/migrateDB';
@@ -15,7 +15,7 @@ import { snackbarState } from '../state/snackbar';
 
 export const PuzzlePresenter = () => {
   const history = useHistory();
-  const user = useRecoilValue(userHydrateState);
+  const user = useRecoilValue(userState);
   const userProfile = useRecoilValue(profileState);
   const gameState = useRecoilValue(requestGame);
   const setSnackbar = useSetRecoilState(snackbarState);
@@ -50,7 +50,10 @@ export const PuzzlePresenter = () => {
   const endGame = useRecoilCallback(({ set, snapshot }) => async () => {
     if (gameLogic.boardProps.winner !== 'N/A') {
       setWinnerDialogueOpen(true);
-      const { id: userID } = await snapshot.getPromise(userHydrateState);
+      const userID = await snapshot.getPromise(currentUserIDState);
+      if (userID === null) {
+        throw new Error(`Unexpected null userID at board initialization`);
+      }
       await updateLiveGameByUserID(userID, {
         winner:
           gameLogic.boardProps.orientation === gameLogic.boardProps.winner
@@ -64,33 +67,37 @@ export const PuzzlePresenter = () => {
   });
 
   const addMoveToGameState = useRecoilCallback(
-    ({ snapshot, set }) => async (onUnmount?: { timeLeft: number }) => {
-      const { id: userID } = await snapshot.getPromise(userHydrateState);
-      const gameState = await snapshot.getPromise(requestGame);
-      const latestState = gameLogic.history[gameLogic.history.length - 1];
-      if (onUnmount) {
-        await updateLiveGameByUserID(userID, {
-          timeLeft: onUnmount.timeLeft,
-        });
-      }
-      if (!onUnmount && latestState.player === 'human') {
-        await updateLiveGameByUserID(userID, {
-          history: [...gameState.history, latestState.fen],
-          timeLeft: gameLogic.timeLeft.self + timerIncreaseOnMove,
-        });
-      }
-      if (!onUnmount && latestState.player === 'ai') {
-        await updateLiveGameByUserID(userID, {
-          history: [...gameState.history, latestState.fen],
-        });
-      }
+    ({ snapshot, set }) =>
+      async (onUnmount?: { timeLeft: number }) => {
+        const userID = await snapshot.getPromise(currentUserIDState);
+        if (userID === null) {
+          throw new Error(`Unexpected null userID at board initialization`);
+        }
+        const gameState = await snapshot.getPromise(requestGame);
+        const latestState = gameLogic.history[gameLogic.history.length - 1];
+        if (onUnmount) {
+          await updateLiveGameByUserID(userID, {
+            timeLeft: onUnmount.timeLeft,
+          });
+        }
+        if (!onUnmount && latestState.player === 'human') {
+          await updateLiveGameByUserID(userID, {
+            history: [...gameState.history, latestState.fen],
+            timeLeft: gameLogic.timeLeft.self + timerIncreaseOnMove,
+          });
+        }
+        if (!onUnmount && latestState.player === 'ai') {
+          await updateLiveGameByUserID(userID, {
+            history: [...gameState.history, latestState.fen],
+          });
+        }
 
-      const newGameState = await getLiveGameByUserID(userID);
-      if (newGameState === null) {
-        throw new Error(`This should never happen... Run for your lives!!`);
+        const newGameState = await getLiveGameByUserID(userID);
+        if (newGameState === null) {
+          throw new Error(`This should never happen... Run for your lives!!`);
+        }
+        set(requestGame, newGameState);
       }
-      set(requestGame, newGameState);
-    }
   );
 
   useEffect(() => {

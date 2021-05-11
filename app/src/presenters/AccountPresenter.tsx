@@ -1,29 +1,37 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilCallback, useRecoilState } from 'recoil';
-import { useUserState } from '../hooks/use-user-state';
+import {
+  useRecoilCallback,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil';
+import { useFirebaseUser } from '../hooks/use-firebase-user';
 import { signOut } from '../services/firebase/auth';
 import { userCollection } from '../services/firebase/storage';
 import { loginStatusState } from '../state/authentication';
 import {
-  defaultProfileState,
-  defaultUserState,
   profileState,
-  requestProfile,
-  userHydrateState,
+  userState,
+  userExtraData,
+  userFirebaseState,
+  currentUserIDState,
+  profileData,
 } from '../state/user';
 import { AccountView } from '../views/AccountView ';
 
 export const AccountPresenter = () => {
   const history = useHistory();
-  const firebaseUser = useUserState();
-  const [user, setUserState] = useRecoilState(userHydrateState);
+  const firebaseUser = useFirebaseUser();
+  const user = useRecoilValue(userState);
+  const setUserExtraData = useSetRecoilState(userExtraData(user.id));
+  const setUserFirebaseState = useSetRecoilState(userFirebaseState);
 
   const updateUser = (key: string, value: string) => {
     userCollection.update(user.id, {
       [key]: value,
     });
-    setUserState({
+    setUserExtraData({
       ...user,
       [key]: value,
     });
@@ -31,7 +39,7 @@ export const AccountPresenter = () => {
 
   const updateEmail = (value: string) => {
     firebaseUser?.updateEmail(value).catch((e: Error) => console.log(e));
-    setUserState({ ...user, email: value });
+    setUserFirebaseState({ email: value });
   };
 
   const updatePassword = (value: string) => {
@@ -43,11 +51,10 @@ export const AccountPresenter = () => {
   const updatePhone = (value: string) => updateUser('phone', value);
   const updateTeam = (value: string) => updateUser('team', value);
 
-  const logoutUser = useRecoilCallback(({ set }) => async () => {
+  const logoutUser = useRecoilCallback(({ set, reset }) => async () => {
     await signOut();
     set(loginStatusState, 'idle');
-    set(userHydrateState, defaultUserState);
-    set(profileState, defaultProfileState);
+    reset(currentUserIDState);
 
     history.push('/');
   });

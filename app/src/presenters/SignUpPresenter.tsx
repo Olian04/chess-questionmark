@@ -11,12 +11,11 @@ import { fetchCountryCode } from '../services/ipdata';
 import { loginStatusState } from '../state/authentication';
 import { snackbarState } from '../state/snackbar';
 import {
+  currentUserIDState,
   defaultProfileState,
-  profileState,
-  userHydrateState,
-  userState,
+  profileData,
+  userExtraData,
 } from '../state/user';
-import { User } from '../types/User';
 import { getGravatarUrl } from '../services/gravatar';
 import { UserCredentials } from '../types/UserCredentials';
 import { UserExtras } from '../types/UserExtras';
@@ -27,8 +26,9 @@ const nonApplicable = 'N/A';
 export const SignUpPresenter = () => {
   const loginStatus = useRecoilValue(loginStatusState);
   const history = useHistory();
+
   const signUp = useRecoilCallback(
-    ({ set }) =>
+    ({ set, reset }) =>
       async (credentials: UserCredentials, extras: Partial<UserExtras>) => {
         if (loginStatus in ['pending', 'success']) return;
 
@@ -61,7 +61,6 @@ export const SignUpPresenter = () => {
         }
 
         const countryCode = await fetchCountryCode();
-
         const avatar = getGravatarUrl({
           email: signUpResponse.user.email as string,
           defaultImage: 'robohash',
@@ -79,17 +78,22 @@ export const SignUpPresenter = () => {
 
         await profileCollection.set(user.id, defaultProfileState);
         // Creates a user-document and stores in on firestore
-        await userCollection.set(user.id, {
+        const extraUserData: UserExtras = {
           countryCode: user.countryCode,
           name: extras.name ? extras.name : user.name,
           team: extras.team ? extras.team : user.team,
           phone: extras.phone ? extras.phone : user.phone,
           avatar: avatar,
+        };
+        await userCollection.set(user.id, extraUserData);
+        set(profileData(user.id), defaultProfileState);
+        set(userExtraData({ id: user.id, onSignUp: true }), extraUserData);
+        set(userFirebaseState, {
+          email: credentials.email,
         });
+        set(currentUserIDState, user.id);
 
         set(loginStatusState, 'success');
-        set(userState, user);
-        set(profileState, defaultProfileState);
         history.push('/play');
       }
   );

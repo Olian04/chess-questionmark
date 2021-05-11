@@ -1,4 +1,4 @@
-import { atom, selector, selectorFamily } from 'recoil';
+import { atom, atomFamily, selector, selectorFamily } from 'recoil';
 import { Profile } from '../types/Profile';
 import { User } from '../types/User';
 import { getCurrentUser } from '../services/firebase/auth';
@@ -6,10 +6,11 @@ import {
   userCollection,
   profileCollection,
 } from '../services/firebase/storage';
+import { UserExtras } from '../types/UserExtras';
 
 const notApplicable = 'N/A';
 
-export const defaultUserState = {
+const defaultUserState = {
   id: notApplicable,
   email: notApplicable,
   name: notApplicable,
@@ -28,56 +29,75 @@ export const defaultProfileState = {
   recentMatches: [],
 };
 
-export const userState = atom<User>({
+export const currentUserIDState = atom<string | null>({
+  key: 'CURRENT_USER_ID',
+  default: null,
+});
+
+export const userFirebaseState = atom<{ email: string } | null>({
+  key: 'USER_FIREBASE',
+  default: null,
+});
+
+export const userState = selector<User>({
   key: 'USER',
-  default: defaultUserState,
-});
-
-export const userHydrateState = selector<User>({
-  key: 'USER_ASYNC',
   get: async ({ get }) => {
-    const state = get(userState);
-    if (state.id !== notApplicable && state.avatar !== notApplicable) {
-      return state;
+    const id = get(currentUserIDState);
+    if (id === null) return defaultUserState;
+
+    const firebaseUser = get(userFirebaseState);
+    if (firebaseUser === null) return defaultUserState;
+
+    const extraData = await get(userExtraData({ id }));
+
+    if (!extraData) {
+      throw Error('Could not find a valid userstate.');
     }
 
-    const maybeUser = await getCurrentUser();
-
-    if (maybeUser) {
-      const extras = await userCollection.get(maybeUser.uid);
-      return {
-        id: maybeUser.uid,
-        email: maybeUser.email,
-        name: extras.name,
-        phone: extras.phone,
-        team: extras.team,
-        avatar: extras.avatar,
-        countryCode: extras.countryCode,
-      } as User;
-    }
-
-    return defaultUserState;
-  },
-  set: ({ set }, newValue) => {
-    set(userState, newValue);
+    return {
+      id,
+      email: firebaseUser.email ?? notApplicable,
+      avatar: extraData.avatar,
+      countryCode: extraData.countryCode,
+      name: extraData.name,
+      phone: extraData.phone,
+      team: extraData.team,
+    };
   },
 });
 
-export const profileState = atom<Profile>({
-  key: 'PROFILE',
-  default: defaultProfileState,
+type userExtraDataParam = { id: string; onSignUp?: boolean };
+
+export const userExtraData = atomFamily<UserExtras | null, userExtraDataParam>({
+  key: 'USER_EXTRA_DATA',
+  default: selectorFamily<UserExtras | null, userExtraDataParam>({
+    key: 'USER_DATA/DEFAULT',
+    get:
+      ({ id, onSignUp }) =>
+      () => {
+        if (onSignUp) {
+          return null;
+        }
+        console.log('APPARENTLY FETCHING!', id);
+        return userCollection.get(id);
+      },
+  }),
 });
 
-export const requestProfile = atom<Profile>({
-  key: 'REQUEST_PROFILE',
-  default: selector<Profile>({
-    key: 'REQUEST_PROFILE_SELECTOR',
-    get: async ({ get }) => {
-      const user = await get(userHydrateState);
-      console.warn('REQUESTPROFILE', user);
-      const profile = await profileCollection.get(user.id);
-      return profile ?? defaultProfileState;
-    },
+export const profileState = selector<Profile>({
+  key: 'REQUEST_PROFILE_SELECTOR',
+  get: ({ get }) => {
+    const user = get(userState);
+    const profile = get(profileData(user.id));
+    return profile;
+  },
+});
+
+export const profileData = atomFamily<Profile, string>({
+  key: 'PROFILE_DATA',
+  default: selectorFamily<Profile, string>({
+    key: 'USER_DATA/DEFAULT',
+    get: (id) => () => profileCollection.get(id),
   }),
 });
 
