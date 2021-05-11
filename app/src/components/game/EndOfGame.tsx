@@ -20,7 +20,7 @@ export const EndOfGame = (props: Props) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onClick}>Return to profile!</Button>
+        <Button onClick={props.onClick}>Return</Button>
       </DialogActions>
     </Dialog>
   );
