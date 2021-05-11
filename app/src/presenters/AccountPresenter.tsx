@@ -55,8 +55,8 @@ export const AccountPresenter = () => {
     setUserState({ ...user, email: value });
   };
 
-  const updatePassword = (cred: UserCredentials, newPassword: string) => {
-    const isSuccess = changePassword(cred, newPassword);
+  const updatePassword = async (cred: UserCredentials, newPassword: string) => {
+    const isSuccess = await changePassword(cred, newPassword);
     if (isSuccess) {
       setSnackbar({
         open: true,
