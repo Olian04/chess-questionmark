@@ -19,7 +19,7 @@ import { Snackbar } from '../components/common/Snackbar';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      height: '100vh',
+      height: '100%',
       display: 'flex',
       justifyContent: 'center',
     },

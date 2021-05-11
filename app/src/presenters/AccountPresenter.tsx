@@ -9,6 +9,7 @@ import {
   defaultProfileState,
   defaultUserState,
   profileState,
+  requestProfile,
   userHydrateState,
 } from '../state/user';
 import { AccountView } from '../views/AccountView ';
@@ -47,6 +48,7 @@ export const AccountPresenter = () => {
     set(loginStatusState, 'idle');
     set(userHydrateState, defaultUserState);
     set(profileState, defaultProfileState);
+
     history.push('/');
   });
 

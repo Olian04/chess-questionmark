@@ -102,11 +102,11 @@ const darkTheme = createMuiTheme({
   measurements: {
     navbar: {
       height: 60,
-      width: '100vw',
+      width: '100%',
     },
     playerbar: {
       height: 25,
-      width: '100vw',
+      width: '100%',
     },
   },
 });

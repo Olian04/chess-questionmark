@@ -10,6 +10,7 @@ import {
   profileStatusState,
   requestProfile,
   userHydrateState,
+  userState,
 } from '../state/user';
 import { LiveGame } from '../types/live/LiveGame';
 import { PlayView } from '../views/PlayView';
@@ -78,6 +79,7 @@ export const PlayPresenter = () => {
     if (user && user.id !== 'N/A') setGreeting(greet(user.name));
   }, []);
 
+  useEffect(() => console.log(user, profile), []);
   return (
     <PlayView
       user={user}

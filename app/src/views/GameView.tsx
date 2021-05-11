@@ -8,22 +8,33 @@ import { GameBoard } from '../components/game/GameBoard';
 import { Snackbar } from '../components/common/Snackbar';
 import { User } from '../types/User';
 import { Overview } from '../components/game/Overview';
+import { isMobile } from 'react-device-detect';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     background: {
-      height: '100vh',
-      width: '100vw',
+      height: '100%',
+      width: '100%',
       position: 'absolute',
       top: 0,
       left: 0,
       background: 'linear-gradient(180deg, #918F99 14.58%, #28262F 79.69%)',
       zIndex: 0,
     },
+    fill: {
+      position: 'absolute',
+      top: theme.measurements.navbar.height,
+      right: theme.spacing(1),
+      left: theme.spacing(1),
+      bottom: theme.spacing(isMobile ? 10 : 3),
+    },
     container: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      flexDirection: 'column',
       zIndex: 1,
       position: 'relative',
-      height: `calc(100% - ${theme.spacing(3)}px)`,
+      height: '100%',
       paddingTop: theme.spacing(1),
     },
   })
@@ -53,30 +64,26 @@ export const GameView = (props: Props) => {
   return (
     <>
       <Snackbar />
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="stretch"
-        justifyContent="space-between"
-        className={classes.container}
-      >
-        <Overview
-          currentPlayerIsHuman={props.currentMove % 2 === 1}
-          currentMove={props.currentMove}
-          handleResign={props.handleResign}
-        />
-        <GameBoard {...props.boardProps} />
-        <PlayerBar
-          timeRef={props.timeRef}
-          time={props.botTime}
-          name={props.player.name}
-          email={props.player.email}
-          countryCode={props.player.countryCode}
-          rating={props.player.rating}
-          isPaused={props.isPaused}
-          isBlinking={props.isBlinking}
-          playerIsWhite={props.player.playerIsWhite}
-        />
+      <Box className={classes.fill}>
+        <Box className={classes.container}>
+          <Overview
+            currentPlayerIsHuman={props.currentMove % 2 === 1}
+            currentMove={props.currentMove}
+            handleResign={props.handleResign}
+          />
+          <GameBoard {...props.boardProps} />
+          <PlayerBar
+            timeRef={props.timeRef}
+            time={props.botTime}
+            name={props.player.name}
+            email={props.player.email}
+            countryCode={props.player.countryCode}
+            rating={props.player.rating}
+            isPaused={props.isPaused}
+            isBlinking={props.isBlinking}
+            playerIsWhite={props.player.playerIsWhite}
+          />
+        </Box>
       </Box>
       <Box className={classes.background} />
     </>

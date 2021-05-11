@@ -14,6 +14,7 @@ import {
   defaultProfileState,
   profileState,
   userHydrateState,
+  userState,
 } from '../state/user';
 import { User } from '../types/User';
 import { getGravatarUrl } from '../services/gravatar';
@@ -27,70 +28,70 @@ export const SignUpPresenter = () => {
   const loginStatus = useRecoilValue(loginStatusState);
   const history = useHistory();
   const signUp = useRecoilCallback(
-    ({ set }) => async (
-      credentials: UserCredentials,
-      extras: Partial<UserExtras>
-    ) => {
-      if (loginStatus in ['pending', 'success']) return;
+    ({ set }) =>
+      async (credentials: UserCredentials, extras: Partial<UserExtras>) => {
+        if (loginStatus in ['pending', 'success']) return;
 
-      set(loginStatusState, 'pending');
+        set(loginStatusState, 'pending');
 
-      if (
-        credentials === null ||
-        credentials.email.trim() === '' ||
-        credentials.password.trim() === ''
-      ) {
-        set(loginStatusState, 'fail');
-        return;
-      }
+        if (
+          credentials === null ||
+          credentials.email.trim() === '' ||
+          credentials.password.trim() === ''
+        ) {
+          set(loginStatusState, 'fail');
+          return;
+        }
 
-      const signUpResponse = await createUserWithEmailAndPassword(
-        credentials
-      ).catch((e) => {
-        set(snackbarState, {
-          open: true,
-          severity: 'error',
-          message: e.message,
+        const signUpResponse = await createUserWithEmailAndPassword(
+          credentials
+        ).catch((e) => {
+          set(snackbarState, {
+            open: true,
+            severity: 'error',
+            message: e.message,
+          });
+          set(loginStatusState, 'fail');
+          return;
         });
-        set(loginStatusState, 'fail');
-        return;
-      });
 
-      if (!signUpResponse || signUpResponse.user === null) {
-        set(loginStatusState, 'fail');
-        return;
-      }
+        if (!signUpResponse || signUpResponse.user === null) {
+          set(loginStatusState, 'fail');
+          return;
+        }
 
-      const countryCode = await fetchCountryCode();
+        const countryCode = await fetchCountryCode();
 
-      const user = {
-        id: signUpResponse.user.uid as string,
-        email: signUpResponse.user.email as string,
-        name: extras.name as string,
-        phone: nonApplicable,
-        avatar: getGravatarUrl({
+        const avatar = getGravatarUrl({
           email: signUpResponse.user.email as string,
           defaultImage: 'robohash',
-        }),
-        team: nonApplicable,
-        countryCode: countryCode,
-      };
+        });
 
-      await profileCollection.set(signUpResponse.user.uid, defaultProfileState);
-      // Creates a user-document and stores in on firestore
-      await userCollection.set(signUpResponse.user.uid, {
-        countryCode: user.countryCode,
-        name: extras.name ? extras.name : user.name,
-        team: extras.team ? extras.team : user.team,
-        phone: extras.phone ? extras.phone : user.phone,
-        avatar: extras.avatar ? extras.avatar : user.avatar,
-      });
+        const user = {
+          id: signUpResponse.user.uid as string,
+          email: signUpResponse.user.email as string,
+          name: extras.name as string,
+          phone: nonApplicable,
+          avatar: avatar,
+          team: nonApplicable,
+          countryCode: countryCode,
+        };
 
-      set(loginStatusState, 'success');
-      set(userHydrateState, user);
-      set(profileState, defaultProfileState);
-      history.push('/play');
-    }
+        await profileCollection.set(user.id, defaultProfileState);
+        // Creates a user-document and stores in on firestore
+        await userCollection.set(user.id, {
+          countryCode: user.countryCode,
+          name: extras.name ? extras.name : user.name,
+          team: extras.team ? extras.team : user.team,
+          phone: extras.phone ? extras.phone : user.phone,
+          avatar: avatar,
+        });
+
+        set(loginStatusState, 'success');
+        set(userState, user);
+        set(profileState, defaultProfileState);
+        history.push('/play');
+      }
   );
   return (
     <SignUpView

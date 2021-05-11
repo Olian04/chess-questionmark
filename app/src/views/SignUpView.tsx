@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       display: 'flex',
       justifyContent: 'center',
-      height: '100vh',
+      height: '100%',
     },
     gridBase: {
       zIndex: 1,

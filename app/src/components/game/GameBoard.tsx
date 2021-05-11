@@ -4,6 +4,7 @@ import { useTheme } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 
 import { EndOfGame } from './EndOfGame';
+import { isMobile } from 'react-device-detect';
 
 interface Props extends cbjsxProps {
   size?: number;
@@ -28,10 +29,20 @@ export const GameBoard = (props: Props) => {
         boardStyle={{
           boxShadow: theme.shadows[10],
         }}
-        calcWidth={({ screenHeight, screenWidth }) =>
-          Math.min(screenHeight - difference, screenWidth) *
-          (props.size ? props.size : 0.8)
-        }
+        calcWidth={({ screenHeight, screenWidth }) => {
+          if (isMobile) {
+            return (
+              Math.min(screenHeight - difference, screenWidth) *
+              (props.size ? props.size : 0.8)
+            );
+          }
+          return (
+            Math.min(
+              Math.min(screenHeight, 375) - difference,
+              Math.min(screenWidth, 414)
+            ) * (props.size ? props.size : 0.8)
+          );
+        }}
         lightSquareStyle={{ backgroundColor: theme.palette.secondary.main }}
         darkSquareStyle={{ backgroundColor: theme.palette.primary.main }}
       />

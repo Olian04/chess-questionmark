@@ -14,18 +14,29 @@ import { Graph } from '../components/replay/Graph';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    fill: {
+      position: 'absolute',
+      top: theme.measurements.navbar.height,
+
+      bottom: theme.spacing(3),
+    },
     container: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      flexDirection: 'column',
       zIndex: 1,
       position: 'relative',
-      height: `calc(100% - ${theme.spacing(3)}px)`,
+      height: '100%',
       paddingTop: theme.spacing(1),
     },
     background: {
-      height: '100vh',
-      width: '100vw',
+      height: '100%',
+      width: '100%',
       position: 'absolute',
       top: 0,
       left: 0,
+      bottom: 0,
+      right: 0,
       background: 'linear-gradient(180deg, #918F99 14.58%, #28262F 79.69%)',
       zIndex: 0,
     },
@@ -98,75 +109,71 @@ export const ReplayView = (props: Props) => {
 
   return (
     <>
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="stretch"
-        justifyContent="space-between"
-        className={classes.container}
-      >
-        <Overview
-          currentMove={props.turn}
-          currentPlayerIsHuman={props.turn % 2 === 1}
-          handleResign={props.handleGoBack}
-          isReplay
-        />
-        <GameBoard
-          position={props.fen}
-          transitionDuration={400}
-          draggable={false}
-          size={0.8}
-          winner={''}
-        />
-        <Box>
-          <Box display="flex" justifyContent="center">
-            <Button
-              disabled={props.start}
-              variant="outlined"
-              onClick={props.onPrevious}
-            >
-              <SkipPrevious fontSize="large" color="action" />
-            </Button>
-            <Button variant="outlined" onClick={props.onPlay}>
-              {!props.playing ? (
-                <PlayArrow fontSize="large" color="action" />
-              ) : (
-                <Pause fontSize="large" color="action" />
-              )}
-            </Button>
-            <Button
-              disabled={props.end}
-              variant="outlined"
-              onClick={props.onNext}
-            >
-              <SkipNext fontSize="large" color="action" />
-            </Button>
-          </Box>
-          <Box className={classes.wrapper}>
-            <ReplaySlider
-              marks={true}
-              min={1}
-              max={props.max}
-              value={props.turn}
-              onChange={(_, v) => props.onSlider(v as number)}
-            />
-            <Box className={classes.graph}>
-              <Graph data={props.materialData} />
+      <Box className={classes.fill}>
+        <Box className={classes.container}>
+          <Overview
+            currentMove={props.turn}
+            currentPlayerIsHuman={props.turn % 2 === 1}
+            handleResign={props.handleGoBack}
+            isReplay
+          />
+          <GameBoard
+            position={props.fen}
+            transitionDuration={400}
+            draggable={false}
+            size={0.8}
+            winner={''}
+          />
+          <Box>
+            <Box display="flex" justifyContent="center">
+              <Button
+                disabled={props.start}
+                variant="outlined"
+                onClick={props.onPrevious}
+              >
+                <SkipPrevious fontSize="large" color="action" />
+              </Button>
+              <Button variant="outlined" onClick={props.onPlay}>
+                {!props.playing ? (
+                  <PlayArrow fontSize="large" color="action" />
+                ) : (
+                  <Pause fontSize="large" color="action" />
+                )}
+              </Button>
+              <Button
+                disabled={props.end}
+                variant="outlined"
+                onClick={props.onNext}
+              >
+                <SkipNext fontSize="large" color="action" />
+              </Button>
+            </Box>
+            <Box className={classes.wrapper}>
+              <ReplaySlider
+                marks={true}
+                min={1}
+                max={props.max}
+                value={props.turn}
+                onChange={(_, v) => props.onSlider(v as number)}
+              />
+              <Box className={classes.graph}>
+                <Graph data={props.materialData} />
+              </Box>
             </Box>
           </Box>
-        </Box>
 
-        <PlayerBar
-          email={props.player.email}
-          time={0}
-          name={props.player.name}
-          countryCode={props.player.countryCode}
-          rating={props.player.rating}
-          isPaused={true}
-          isBlinking={false}
-          playerIsWhite={props.player.playerIsWhite}
-          isReplay
-        />
+          <PlayerBar
+            email={props.player.email}
+            time={0}
+            name={props.player.name}
+            countryCode={props.player.countryCode}
+            rating={props.player.rating}
+            isPaused={true}
+            isBlinking={false}
+            playerIsWhite={props.player.playerIsWhite}
+            isReplay
+          />
+        </Box>
       </Box>
       <Box className={classes.background} />
     </>

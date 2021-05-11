@@ -28,7 +28,7 @@ export const defaultProfileState = {
   recentMatches: [],
 };
 
-const userState = atom<User>({
+export const userState = atom<User>({
   key: 'USER',
   default: defaultUserState,
 });
@@ -37,8 +37,9 @@ export const userHydrateState = selector<User>({
   key: 'USER_ASYNC',
   get: async ({ get }) => {
     const state = get(userState);
-    if (state.id !== notApplicable && state.avatar !== notApplicable)
+    if (state.id !== notApplicable && state.avatar !== notApplicable) {
       return state;
+    }
 
     const maybeUser = await getCurrentUser();
 
@@ -73,9 +74,10 @@ export const requestProfile = atom<Profile>({
     key: 'REQUEST_PROFILE_SELECTOR',
     get: async ({ get }) => {
       const user = await get(userHydrateState);
+      console.warn('REQUESTPROFILE', user);
       const profile = await profileCollection.get(user.id);
       return profile ?? defaultProfileState;
-    }
+    },
   }),
 });
 

@@ -10,7 +10,7 @@ import { RandomGame } from '../types/RandomGame';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      height: '100vh',
+      height: '100%',
     },
     gridBase: {
       zIndex: 1,
