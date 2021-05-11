@@ -1,3 +1,5 @@
+user: female law student, 28?
+
 tried to click on pieces instead of dragging
 got into a bug where stockfish may have resigned?
 took a while to understand what was going on (why the board starts like it does)
