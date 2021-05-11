@@ -14,6 +14,7 @@ import { PlayRoute } from './routes/PlayRoute';
 import { RecoilRoute } from './providers/stateProvider';
 import { BackgroundCircle } from './components/common/BackgroundCircle';
 import { LoadingView } from './views/LoadingView';
+import { SnackbarPresenter } from './presenters/SnackbarPresenter';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,87 +33,89 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const App = () => {
   const classes = useStyles();
-  <RecoilRoute guarded path="/replay/:id" component={ReplayRoute} />;
   return (
-    <Router>
-      <div className={classes.background}>
-        <Switch>
-          <RecoilRoute path="/login">
-            <Container maxWidth="sm" className={classes.container}>
-              <React.Suspense
-                fallback={<LoadingView message="Fetching state" />}
-              >
-                <Switch>
-                  <RecoilRoute exact path="/login" component={LoginRoute} />
-                  <RecoilRoute
-                    exact
-                    path="/login/sign-up"
-                    component={SignUpRoute}
-                  />
-                  <RecoilRoute
-                    exact
-                    path="/login/sign-in"
-                    component={SignInRoute}
-                  />
-                  <RecoilRoute>
-                    <Redirect to="/login" />
-                  </RecoilRoute>
-                </Switch>
-              </React.Suspense>
-            </Container>
-          </RecoilRoute>
-          <RecoilRoute path="/">
-            <NavigationBar
-              menuItems={[
-                { title: 'Account', to: '/account' },
-                { title: 'Play', to: '/play' },
-                { title: 'About', to: '/about' },
-              ]}
-            />
-            <Container maxWidth="sm" className={classes.container}>
-              <React.Suspense
-                fallback={<LoadingView message="Fetching state" />}
-              >
-                <Switch>
-                  <RecoilRoute
-                    guarded
-                    exact
-                    path="/puzzle"
-                    component={PuzzleRoute}
-                  />
-                  <RecoilRoute
-                    guarded
-                    path="/replay/:id"
-                    component={ReplayRoute}
-                  />
-                  <RecoilRoute
-                    guarded
-                    exact
-                    path="/account"
-                    component={AccountRoute}
-                  />
-                  <RecoilRoute
-                    guarded
-                    exact
-                    path="/about"
-                    component={AboutRoute}
-                  />
-                  <RecoilRoute
-                    guarded
-                    exact
-                    path="/play"
-                    component={PlayRoute}
-                  />
-                  <RecoilRoute guarded exact path="/">
-                    <Redirect to="/play" />
-                  </RecoilRoute>
-                </Switch>
-              </React.Suspense>
-            </Container>
-          </RecoilRoute>
-        </Switch>
-      </div>
-      <BackgroundCircle />
-    </Router>
+    <>
+      <SnackbarPresenter />
+      <Router>
+        <div className={classes.background}>
+          <Switch>
+            <RecoilRoute path="/login">
+              <Container maxWidth="sm" className={classes.container}>
+                <React.Suspense
+                  fallback={<LoadingView message="Fetching state" />}
+                >
+                  <Switch>
+                    <RecoilRoute exact path="/login" component={LoginRoute} />
+                    <RecoilRoute
+                      exact
+                      path="/login/sign-up"
+                      component={SignUpRoute}
+                    />
+                    <RecoilRoute
+                      exact
+                      path="/login/sign-in"
+                      component={SignInRoute}
+                    />
+                    <RecoilRoute>
+                      <Redirect to="/login" />
+                    </RecoilRoute>
+                  </Switch>
+                </React.Suspense>
+              </Container>
+            </RecoilRoute>
+            <RecoilRoute path="/">
+              <NavigationBar
+                menuItems={[
+                  { title: 'Account', to: '/account' },
+                  { title: 'Play', to: '/play' },
+                  { title: 'About', to: '/about' },
+                ]}
+              />
+              <Container maxWidth="sm" className={classes.container}>
+                <React.Suspense
+                  fallback={<LoadingView message="Fetching state" />}
+                >
+                  <Switch>
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/puzzle"
+                      component={PuzzleRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      path="/replay/:id"
+                      component={ReplayRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/account"
+                      component={AccountRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/about"
+                      component={AboutRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/play"
+                      component={PlayRoute}
+                    />
+                    <RecoilRoute guarded exact path="/">
+                      <Redirect to="/play" />
+                    </RecoilRoute>
+                  </Switch>
+                </React.Suspense>
+              </Container>
+            </RecoilRoute>
+          </Switch>
+        </div>
+        <BackgroundCircle />
+      </Router>
+    </>
   );
 };

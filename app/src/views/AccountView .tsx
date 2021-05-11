@@ -12,7 +12,6 @@ import {
 import { TwoRowButton } from '../components/settings/TwoRowButton';
 import { User } from '../types/User';
 import { UserCredentials } from '../types/UserCredentials';
-import { Snackbar } from '../components/common/Snackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,7 +52,6 @@ export const AccountView = (props: Props) => {
   });
   return (
     <>
-      <Snackbar />
       <UpdateFieldModal
         open={modal.open}
         dialogs={modal.dialogs as any}
