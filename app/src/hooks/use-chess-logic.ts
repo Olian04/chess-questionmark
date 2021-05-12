@@ -48,7 +48,9 @@ export const useChessLogic = (conf: Config): API => {
   const [topTimeLeft, setTopTimeLeft] = useState(conf.timerLength);
   const [intervalID, setIntervalID] = useState(0);
 
-  const [position, setPosition] = useState(conf.initialFEN);
+  const [position, setPosition] = useState(
+    '8/8/2k5/3p4/4P3/5K2/8/8 w KQkq - 0 1'
+  );
   const [dropSquareStyle, setDropSquareStyle] = useState({});
   const [squareStyles, setSquareStyles] = useState({});
   const [pieceSquare, setPieceSquare] = useState('' as Square);
@@ -142,7 +144,7 @@ export const useChessLogic = (conf: Config): API => {
       setHistory(game.history({ verbose: true }));
       setSquareStyles(squareStyling({ pieceSquare, history }));
       boardProps.removeHighlightSquare();
-      // setDraggable(false);
+      setDraggable(false);
       if (game.in_checkmate()) {
         setEndCause('checkmate');
         setWinner(player);
@@ -194,11 +196,42 @@ export const useChessLogic = (conf: Config): API => {
         promotion: 'q',
       });
 
-      if (move === null) return;
+      if (move === null) {
+        setPieceSquare(square);
+        return;
+      }
 
       setPosition(game.fen());
       setHistory(game.history({ verbose: true }));
-      setPieceSquare('' as Square);
+      boardProps.removeHighlightSquare();
+      setDraggable(false);
+      if (game.in_checkmate()) {
+        setEndCause('checkmate');
+        setWinner(player);
+      } else if (game.in_threefold_repetition()) {
+        setEndCause('threefold repetition');
+        setWinner(player);
+      } else if (game.in_stalemate()) {
+        setEndCause('stalemate');
+        setWinner(player);
+      } else if (game.in_draw()) {
+        setEndCause('draw');
+        setWinner(player);
+      } else if (game.insufficient_material()) {
+        setEndCause('draw');
+        setWinner(player);
+      } else if (game.game_over()) {
+        setEndCause('inexplicable reason');
+        setWinner(player);
+      }
+      setApiHistory((h) => [
+        ...h,
+        {
+          player: 'human',
+          fen: game.fen(),
+        },
+      ]);
+      engineGame({}).prepareMove();
     },
   };
 
@@ -213,22 +246,6 @@ export const useChessLogic = (conf: Config): API => {
       search: string;
       score: string;
     };
-    let time = {
-      wtime: 3000,
-      btime: 3000,
-      winc: 1500,
-      binc: 1500,
-    } as {
-      wtime: number;
-      btime: number;
-      winc: number;
-      binc: number;
-      clockColor: string;
-      startTime: number;
-      depth: number;
-      nodes: unknown[];
-    };
-    let clockTimeoutID: number | null = null;
     let announced_game_over: boolean;
 
     setInterval(() => {
@@ -241,68 +258,11 @@ export const useChessLogic = (conf: Config): API => {
     };
     uciCmd('uci');
 
-    const clockTick = () => {
-      let t =
-        (time.clockColor === 'white' ? time.wtime : time.btime) +
-        time.startTime -
-        Date.now();
-      let timeToNextSecond = (t % 1000) + 1;
-      clockTimeoutID = setTimeout(clockTick, timeToNextSecond);
-    };
-
-    const stopClock = () => {
-      if (clockTimeoutID !== null) {
-        clearTimeout(clockTimeoutID);
-        clockTimeoutID = null;
-      }
-      if (time.startTime > 0) {
-        let elapsed = Date.now() - time.startTime;
-        time.startTime = (null as any) as number;
-        if (time.clockColor === 'white') {
-          time.wtime = Math.max(0, time.wtime - elapsed);
-        } else {
-          time.btime = Math.max(0, time.btime - elapsed);
-        }
-      }
-    };
-
-    const startClock = () => {
-      if (game.turn() === 'w') {
-        time.wtime += time.winc;
-        time.clockColor = 'white';
-      } else {
-        time.btime += time.binc;
-        time.clockColor = 'black';
-      }
-      time.startTime = Date.now();
-      clockTick();
-    };
-
     const prepareMove = () => {
-      stopClock();
       const turn = game.turn() === 'w' ? 'white' : 'black';
       if (!game.game_over()) {
         if (turn !== player) {
           uciCmd('position fen ' + game.fen());
-          /*
-          if (time && time.wtime) {
-            uciCmd(
-              'go ' +
-                (time.depth ? 'depth ' + time.depth : '') +
-                ' wtime ' +
-                time.wtime +
-                ' winc ' +
-                time.winc +
-                ' btime ' +
-                time.btime +
-                ' binc ' +
-                time.binc
-            );
-
-          } else {
-            uciCmd('go ' + (time.depth ? 'depth ' + time.depth : ''));
-          }
-          */
           const depthDerivedFromRating = Math.max(
             Math.floor(conf.diffculty / 50),
             1
@@ -311,9 +271,6 @@ export const useChessLogic = (conf: Config): API => {
             () => uciCmd(`go depth ${depthDerivedFromRating}`),
             Math.random() * 5000
           );
-        }
-        if (game.history().length >= 2 && !time.depth && !time.nodes) {
-          startClock();
         }
       }
     };
@@ -333,6 +290,7 @@ export const useChessLogic = (conf: Config): API => {
       } else {
         let match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbn])?/);
         if (match) {
+          console.log('I has plan');
           game.move({ from: match[1], to: match[2], promotion: match[3] });
           setPosition(game.fen());
           setHistory(game.history({ verbose: true }));
@@ -343,9 +301,20 @@ export const useChessLogic = (conf: Config): API => {
           if (game.in_checkmate()) {
             setEndCause('checkmate');
             setWinner(player === 'white' ? 'black' : 'white');
-          }
-          if (game.in_threefold_repetition()) {
+          } else if (game.in_threefold_repetition()) {
             setEndCause('threefold repetition');
+            setWinner(player === 'white' ? 'black' : 'white');
+          } else if (game.in_stalemate()) {
+            setEndCause('stalemate');
+            setWinner(player === 'white' ? 'black' : 'white');
+          } else if (game.in_draw()) {
+            setEndCause('draw');
+            setWinner(player === 'white' ? 'black' : 'white');
+          } else if (game.insufficient_material()) {
+            setEndCause('draw');
+            setWinner(player === 'white' ? 'black' : 'white');
+          } else if (game.game_over()) {
+            setEndCause('inexplicable reason');
             setWinner(player === 'white' ? 'black' : 'white');
           }
           setApiHistory((h) => [
