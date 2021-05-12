@@ -108,6 +108,11 @@ interface Props {
 
 export const Pill = (props: Props) => {
   const classes = useStyles();
+  const seconds = props.time % 60;
+  let sec_time = seconds.toString();
+  if (sec_time.length < 2){
+    sec_time = '0' + sec_time
+  }
   return (
     <Box
       color="textPrimary"
@@ -126,7 +131,7 @@ export const Pill = (props: Props) => {
           color="textPrimary"
           className={clsx(classes.text, classes.timerText)}
         >
-          {(props.time - (props.time % 60)) / 60}:{props.time % 60}
+        {(props.time - (seconds)) / 60}:{sec_time}
         </Typography>
       </Box>
     </Box>
