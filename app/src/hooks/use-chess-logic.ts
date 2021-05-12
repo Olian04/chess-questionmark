@@ -30,6 +30,7 @@ interface API {
   };
   boardProps: BoardProps;
   handleResign: () => void;
+  endCause: string;
 }
 
 interface SquareStylingProps {
@@ -54,6 +55,7 @@ export const useChessLogic = (conf: Config): API => {
   const [history, setHistory] = useState([] as ChessMove[]);
   const [draggable, setDraggable] = useState(true);
   const [winner, setWinner] = useState('N/A' as Winner);
+  const [endCause, setEndCause] = useState('N/A');
 
   const [apiHistory, setApiHistory] = useState<Move[]>(
     conf?.previousFENStrings?.map((fen, i) => ({
@@ -85,6 +87,7 @@ export const useChessLogic = (conf: Config): API => {
 
   const handleResign = () => {
     const winner = player === 'white' ? 'black' : 'white';
+    setEndCause('resignation');
     setWinner(winner);
   };
 
@@ -141,7 +144,12 @@ export const useChessLogic = (conf: Config): API => {
       boardProps.removeHighlightSquare();
       // setDraggable(false);
       if (game.in_checkmate()) {
+        setEndCause('checkmate');
         setWinner(player);
+      }
+      if (game.in_threefold_repetition()) {
+        setEndCause('threefold repetition');
+        setWinner(player === 'white' ? 'black' : 'white');
       }
       setApiHistory((h) => [
         ...h,
@@ -290,7 +298,7 @@ export const useChessLogic = (conf: Config): API => {
                 ' binc ' +
                 time.binc
             );
-            
+
           } else {
             uciCmd('go ' + (time.depth ? 'depth ' + time.depth : ''));
           }
@@ -333,6 +341,11 @@ export const useChessLogic = (conf: Config): API => {
           prepareMove();
           setDraggable(true);
           if (game.in_checkmate()) {
+            setEndCause('checkmate');
+            setWinner(player === 'white' ? 'black' : 'white');
+          }
+          if (game.in_threefold_repetition()) {
+            setEndCause('threefold repetition');
             setWinner(player === 'white' ? 'black' : 'white');
           }
           setApiHistory((h) => [
@@ -384,8 +397,10 @@ export const useChessLogic = (conf: Config): API => {
   const gameTimeout = (p: Winner) => {
     clearInterval(intervalID);
     if (p === 'white') {
+      setEndCause('timeout');
       setWinner('black');
     } else if (p === 'black') {
+      setEndCause('timeout');
       setWinner('white');
     }
     setDraggable(false);
@@ -469,5 +484,6 @@ export const useChessLogic = (conf: Config): API => {
       squareStyles,
     },
     handleResign,
+    endCause,
   };
 };

@@ -12,6 +12,7 @@ import clsx from 'clsx';
 
 interface Props {
   winner: boolean;
+  cause: string;
   open: boolean;
   onClick: () => void;
 }
@@ -58,7 +59,10 @@ export const EndOfGame = (props: Props) => {
       <Dialog open={props.open} onClose={props.onClick}>
         <DialogContent>
           <DialogContentText>
-            {props.winner ? 'You won!' : 'You lost!'}
+            {(props.winner ? 'You won' : 'You lost') +
+              ' due to ' +
+              props.cause +
+              '.'}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -80,7 +84,10 @@ export const EndOfGame = (props: Props) => {
     >
       <Box className={classes.modal}>
         <Typography variant="body1">
-          {props.winner ? 'You won!' : 'You lost!'}
+          {(props.winner ? 'You won' : 'You lost') +
+            ' due to ' +
+            props.cause +
+            '.'}
         </Typography>
         <Button onClick={props.onClick}>Return!</Button>
       </Box>

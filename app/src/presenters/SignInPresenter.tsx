@@ -9,6 +9,8 @@ import { signInWithEmailAndPassword } from '../services/firebase/auth';
 import { UserCredentials } from '../types/UserCredentials';
 import { userCollection } from '../services/firebase/storage';
 import { snackbarState } from '../state/snackbar';
+import { fetchCountryCode } from '../services/ipdata';
+import { getGravatarUrl } from '../services/gravatar';
 
 export const SignInPresenter = () => {
   const setSnackbar = useSetRecoilState(snackbarState);
@@ -54,13 +56,31 @@ export const SignInPresenter = () => {
         const { name, phone, team, avatar, countryCode } =
           await userCollection.get(loginResponse.user.uid);
 
+        // Update old users
+        const id = loginResponse.user?.uid;
+        const newDetails = {
+          avatar: avatar,
+          countryCode: countryCode,
+        };
+        if (!avatar || avatar === 'N/A') {
+          newDetails.avatar = getGravatarUrl({
+            email: credentials.email as string,
+            defaultImage: 'robohash',
+          });
+          userCollection.update(id, { avatar: newDetails.avatar });
+        }
+        if (!countryCode) {
+          newDetails.countryCode = await fetchCountryCode();
+          userCollection.update(id, { countryCode: newDetails.countryCode });
+        }
+
         set(currentUserIDState, loginResponse.user.uid);
-        set(userExtraData(loginResponse.user.uid), {
+        set(userExtraData({ id: loginResponse.user.uid }), {
           name,
           phone,
           team,
-          avatar,
-          countryCode,
+          avatar: newDetails.avatar,
+          countryCode: newDetails.countryCode,
         });
         set(loginStatusState, 'success');
       }

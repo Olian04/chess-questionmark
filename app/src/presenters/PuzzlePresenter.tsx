@@ -145,6 +145,7 @@ export const PuzzlePresenter = () => {
     <>
       <EndOfGame
         winner={gameLogic.boardProps.winner === 'white' && playerIsWhite}
+        cause={gameLogic.endCause}
         onClick={() => {
           setWinnerDialogueOpen(false);
           history.push('/play');
