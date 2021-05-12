@@ -184,7 +184,7 @@ export const AppContainer = () => {
               </Typography>
             </Box>
 
-            <Typography variant="h1">🥸</Typography>
+            <Typography variant="h1">😤</Typography>
           </Box>
         </Grid>
       </Grid>
