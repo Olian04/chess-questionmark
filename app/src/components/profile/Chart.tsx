@@ -5,19 +5,6 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    container: {
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.background.paper,
-      margin: theme.spacing(1),
-      minHeight: '160px',
-      position: 'relative',
-      overflow: 'hidden',
-    },
-    wrapper: {
-      position: 'absolute',
-      top: 0,
-      padding: theme.spacing(1),
-    },
     chart: {
       marginLeft: theme.spacing(-3),
       marginRight: theme.spacing(-3),

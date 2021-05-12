@@ -23,9 +23,6 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 0,
       padding: theme.spacing(1),
     },
-    chart: {
-      margin: theme.spacing(-2),
-    },
   })
 );
 
