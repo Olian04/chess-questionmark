@@ -7,6 +7,7 @@ import {
   ListItemText,
   Typography,
   ListItemProps,
+  ListItemIcon,
 } from '@material-ui/core';
 
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
@@ -33,18 +34,10 @@ export const SectionHeading = (props: Props) => {
   const { title, subTitle, icon } = props;
   return (
     <ListItem style={{ width: '100%' }}>
-      <ListItemAvatar>
-        <Avatar
-          alt={`${title} Icon`}
-          variant="rounded"
-          className={classes.avatar}
-        >
-          {icon}
-        </Avatar>
-      </ListItemAvatar>
       <ListItemText>
         <Grid item container direction="column" xs>
           <Grid item container alignItems="flex-start" xs>
+          {icon}
             <Typography variant="button" color="textPrimary">
               <b>{title}</b>
             </Typography>

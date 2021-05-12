@@ -65,20 +65,23 @@ interface Props {
     credentials: UserCredentials,
     extras: Partial<UserExtras>
   ) => void;
+  onHandleModal: (type: string) => void;
+  onSetChecked: (type: boolean) => void;
+  checked: boolean;
 }
 
 export const SignUpView = (props: Props) => {
   const classes = useStyles();
 
-  const [checked, setChecked] = useState(false);
-  const setModal = useSetRecoilState(modalState);
+  
+ 
 
   const handleCheckbox = (
     formik: any,
     event: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
   ) => {
-    setChecked(checked);
+    props.onSetChecked(checked);
     formik.handleChange(event);
   };
   /*
@@ -90,28 +93,7 @@ export const SignUpView = (props: Props) => {
   }, [props.signUpFailed]);
   */
 
-  const handleModal = (type: string) => {
-    if (type === 'terms') {
-      setModal({
-        open: true,
-        title: 'Terms of service',
-        content: [
-          'Upon signup to "chess?", you hereby agree to give the creators of "chess?" an automatic A if your firstname starts on either of: M, C, A, E, W, P, S, H.',
-          'These terms are valid throughout year 2021.',
-        ],
-      });
-    }
-    if (type === 'policy') {
-      setModal({
-        open: true,
-        title: 'Privacy policy',
-        content: [
-          "If you are concerned of your identity, don't use a valid email.",
-          "We don't verify it anyways. Lol",
-        ],
-      });
-    }
-  };
+  
 
   return (
     <>
@@ -131,7 +113,7 @@ export const SignUpView = (props: Props) => {
                 name: '',
                 email: '',
                 password: '',
-                agreeOnTerms: checked,
+                agreeOnTerms: props.checked,
               }}
               onSubmit={async (values, actions) => {
                 await props.onSignUpAttempt(
@@ -246,7 +228,7 @@ export const SignUpView = (props: Props) => {
                           <FormControlLabel
                             control={
                               <Checkbox
-                                checked={checked}
+                                checked={props.checked}
                                 onChange={(event, checked) =>
                                   handleCheckbox(formikProps, event, checked)
                                 }
@@ -259,14 +241,14 @@ export const SignUpView = (props: Props) => {
                               <Typography>
                                 I agree to the{' '}
                                 <span
-                                  onClick={() => handleModal('terms')}
+                                  onClick={() => props.onHandleModal('terms')}
                                   className={classes.link}
                                 >
                                   Terms
                                 </span>
                                 {' and '}
                                 <span
-                                  onClick={() => handleModal('policy')}
+                                  onClick={() => props.onHandleModal('policy')}
                                   className={classes.link}
                                 >
                                   Privacy Policy
