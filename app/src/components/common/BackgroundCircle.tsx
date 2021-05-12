@@ -32,16 +32,16 @@ const useStyles = makeStyles((theme: Theme) =>
       left: `calc(50% - (${circleDiameter}vh / 2))`,
     },
     top: {
-      transform: 'translate(0%, -50vh)',
+      transform: 'translate(0%, -70%)',
     },
     right: {
-      transform: `translate(90vw, 0%)`,
+      transform: `translate(60%, 0%)`,
     },
     left: {
-      transform: `translate(-90vw, 0%)`,
+      transform: `translate(-60%, 0%)`,
     },
     bottom: {
-      transform: 'translate(0%, 50vh)',
+      transform: 'translate(0%, 90%)',
     },
     middle: {},
     hidden: {
