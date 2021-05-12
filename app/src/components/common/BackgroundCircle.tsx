@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
       transform: `translate(-60%, 0%)`,
     },
     bottom: {
-      transform: 'translate(0%, 90%)',
+      transform: 'translate(0%, 70%)',
     },
     middle: {},
     hidden: {
