@@ -33,12 +33,26 @@ const useStyles = makeStyles((theme: Theme) =>
     background: {
       color: theme.palette.text.primary,
       backgroundColor: theme.palette.background.default,
-      minHeight: '100%',
       width: '100%',
+      minHeight: '100%',
       position: 'relative',
+    },
+    flexWrapper: {
+      display: 'flex',
+      alignItems: 'stretch',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
     },
     container: {
       height: 'calc(100% - 60px)',
+    },
+    fillContainer: {
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     browserWrapper: {
       height: 650,
@@ -156,83 +170,87 @@ export const App = () => {
   const classes = useStyles();
   return (
     <Router>
-      <div className={classes.background}>
-        <Switch>
-          <RecoilRoute path="/login">
-            <Container maxWidth="sm" className={classes.container}>
-              <React.Suspense
-                fallback={<LoadingView message="Fetching state" />}
-              >
-                <Switch>
-                  <RecoilRoute exact path="/login" component={LoginRoute} />
-                  <RecoilRoute
-                    exact
-                    path="/login/sign-up"
-                    component={SignUpRoute}
-                  />
-                  <RecoilRoute
-                    exact
-                    path="/login/sign-in"
-                    component={SignInRoute}
-                  />
-                  <RecoilRoute>
-                    <Redirect to="/login" />
-                  </RecoilRoute>
-                </Switch>
-              </React.Suspense>
-            </Container>
-          </RecoilRoute>
-          <RecoilRoute path="/">
-            <NavigationBar
-              menuItems={[
-                { title: 'Account', to: '/account' },
-                { title: 'Play', to: '/play' },
-                { title: 'About', to: '/about' },
-              ]}
-            />
-            <Container maxWidth="sm" className={classes.container}>
-              <React.Suspense
-                fallback={<LoadingView message="Fetching state" />}
-              >
-                <Switch>
-                  <RecoilRoute
-                    guarded
-                    exact
-                    path="/puzzle"
-                    component={PuzzleRoute}
-                  />
-                  <RecoilRoute
-                    guarded
-                    path="/replay/:id"
-                    component={ReplayRoute}
-                  />
-                  <RecoilRoute
-                    guarded
-                    exact
-                    path="/account"
-                    component={AccountRoute}
-                  />
-                  <RecoilRoute
-                    guarded
-                    exact
-                    path="/about"
-                    component={AboutRoute}
-                  />
-                  <RecoilRoute
-                    guarded
-                    exact
-                    path="/play"
-                    component={PlayRoute}
-                  />
-                  <RecoilRoute guarded exact path="/">
-                    <Redirect to="/play" />
-                  </RecoilRoute>
-                </Switch>
-              </React.Suspense>
-            </Container>
-          </RecoilRoute>
-        </Switch>
-      </div>
+      <Box className={classes.background}>
+        <Box className={classes.flexWrapper}>
+          <Switch>
+            <RecoilRoute path="/login">
+              <Box className={classes.fillContainer}>
+                <Container maxWidth="sm" className={classes.container}>
+                  <React.Suspense
+                    fallback={<LoadingView message="Fetching state" />}
+                  >
+                    <Switch>
+                      <RecoilRoute exact path="/login" component={LoginRoute} />
+                      <RecoilRoute
+                        exact
+                        path="/login/sign-up"
+                        component={SignUpRoute}
+                      />
+                      <RecoilRoute
+                        exact
+                        path="/login/sign-in"
+                        component={SignInRoute}
+                      />
+                      <RecoilRoute>
+                        <Redirect to="/login" />
+                      </RecoilRoute>
+                    </Switch>
+                  </React.Suspense>
+                </Container>
+              </Box>
+            </RecoilRoute>
+            <RecoilRoute path="/">
+              <NavigationBar
+                menuItems={[
+                  { title: 'Account', to: '/account' },
+                  { title: 'Play', to: '/play' },
+                  { title: 'About', to: '/about' },
+                ]}
+              />
+              <Container maxWidth="sm" className={classes.container}>
+                <React.Suspense
+                  fallback={<LoadingView message="Fetching state" />}
+                >
+                  <Switch>
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/puzzle"
+                      component={PuzzleRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      path="/replay/:id"
+                      component={ReplayRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/account"
+                      component={AccountRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/about"
+                      component={AboutRoute}
+                    />
+                    <RecoilRoute
+                      guarded
+                      exact
+                      path="/play"
+                      component={PlayRoute}
+                    />
+                    <RecoilRoute guarded exact path="/">
+                      <Redirect to="/play" />
+                    </RecoilRoute>
+                  </Switch>
+                </React.Suspense>
+              </Container>
+            </RecoilRoute>
+          </Switch>
+        </Box>
+      </Box>
       <BackgroundCircle />
     </Router>
   );

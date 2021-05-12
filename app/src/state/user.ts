@@ -78,7 +78,6 @@ export const userExtraData = atomFamily<UserExtras | null, userExtraDataParam>({
         if (onSignUp) {
           return null;
         }
-        console.log('APPARENTLY FETCHING!', id);
         return userCollection.get(id);
       },
   }),

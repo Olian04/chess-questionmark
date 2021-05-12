@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, List, ListItem } from '@material-ui/core';
+import { Box, Container, List, ListItem } from '@material-ui/core';
 
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { PillBar } from './PillBar';
@@ -16,6 +16,8 @@ const useStyles = makeStyles((theme: Theme) =>
       zIndex: 10,
       top: 0,
       left: 0,
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
       position: 'sticky',
     },
   })
@@ -33,7 +35,7 @@ export const NavigationBar = (props: Props) => {
   const history = useHistory();
   const location = useLocation();
   return (
-    <Container className={classes.banner}>
+    <Box className={classes.banner}>
       <List>
         <ListItem>
           <PillBar
@@ -45,6 +47,6 @@ export const NavigationBar = (props: Props) => {
           />
         </ListItem>
       </List>
-    </Container>
+    </Box>
   );
 };

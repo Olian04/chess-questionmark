@@ -15,6 +15,7 @@ import {
   defaultProfileState,
   profileData,
   userExtraData,
+  userFirebaseState,
 } from '../state/user';
 import { getGravatarUrl } from '../services/gravatar';
 import { UserCredentials } from '../types/UserCredentials';
