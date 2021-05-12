@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme: Theme) =>
       right: 0,
       height: '100%',
       position: 'absolute',
-      zIndex: 20,
       transition: 'visible 0.5s ease-in',
       pointerEvents: 'none',
     },
@@ -35,10 +34,12 @@ const useStyles = makeStyles((theme: Theme) =>
     open: {
       opacity: 1,
       bottom: '8.8%',
+      zIndex: 20,
     },
     closed: {
       opacity: 0,
       bottom: 0,
+      zIndex: -1,
     },
     visible: {
       visible: 'visible',
