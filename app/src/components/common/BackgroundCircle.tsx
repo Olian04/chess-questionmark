@@ -28,17 +28,17 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '50%',
       transition: 'all 0.75s ease-in-out',
       // Center
-      top: `${50 - circleDiameter / 2}vh`,
-      left: `calc(50% - ${circleDiameter / 2}vh)`,
+      top: `calc(50% - (${circleDiameter}vh / 2))`,
+      left: `calc(50% - (${circleDiameter}vh / 2))`,
     },
     top: {
       transform: 'translate(0%, -50vh)',
     },
     right: {
-      transform: `translate(50vh,0%)`,
+      transform: `translate(90vw, 0%)`,
     },
     left: {
-      transform: `translate(-50vh,0%)`,
+      transform: `translate(-90vw, 0%)`,
     },
     bottom: {
       transform: 'translate(0%, 50vh)',
@@ -51,10 +51,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-interface Props {
-  side: 'left' | 'right' | 'top' | 'bottom';
-}
 
 export const BackgroundCircle = () => {
   const classes = useStyles();
