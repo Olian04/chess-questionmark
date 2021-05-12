@@ -92,6 +92,7 @@ export const PlayPresenter = () => {
   return (
     <PlayView
       username={user.name}
+      email={user.email}
       profile={profile}
       isLoading={profileStatus !== 'success'}
       greeting={greeting}

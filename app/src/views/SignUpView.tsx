@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Checkbox,
@@ -14,13 +14,14 @@ import {
 } from '@material-ui/core';
 import { Formik } from 'formik';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
+import { useSetRecoilState } from 'recoil';
+
+import { SignupSchema } from '../util/signupSchema';
 import { RoundedTextField } from '../components/common/RoundedTextField';
 import Logo from '/sign-up-logo.svg';
 import { LinkButton } from '../components/common/LinkButton';
 import { StyledLink } from '../components/common/CustomLink';
-import * as Yup from 'yup';
-import { green } from '@material-ui/core/colors';
-import { useSetRecoilState } from 'recoil';
 import { UserExtras } from '../types/UserExtras';
 import { UserCredentials } from '../types/UserCredentials';
 import { CommonModal } from '../components/common/CommonModal';
@@ -58,18 +59,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-const SignupSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(3, 'Name is too short')
-    .max(20, 'Name is too long')
-    .required('Name is required'),
-  email: Yup.string().email('Invalid email').required('Email is required'),
-  password: Yup.string()
-    .min(8, 'Password needs to be atleast 8 characters long')
-    .required('Password is required'),
-  agreeOnTerms: Yup.boolean().oneOf([true], 'Term of conditions are required'),
-});
 
 interface Props {
   onLoading: boolean;

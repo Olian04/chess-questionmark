@@ -153,6 +153,7 @@ export const PuzzlePresenter = () => {
       />
       <GameView
         timeRef={timeRef}
+        user={user}
         player={userInfo}
         topTime={gameLogic.timeLeft.opponent}
         botTime={gameLogic.timeLeft.self}
@@ -161,7 +162,7 @@ export const PuzzlePresenter = () => {
         currentMove={gameLogic.history.length}
         handleResign={gameLogic.handleResign}
         isPaused={
-          gameLogic.history[gameLogic.history.length - 1].player === 'ai'
+          gameLogic.history.length % 2 !== 1
         }
         isBlinking={gameLogic.timeLeft.self <= 60 / 6}
       />

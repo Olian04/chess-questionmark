@@ -1,8 +1,6 @@
-import Alert from '@material-ui/lab/Alert';
+import Alert, { AlertProps } from '@material-ui/lab/Alert';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { openSnackbar, snackbarState } from '../../state/snackbar';
+import React from 'react';
 import { Box } from '@material-ui/core';
 import clsx from 'clsx';
 
@@ -51,44 +49,30 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Snackbar = () => {
+interface Props extends Pick<AlertProps, 'severity' | 'onClose'> {
+  open: boolean;
+  message: string;
+}
+
+export const Snackbar = (props: Props) => {
   const classes = useStyles();
-  const setSnackbar = useSetRecoilState(snackbarState);
-  const snackbar = useRecoilValue(openSnackbar);
-
-  const handleOnClose = (event: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') return;
-    setSnackbar({ ...snackbar, open: false });
-  };
-
-  useEffect(() => {
-    if (snackbar.open) {
-      const timer = setTimeout(
-        () => setSnackbar({ ...snackbar, open: false }),
-        snackbar.duration
-      );
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [snackbar.open]);
 
   return (
-    <Box className={classes.container}>
-      <Box
-        className={clsx(
-          classes.wrapper,
-          snackbar.open ? classes.visible : classes.hidden
-        )}
-      >
+    <Box
+      className={clsx(
+        classes.container,
+        props.open ? classes.visible : classes.hidden
+      )}
+    >
+      <Box className={classes.wrapper}>
         <Box
           className={clsx(
             classes.snackbar,
-            snackbar.open ? classes.open : classes.closed
+            props.open ? classes.open : classes.closed
           )}
         >
-          <Alert onClose={handleOnClose} severity={snackbar.severity}>
-            {snackbar.message}
+          <Alert onClose={props.onClose} severity={props.severity}>
+            {props.message}
           </Alert>
         </Box>
       </Box>

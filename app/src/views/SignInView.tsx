@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   CircularProgress,
   Container,
@@ -7,14 +7,14 @@ import {
 } from '@material-ui/core';
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Formik } from 'formik';
+
+import { SigninSchema } from '../util/signinSchema';
 import { RoundedTextField } from '../components/common/RoundedTextField';
 import { LinkButton } from '../components/common/LinkButton';
 import { StyledLink } from '../components/common/CustomLink';
 import { UserCredentials } from '../types/UserCredentials';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { green } from '@material-ui/core/colors';
-import { Snackbar } from '../components/common/Snackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,11 +42,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-const SigninSchema = Yup.object().shape({
-  email: Yup.string().required('Email is required'),
-  password: Yup.string().required('Password is required'),
-});
 
 interface Props {
   onLoginAttempt: (credentials: UserCredentials) => void;

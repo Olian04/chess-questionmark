@@ -9,6 +9,7 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { useWindowSize } from '@react-hook/window-size';
 import { useRecoilValue } from 'recoil';
 import { pillState } from '../../state/pill';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: theme.shape.borderRadius,
       position: 'relative',
       backgroundColor: theme.palette.primary.main,
-      transition: 'left 0.3s ease-in-out',
+      transition: 'left 0.3s ease-in-out, opacity 0.5s ease',
     },
     button: {
       backgroundColor: 'transparent',
@@ -44,6 +45,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     active: {
       backgroundColor: theme.palette.primary.main,
+    },
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
     },
   })
 );
@@ -105,7 +112,10 @@ export const PillBar = (props: Props) => {
       </Grid>
       <Box className={classes.slider} style={{ top: -1 * pillSize.h - 2 }}>
         <Box
-          className={classes.sliderButton}
+          className={clsx(
+            classes.sliderButton,
+            currentPill === -1 ? classes.hidden : classes.visible
+          )}
           style={{ width: pillSize.w, height: pillSize.h, left: pillPosition }}
         ></Box>
       </Box>

@@ -11,6 +11,7 @@ import { PlayerBar } from '../components/game/PlayerBar';
 import { GameBoard } from '../components/game/GameBoard';
 import { Overview } from '../components/game/Overview';
 import { Graph } from '../components/replay/Graph';
+import { User } from '../types/User';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -82,6 +83,7 @@ const ReplaySlider = withStyles({
 })(Slider);
 
 interface Props {
+  user: User;
   fen: string;
   turn: number;
   onPrevious: () => void;
@@ -162,7 +164,7 @@ export const ReplayView = (props: Props) => {
           </Box>
 
           <PlayerBar
-            email={props.player.email}
+            avatar={props.user.avatar}
             time={0}
             name={props.player.name}
             countryCode={props.player.countryCode}

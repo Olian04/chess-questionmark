@@ -62,7 +62,7 @@ export const EndOfGame = (props: Props) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.onClick}>Return to profile!</Button>
+          <Button onClick={props.onClick}>Return!</Button>
         </DialogActions>
       </Dialog>
     );
@@ -82,7 +82,7 @@ export const EndOfGame = (props: Props) => {
         <Typography variant="body1">
           {props.winner ? 'You won!' : 'You lost!'}
         </Typography>
-        <Button onClick={props.onClick}>Return to profile!</Button>
+        <Button onClick={props.onClick}>Return!</Button>
       </Box>
     </Box>
   );

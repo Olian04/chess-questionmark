@@ -1,0 +1,8 @@
+Age: 20 
+Profession: Student 
+Sex: Male
+Replay Match could have an indication that whether I resigned or lost.
+Ranking is confusing, seems like it's relevant to 1500 other users. Maybe it should be renamed as Points.
+Frustrating that it is impossible to win. Even in case of draw or stalemate, you will have to resign and it will show up as a loss.
+Like the color scheme and minimal design.
+The Settings icon looks like it's a button.

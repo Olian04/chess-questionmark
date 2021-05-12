@@ -1,0 +1,29 @@
+Man, 21, Studerar lärare
+
+Förvirrad redan på login sidan.
+(oroad över om vi kan läsa hanns lösenord)
+
+Försökte klicka på kugghjulet på account page. Samma sak på @, ville få fram "contact us" om man klickade på den.
+
+"Vad fan händer", när han besökte game screen. "Varför har jag bara 2 pjäser?" "Är det här verkligen som vanligt?" "Jag tror inte jag vet hur man spelar chess"
+
+Insåg att det var en random board state när han startade andra matchen.
+
+"Vad är det man rankas mot? Är det andra spelare"
+
+Missade notis om vilken färg han spelar som, blev fundersam varför han inte är vit fortfarande.
+
+"Blir man tilldelad samma pjäser?" "Nej han(AI) har fler bönder än mig"
+
+"Varför kan jag inte gå med den?" "Ohh det är för att den skyddar kungen!"
+
+"Känns orättvist, jag har så få pjäser, han har jätte många"
+
+Fortsatte att starta om tills han fick en "bra start"
+
+Hittade inte "replays" själv, behövde bli vägvisad.
+
+Testade alldrig att användarnamn, email, eller lösenord.
+
+Bug: Efter login, behövde ladda om sidan för att kunna ladda sidan
+
