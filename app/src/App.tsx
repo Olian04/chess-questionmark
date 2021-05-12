@@ -88,7 +88,9 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.default,
     },
     mobileContainer: {
-      height: '100vh',
+      position: 'relative',
+      height: '100%',
+      width: '100%',
     },
     center: {
       height: '100vh',
