@@ -69,12 +69,12 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       aspectRatio: '6 / 13',
-
       //cursor: 'none',
 
       backgroundImage: 'url(/iphone12maxpro.svg)',
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'contain',
+      boxSizing: 'content-box',
       padding: 10,
       // transform: 'rotate(-35deg) skew(20deg, 5deg)',
     },
