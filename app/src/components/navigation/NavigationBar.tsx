@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: theme.measurements.navbar.width,
       borderBottomLeftRadius: theme.shape.borderRadius,
       borderBottomRightRadius: theme.shape.borderRadius,
-      zIndex: 10,
+      zIndex: 1400,
       top: 0,
       left: 0,
       paddingLeft: theme.spacing(1),

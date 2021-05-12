@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 /** Suggestion for keeping strictmode and still be able to use
  * components that apparently use findDOMNode
  * See https://stackoverflow.com/questions/61220424/material-ui-drawer-finddomnode-is-deprecated-in-strictmode */
@@ -47,8 +47,8 @@ const darkTheme = createMuiTheme({
     values: {
       xs: 0,
       sm: 350,
-      md: 960,
-      lg: 1280,
+      md: 720,
+      lg: 1080,
       xl: 1920,
     },
   },
@@ -147,6 +147,11 @@ interface Props {
 
 export const ThemeProvider = (props: Props) => {
   const theme = useTheme();
+
+  useEffect(() => {
+    document.body.style.backgroundColor = theme.palette.background.default;
+  }, [theme]);
+
   return (
     <MaterialThemeProvider theme={theme}>
       {props.children}

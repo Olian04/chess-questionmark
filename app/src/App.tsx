@@ -4,6 +4,7 @@ import {
   Avatar,
   Box,
   Container,
+  Grid,
   Hidden,
   List,
   ListItem,
@@ -32,9 +33,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     background: {
       color: theme.palette.text.primary,
-      backgroundColor: theme.palette.background.default,
       width: '100%',
-      minHeight: '100%',
+      height: '100%',
       position: 'relative',
     },
     flexWrapper: {
@@ -42,9 +42,18 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'stretch',
       justifyContent: 'center',
       flexWrap: 'wrap',
+      position: 'relative',
+      height: '100%',
+      width: '100%',
     },
     container: {
       height: 'calc(100% - 60px)',
+      top: -5,
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+      boxSizing: 'border-box',
+      position: 'relative',
+      width: '100%',
     },
     fillContainer: {
       position: 'absolute',
@@ -76,6 +85,7 @@ const useStyles = makeStyles((theme: Theme) =>
       overflowY: 'auto',
       position: 'relative',
       scrollbarWidth: 'none', // only mozilla
+      backgroundColor: theme.palette.background.default,
     },
     mobileContainer: {
       height: '100vh',
@@ -86,6 +96,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+      flexWrap: 'wrap',
     },
     wrapper: {
       display: 'flex',
@@ -130,9 +141,29 @@ export const AppContainer = () => {
     );
   }
   return (
-    <Box className={classes.center}>
-      <Box className={classes.wrapper}>
-        <Box className={classes.leftContainer}>
+    <Container className={classes.center}>
+      <Grid container direction="row-reverse" justify="space-evenly">
+        <Grid
+          container
+          item
+          xs={12}
+          lg={4}
+          alignItems="center"
+          direction="column"
+        >
+          <Box className={classes.browserWrapper}>
+            <Box className={classes.browserContainer}>
+              <App />
+            </Box>
+          </Box>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          lg={8}
+          className={classes.leftContainer}
+          alignItems="center"
+        >
           <Box className={clsx(classes.info, classes.row)}>
             <Box>
               <Typography
@@ -155,14 +186,9 @@ export const AppContainer = () => {
 
             <Typography variant="h1">🥸</Typography>
           </Box>
-        </Box>
-        <Box className={classes.browserWrapper}>
-          <Box className={classes.browserContainer}>
-            <App />
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 
@@ -175,7 +201,7 @@ export const App = () => {
           <Switch>
             <RecoilRoute path="/login">
               <Box className={classes.fillContainer}>
-                <Container maxWidth="sm" className={classes.container}>
+                <Box maxWidth="sm">
                   <React.Suspense
                     fallback={<LoadingView message="Fetching state" />}
                   >
@@ -196,7 +222,7 @@ export const App = () => {
                       </RecoilRoute>
                     </Switch>
                   </React.Suspense>
-                </Container>
+                </Box>
               </Box>
             </RecoilRoute>
             <RecoilRoute path="/">
@@ -207,7 +233,7 @@ export const App = () => {
                   { title: 'About', to: '/about' },
                 ]}
               />
-              <Container maxWidth="sm" className={classes.container}>
+              <Box maxWidth="sm" className={classes.container}>
                 <React.Suspense
                   fallback={<LoadingView message="Fetching state" />}
                 >
@@ -246,7 +272,7 @@ export const App = () => {
                     </RecoilRoute>
                   </Switch>
                 </React.Suspense>
-              </Container>
+              </Box>
             </RecoilRoute>
           </Switch>
         </Box>

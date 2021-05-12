@@ -16,9 +16,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     fill: {
       position: 'absolute',
-      top: theme.measurements.navbar.height,
-
-      bottom: theme.spacing(3),
+      top: 0,
+      height: `calc(100% - ${theme.measurements.navbar.height}px)`,
     },
     container: {
       display: 'flex',

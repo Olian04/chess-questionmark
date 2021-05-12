@@ -19,7 +19,10 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1),
     },
     chart: {
-      margin: theme.spacing(-2),
+      marginLeft: theme.spacing(-3),
+      marginRight: theme.spacing(-3),
+      marginTop: theme.spacing(-2),
+      marginBottom: theme.spacing(-2),
     },
   })
 );

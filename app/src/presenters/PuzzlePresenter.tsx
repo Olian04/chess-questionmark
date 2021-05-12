@@ -47,7 +47,7 @@ export const PuzzlePresenter = () => {
     }
   }, []);
 
-  const endGame = useRecoilCallback(({ set, snapshot }) => async () => {
+  const endGame = useRecoilCallback(({ set, snapshot, reset }) => async () => {
     if (gameLogic.boardProps.winner !== 'N/A') {
       setWinnerDialogueOpen(true);
       const userID = await snapshot.getPromise(currentUserIDState);
@@ -62,7 +62,7 @@ export const PuzzlePresenter = () => {
         state: 'ended',
       });
       await migrateGameByUserID(userID);
-      set(requestGame, fallbackGameState);
+      reset(requestGame);
     }
   });
 
@@ -129,6 +129,7 @@ export const PuzzlePresenter = () => {
       open: true,
       severity: 'info',
       message: `You are playing as ${playerIsWhite ? 'white' : 'black'}`,
+      duration: 6000,
     });
   }, [gameLogic.boardProps.orientation]);
 
