@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 import { IModal } from '../types/modal';
 
 export const modalState = atom<IModal>({
@@ -7,5 +7,20 @@ export const modalState = atom<IModal>({
     open: false,
     title: '',
     content: [''],
+  },
+});
+
+export const openModal = selector({
+  key: 'SET_MODAL',
+  get: ({ get }) => {
+    const modal = get(modalState);
+    if (modal.open) {
+      return modal;
+    }
+    return {
+      open: false,
+      title: '',
+      content: [''],
+    };
   },
 });

@@ -12,6 +12,7 @@ import {
   getLiveGameByUserID,
 } from '../services/firebase/realtimeDB';
 import { snackbarState } from '../state/snackbar';
+import { modalState } from '../state/modal';
 
 export const PuzzlePresenter = () => {
   const history = useHistory();
@@ -19,6 +20,7 @@ export const PuzzlePresenter = () => {
   const userProfile = useRecoilValue(profileState);
   const gameState = useRecoilValue(requestGame);
   const setSnackbar = useSetRecoilState(snackbarState);
+  const setModal = useSetRecoilState(modalState);
   const [winnerDialogueOpen, setWinnerDialogueOpen] = useState<boolean>(false);
   const [playerIsWhite] = useState(
     gameState?.history[0]?.split(' ')?.[1] === 'w' ?? true
@@ -131,6 +133,19 @@ export const PuzzlePresenter = () => {
       message: `You are playing as ${playerIsWhite ? 'white' : 'black'}`,
       duration: 6000,
     });
+    if (userProfile.recentMatches.length === 0) {
+      setModal({
+        open: true,
+        title: 'This is a puzzle',
+        content: [
+          `Hey ${user.name}!`,
+          'Before you play, we just want to make sure that you understand, that this is a puzzle.',
+          'Meaning that the board will start randomly, and your goal is to win against our AI.',
+          "This won't be shown again,",
+          'good luck!',
+        ],
+      });
+    }
   }, [gameLogic.boardProps.orientation]);
 
   const userInfo = {
@@ -162,9 +177,7 @@ export const PuzzlePresenter = () => {
         previousPlayer={gameLogic.history[gameLogic.history.length - 1].player}
         currentMove={gameLogic.history.length}
         handleResign={gameLogic.handleResign}
-        isPaused={
-          gameLogic.history.length % 2 !== 1
-        }
+        isPaused={gameLogic.history.length % 2 !== 1}
         isBlinking={gameLogic.timeLeft.self <= 60 / 6}
       />
     </>

@@ -108,7 +108,6 @@ export const SignUpView = (props: Props) => {
 
   return (
     <>
-      <CommonModal />
       <Container className={classes.container}>
         <Grid
           container

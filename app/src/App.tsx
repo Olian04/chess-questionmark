@@ -1,16 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
-import {
-  Avatar,
-  Box,
-  Container,
-  Grid,
-  Hidden,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-} from '@material-ui/core';
+import { Box, Container, Grid, Typography } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { NavigationBar } from './components/navigation/NavigationBar';
 import { LoginRoute } from './routes/LoginRoute';
@@ -24,10 +14,10 @@ import { PlayRoute } from './routes/PlayRoute';
 import { RecoilRoute } from './providers/stateProvider';
 import { BackgroundCircle } from './components/common/BackgroundCircle';
 import { LoadingView } from './views/LoadingView';
-import { isBrowser, isMobile } from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 import clsx from 'clsx';
-import frame from '/iphone12maxpro.svg';
 import { SnackbarPresenter } from './presenters/SnackbarPresenter';
+import { CommonModalPresenter } from './presenters/CommonModalPresenter';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     container: {
       height: 'calc(100% - 60px)',
-      top: -10,
+      top: -5,
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3),
       boxSizing: 'border-box',
@@ -199,6 +189,7 @@ export const App = () => {
   return (
     <>
       <SnackbarPresenter />
+      <CommonModalPresenter />
       <Router>
         <Box className={classes.background}>
           <Box className={classes.flexWrapper}>
