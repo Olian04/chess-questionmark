@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     open: {
       opacity: 1,
-      bottom: '8.8%',
+      bottom: '16.8%',
       zIndex: 20,
     },
     closed: {
