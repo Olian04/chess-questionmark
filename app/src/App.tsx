@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     container: {
       height: 'calc(100% - 60px)',
-      top: -5,
+      top: -10,
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3),
       boxSizing: 'border-box',

@@ -16,9 +16,10 @@ import { User } from '../types/User';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     fill: {
-      position: 'absolute',
+      position: 'relative',
       top: 0,
       height: `calc(100% - ${theme.measurements.navbar.height}px)`,
+      width: '100%',
     },
     container: {
       display: 'flex',
