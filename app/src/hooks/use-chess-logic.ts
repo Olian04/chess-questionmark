@@ -14,7 +14,7 @@ interface Config {
   timerLength: number;
   timerIncreaseOnMove: number;
   playerColor: 'white' | 'black';
-  diffculty: number;
+  difficulty: number;
 }
 
 type Move = {
@@ -287,13 +287,16 @@ export const useChessLogic = (conf: Config): API => {
     };
     uciCmd('uci');
 
+    const skill = Math.min(Math.floor(conf.difficulty / 100), 20);
+    uciCmd('setoption name Skill level value ' + skill);
+
     const prepareMove = () => {
       const turn = game.turn() === 'w' ? 'white' : 'black';
       if (!game.game_over()) {
         if (turn !== player) {
           uciCmd('position fen ' + game.fen());
           const depthDerivedFromRating = Math.max(
-            Math.floor(conf.diffculty / 50),
+            Math.floor(conf.difficulty / 300),
             1
           );
           setTimeout(

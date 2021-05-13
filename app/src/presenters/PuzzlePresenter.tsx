@@ -37,9 +37,8 @@ export const PuzzlePresenter = () => {
     previousFENStrings,
     playerColor: playerIsWhite ? 'white' : 'black',
     timerLength: gameState.timeLeft,
-    diffculty:
-      userProfile.rank /
-      (userProfile.losses + userProfile.wins + userProfile.draws),
+    difficulty:
+      userProfile.rank,
     timerIncreaseOnMove,
   });
 
