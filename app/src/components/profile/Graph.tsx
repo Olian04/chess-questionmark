@@ -56,7 +56,7 @@ export const Graph = (props: Props) => {
       {!props.isLoading && <Chart data={rankUpdates} />}
       <Box className={classes.wrapper}>
         <Typography variant="h5" color="textPrimary">
-          <b>Ranking</b>
+          <b>Points</b>
         </Typography>
         <Typography variant="caption" color="textPrimary">
           {props.isLoading ? (

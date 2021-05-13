@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
+import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { createUserWithEmailAndPassword } from '../services/firebase/auth';
 import {
@@ -22,6 +22,7 @@ import { UserCredentials } from '../types/UserCredentials';
 import { UserExtras } from '../types/UserExtras';
 import { SignUpView } from '../views/SignUpView';
 import { useFirebaseUser } from '../hooks/use-firebase-user';
+import { modalState } from '../state/modal';
 
 const nonApplicable = 'N/A';
 
@@ -36,6 +37,8 @@ export const SignUpPresenter = () => {
     }
   }, [firebaseUser]);
 
+  const setModal = useSetRecoilState(modalState);
+  const [checked, setChecked] = useState(false);
   const signUp = useRecoilCallback(
     ({ set, reset }) =>
       async (credentials: UserCredentials, extras: Partial<UserExtras>) => {
@@ -106,10 +109,35 @@ export const SignUpPresenter = () => {
         history.push('/play');
       }
   );
+  const handleModal = (type: string) => {
+    if (type === 'terms') {
+      setModal({
+        open: true,
+        title: 'Terms of service',
+        content: [
+          'Upon signup to "chess?", you hereby agree to give the creators of "chess?" an automatic A if your firstname starts on either of: M, C, A, E, W, P, S, H.',
+          'These terms are valid throughout year 2021.',
+        ],
+      });
+    }
+    if (type === 'policy') {
+      setModal({
+        open: true,
+        title: 'Privacy policy',
+        content: [
+          "If you are concerned of your identity, don't use a valid email.",
+          "We don't verify it anyways. Lol",
+        ],
+      });
+    }
+  };
   return (
     <SignUpView
       onLoading={loginStatus === 'pending'}
       onSignUpAttempt={signUp}
+      onHandleModal={handleModal}
+      onSetChecked={setChecked}
+      checked={checked}
     />
   );
 };

@@ -138,7 +138,7 @@ export const PlayView = (props: Props) => {
                 variant="button"
                 color="textPrimary"
               >
-                Recent Matches
+                Match Replays
               </Typography>
             </Grid>
             <Grid item xs>

@@ -316,7 +316,6 @@ export const useChessLogic = (conf: Config): API => {
       } else {
         let match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbn])?/);
         if (match) {
-          console.log('I has plan');
           game.move({ from: match[1], to: match[2], promotion: match[3] });
           setPosition(game.fen());
           setHistory(game.history({ verbose: true }));
@@ -383,7 +382,7 @@ export const useChessLogic = (conf: Config): API => {
         uciCmd('ucinewgame');
         uciCmd('isready');
         engineStatus.engineReady = false;
-        engineStatus.search = (null as any) as string;
+        engineStatus.search = null as any as string;
         prepareMove();
         announced_game_over = false;
       },
