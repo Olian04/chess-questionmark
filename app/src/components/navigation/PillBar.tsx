@@ -15,6 +15,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       width: '100%',
+      position: 'relative',
+      height: theme.measurements.navbar.height / 2,
     },
     background: {
       backgroundColor: 'transparent',
