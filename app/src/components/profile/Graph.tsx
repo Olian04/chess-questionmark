@@ -23,6 +23,13 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 0,
       padding: theme.spacing(1),
     },
+    stroke: {
+      '-webkit-text-stroke-width': '0.2px',
+      '-webkit-text-stroke-color': 'black',
+      fontWeight: 900,
+      fontSize: '1.1em',
+      textShadow: `${theme.palette.background.paper} 1px 0 10px`,
+    },
   })
 );
 
@@ -67,8 +74,8 @@ export const Graph = (props: Props) => {
               height="10px"
             />
           ) : (
-            <b>
-              #{props.rank}{' '}
+            <b className={classes.stroke}>
+              {props.rank}{' '}
               <span
                 style={{
                   color: delta > 0 ? '#99FF99' : '#DF5049',
