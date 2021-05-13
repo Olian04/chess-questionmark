@@ -13,11 +13,13 @@ export const migrateGameByUserID = async (userID: string) => {
 
   if (liveGame) {
     const winner = {
+      Draw: userID,
       playerOne: liveGame.playerOne,
       playerTwo: liveGame.playerTwo,
     }[liveGame.winner];
 
     const loser = {
+      Draw: 'AI',
       playerTwo: liveGame.playerOne,
       playerOne: liveGame.playerTwo,
     }[liveGame.winner];
@@ -35,13 +37,20 @@ export const migrateGameByUserID = async (userID: string) => {
     const profile = await profileCollection.getRaw(liveGame.playerOne);
 
     if (profile) {
-      profileCollection.updateRaw(userID, {
-        losses: userID === loser ? profile.losses + 1 : profile.losses,
-        wins: userID === winner ? profile.wins + 1 : profile.wins,
-        rank:
-          userID === winner ? profile.rank + material : profile.rank - material,
-        recentMatches: [...profile.recentMatches, id],
-      });
+      if (liveGame.winner === 'Draw') {
+        profileCollection.updateRaw(userID, {
+          draws: profile.draws + 1,
+          recentMatches: [...profile.recentMatches, id],
+        });
+      } else {
+        profileCollection.updateRaw(userID, {
+          losses: userID === loser ? profile.losses + 1 : profile.losses,
+          wins: userID === winner ? profile.wins + 1 : profile.wins,
+          rank:
+            userID === winner ? profile.rank + material : profile.rank - material,
+          recentMatches: [...profile.recentMatches, id],
+        });
+      }
     }
 
     return deleteLiveGameByUserID(userID);

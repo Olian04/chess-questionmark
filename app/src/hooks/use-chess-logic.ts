@@ -40,7 +40,7 @@ interface SquareStylingProps {
 }
 
 type Player = 'white' | 'black';
-type Winner = Player | 'N/A';
+type Winner = Player | 'draw' | 'N/A';
 
 export const useChessLogic = (conf: Config): API => {
   const [player] = useState<Player>(conf.playerColor);
@@ -49,9 +49,7 @@ export const useChessLogic = (conf: Config): API => {
   const [topTimeLeft, setTopTimeLeft] = useState(conf.timerLength);
   const [intervalID, setIntervalID] = useState(0);
 
-  const [position, setPosition] = useState(
-    '8/8/2k5/3p4/4P3/5K2/8/8 w KQkq - 0 1'
-  );
+  const [position, setPosition] = useState(conf.initialFEN);
   const [dropSquareStyle, setDropSquareStyle] = useState({});
   const [squareStyles, setSquareStyles] = useState({});
   const [pieceSquare, setPieceSquare] = useState('' as Square);
@@ -126,28 +124,33 @@ export const useChessLogic = (conf: Config): API => {
     setWinner(winner);
   };
 
+  const checkDraw = () => {
+    if (game.in_threefold_repetition()) {
+      return 'threefold repetition';
+    } else if (game.in_stalemate()) {
+      return 'stalemate';
+    } else if (game.in_draw()) {
+      return 'draw';
+    } else if (game.insufficient_material()) {
+      return 'draw';
+    } else if (game.game_over()) {
+      return 'inexplicable reason';
+    } else {
+      return '';
+    }
+  };
+
   const handleTurnSwap = () => {
     setPosition(game.fen());
     setHistory(game.history({ verbose: true }));
     setDraggable(false);
+    let drawReason = checkDraw();
     if (game.in_checkmate()) {
       setEndCause('checkmate');
       setWinner(player);
-    } else if (game.in_threefold_repetition()) {
-      setEndCause('threefold repetition');
-      setWinner(player);
-    } else if (game.in_stalemate()) {
-      setEndCause('stalemate');
-      setWinner(player);
-    } else if (game.in_draw()) {
-      setEndCause('draw');
-      setWinner(player);
-    } else if (game.insufficient_material()) {
-      setEndCause('draw');
-      setWinner(player);
-    } else if (game.game_over()) {
-      setEndCause('inexplicable reason');
-      setWinner(player);
+    } else if (drawReason !== '') {
+      setEndCause(drawReason);
+      setWinner('draw');
     } else if (game.in_check()) {
       checkKing();
     } else if (checkSquare !== ('' as Square)) {
@@ -218,7 +221,7 @@ export const useChessLogic = (conf: Config): API => {
     },
 
     onMouseOverSquare: (square: Square) => {
-      if (!draggable) return;
+      if (!isPlayerTurn()) return;
 
       const moves = game.moves({
         square: square,
@@ -301,7 +304,7 @@ export const useChessLogic = (conf: Config): API => {
       }
     };
 
-    engine.onmessage = (event) => {
+    engine.onmessage = (event: any) => {
       let line;
 
       if (event && typeof event === 'object') {
@@ -320,24 +323,13 @@ export const useChessLogic = (conf: Config): API => {
           setPosition(game.fen());
           setHistory(game.history({ verbose: true }));
           setDraggable(true);
+          let drawReason = checkDraw();
           if (game.in_checkmate()) {
             setEndCause('checkmate');
             setWinner(player === 'white' ? 'black' : 'white');
-          } else if (game.in_threefold_repetition()) {
-            setEndCause('threefold repetition');
-            setWinner(player === 'white' ? 'black' : 'white');
-          } else if (game.in_stalemate()) {
-            setEndCause('stalemate');
-            setWinner(player === 'white' ? 'black' : 'white');
-          } else if (game.in_draw()) {
-            setEndCause('draw');
-            setWinner(player === 'white' ? 'black' : 'white');
-          } else if (game.insufficient_material()) {
-            setEndCause('draw');
-            setWinner(player === 'white' ? 'black' : 'white');
-          } else if (game.game_over()) {
-            setEndCause('inexplicable reason');
-            setWinner(player === 'white' ? 'black' : 'white');
+          } else if (drawReason !== '') {
+            setEndCause(drawReason);
+            setWinner('draw');
           } else if (game.in_check()) {
             checkKing();
           } else if (checkSquare !== ('' as Square)) {
@@ -382,7 +374,7 @@ export const useChessLogic = (conf: Config): API => {
         uciCmd('ucinewgame');
         uciCmd('isready');
         engineStatus.engineReady = false;
-        engineStatus.search = null as any as string;
+        engineStatus.search = (null as any) as string;
         prepareMove();
         announced_game_over = false;
       },

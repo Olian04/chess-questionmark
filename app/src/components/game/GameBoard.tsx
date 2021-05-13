@@ -8,7 +8,6 @@ import { isMobile } from 'react-device-detect';
 
 interface Props extends cbjsxProps {
   size?: number;
-  winner: string;
 }
 
 export const GameBoard = (props: Props) => {
