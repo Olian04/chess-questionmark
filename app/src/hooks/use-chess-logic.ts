@@ -35,6 +35,7 @@ interface API {
 
 interface SquareStylingProps {
   pieceSquare: Square;
+  checkSquare: Square;
   history: Array<{ from: Square; to: Square }>;
 }
 
@@ -54,6 +55,7 @@ export const useChessLogic = (conf: Config): API => {
   const [dropSquareStyle, setDropSquareStyle] = useState({});
   const [squareStyles, setSquareStyles] = useState({});
   const [pieceSquare, setPieceSquare] = useState('' as Square);
+  const [checkSquare, setCheckSquare] = useState('' as Square);
   const [history, setHistory] = useState([] as ChessMove[]);
   const [draggable, setDraggable] = useState(true);
   const [winner, setWinner] = useState('N/A' as Winner);
@@ -68,11 +70,16 @@ export const useChessLogic = (conf: Config): API => {
 
   const [game] = useState(new Chess(position));
 
-  const squareStyling = ({ pieceSquare, history }: SquareStylingProps) => {
+  const squareStyling = ({
+    pieceSquare,
+    checkSquare,
+    history,
+  }: SquareStylingProps) => {
     const sourceSquare = history.length && history[history.length - 1].from;
     const targetSquare = history.length && history[history.length - 1].to;
 
     return {
+      [checkSquare]: { backgroundColor: 'red' },
       [pieceSquare]: { backgroundColor: 'cornFlowerBlue' },
       ...(history.length && {
         [sourceSquare]: {
@@ -87,15 +94,80 @@ export const useChessLogic = (conf: Config): API => {
     };
   };
 
+  const getAllSquares = () => {
+    const arr = [...Array(64).keys()];
+    return arr.map((piece_index) => {
+      const row = 'abcdefgh'[piece_index % 8];
+      const column = Math.ceil((64 - piece_index) / 8);
+      return row + column;
+    });
+  };
+
+  const checkKing = () => {
+    const t = game.turn();
+    const positions = getAllSquares();
+    for (const pos of positions) {
+      const p = pos as Square;
+      const piece = game.get(p);
+      if (piece !== null && piece.type === 'k' && piece.color === t) {
+        setCheckSquare(p);
+      }
+    }
+  };
+
+  const isPlayerTurn = () => {
+    const t = game.turn() === 'w' ? 'white' : 'black';
+    return t === player;
+  };
+
   const handleResign = () => {
     const winner = player === 'white' ? 'black' : 'white';
     setEndCause('resignation');
     setWinner(winner);
   };
 
+  const handleTurnSwap = () => {
+    setPosition(game.fen());
+    setHistory(game.history({ verbose: true }));
+    setDraggable(false);
+    if (game.in_checkmate()) {
+      setEndCause('checkmate');
+      setWinner(player);
+    } else if (game.in_threefold_repetition()) {
+      setEndCause('threefold repetition');
+      setWinner(player);
+    } else if (game.in_stalemate()) {
+      setEndCause('stalemate');
+      setWinner(player);
+    } else if (game.in_draw()) {
+      setEndCause('draw');
+      setWinner(player);
+    } else if (game.insufficient_material()) {
+      setEndCause('draw');
+      setWinner(player);
+    } else if (game.game_over()) {
+      setEndCause('inexplicable reason');
+      setWinner(player);
+    } else if (game.in_check()) {
+      checkKing();
+    } else if (checkSquare !== ('' as Square)) {
+      setCheckSquare('' as Square);
+    }
+    setSquareStyles(squareStyling({ pieceSquare, checkSquare, history }));
+    boardProps.removeHighlightSquare();
+    setApiHistory((h) => [
+      ...h,
+      {
+        player: 'human',
+        fen: game.fen(),
+      },
+    ]);
+    engineGame({}).prepareMove();
+  };
+
   const boardProps = {
     removeHighlightSquare: () => {
-      setSquareStyles(squareStyling({ pieceSquare, history }));
+      setSquareStyles(squareStyling({ pieceSquare, checkSquare, history }));
     },
 
     highlightSquare: (sourceSquare: Square, squaresToHighlight: Square[]) => {
@@ -112,6 +184,7 @@ export const useChessLogic = (conf: Config): API => {
             },
             ...squareStyling({
               history: history,
+              checkSquare: checkSquare,
               pieceSquare: pieceSquare,
             }),
           };
@@ -132,6 +205,7 @@ export const useChessLogic = (conf: Config): API => {
       sourceSquare: Square;
       targetSquare: Square;
     }) => {
+      if (!isPlayerTurn()) return;
       let move = game.move({
         from: sourceSquare,
         to: targetSquare,
@@ -140,27 +214,7 @@ export const useChessLogic = (conf: Config): API => {
 
       if (move === null) return;
 
-      setPosition(game.fen());
-      setHistory(game.history({ verbose: true }));
-      setSquareStyles(squareStyling({ pieceSquare, history }));
-      boardProps.removeHighlightSquare();
-      setDraggable(false);
-      if (game.in_checkmate()) {
-        setEndCause('checkmate');
-        setWinner(player);
-      }
-      if (game.in_threefold_repetition()) {
-        setEndCause('threefold repetition');
-        setWinner(player === 'white' ? 'black' : 'white');
-      }
-      setApiHistory((h) => [
-        ...h,
-        {
-          player: 'human',
-          fen: game.fen(),
-        },
-      ]);
-      engineGame({}).prepareMove();
+      handleTurnSwap();
     },
 
     onMouseOverSquare: (square: Square) => {
@@ -190,6 +244,7 @@ export const useChessLogic = (conf: Config): API => {
     },
 
     onSquareClick: (square: Square) => {
+      if (!isPlayerTurn()) return;
       const move = game.move({
         from: pieceSquare,
         to: square,
@@ -201,37 +256,8 @@ export const useChessLogic = (conf: Config): API => {
         return;
       }
 
-      setPosition(game.fen());
-      setHistory(game.history({ verbose: true }));
-      boardProps.removeHighlightSquare();
-      setDraggable(false);
-      if (game.in_checkmate()) {
-        setEndCause('checkmate');
-        setWinner(player);
-      } else if (game.in_threefold_repetition()) {
-        setEndCause('threefold repetition');
-        setWinner(player);
-      } else if (game.in_stalemate()) {
-        setEndCause('stalemate');
-        setWinner(player);
-      } else if (game.in_draw()) {
-        setEndCause('draw');
-        setWinner(player);
-      } else if (game.insufficient_material()) {
-        setEndCause('draw');
-        setWinner(player);
-      } else if (game.game_over()) {
-        setEndCause('inexplicable reason');
-        setWinner(player);
-      }
-      setApiHistory((h) => [
-        ...h,
-        {
-          player: 'human',
-          fen: game.fen(),
-        },
-      ]);
-      engineGame({}).prepareMove();
+      setPieceSquare('' as Square);
+      handleTurnSwap();
     },
   };
 
@@ -294,9 +320,6 @@ export const useChessLogic = (conf: Config): API => {
           game.move({ from: match[1], to: match[2], promotion: match[3] });
           setPosition(game.fen());
           setHistory(game.history({ verbose: true }));
-          setSquareStyles(squareStyling({ pieceSquare, history }));
-          boardProps.removeHighlightSquare();
-          prepareMove();
           setDraggable(true);
           if (game.in_checkmate()) {
             setEndCause('checkmate');
@@ -316,7 +339,14 @@ export const useChessLogic = (conf: Config): API => {
           } else if (game.game_over()) {
             setEndCause('inexplicable reason');
             setWinner(player === 'white' ? 'black' : 'white');
+          } else if (game.in_check()) {
+            checkKing();
+          } else if (checkSquare !== ('' as Square)) {
+            setCheckSquare('' as Square);
           }
+          setSquareStyles(squareStyling({ pieceSquare, checkSquare, history }));
+          boardProps.removeHighlightSquare();
+          prepareMove();
           setApiHistory((h) => [
             ...h,
             {
