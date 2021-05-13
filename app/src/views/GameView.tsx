@@ -24,8 +24,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     fill: {
       position: 'relative',
-      right: theme.spacing(1),
-      left: theme.spacing(1),
       height: `calc(100% - ${theme.measurements.navbar.height}px)`,
     },
     container: {

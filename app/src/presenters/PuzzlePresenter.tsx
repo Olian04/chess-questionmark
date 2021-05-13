@@ -68,6 +68,11 @@ export const PuzzlePresenter = () => {
     }
   });
 
+  const handleResign = () => {
+    gameLogic.handleResign();
+    endGame();
+  };
+
   const addMoveToGameState = useRecoilCallback(
     ({ snapshot, set }) =>
       async (onUnmount?: { timeLeft: number }) => {
@@ -136,13 +141,11 @@ export const PuzzlePresenter = () => {
     if (userProfile.recentMatches.length === 0) {
       setModal({
         open: true,
-        title: 'This is a puzzle',
+        title: 'Playing a puzzle',
         content: [
-          `Hey ${user.name}!`,
-          'Before you play, we just want to make sure that you understand, that this is a puzzle.',
-          'Meaning that the board will start randomly, and your goal is to win against our AI.',
-          "This won't be shown again,",
-          'good luck!',
+          'You have started a random puzzle against our AI.',
+          'Try your best to win but remember that there is no shame in losing, good luck!',
+          'This message will not be shown again.',
         ],
       });
     }
@@ -176,7 +179,7 @@ export const PuzzlePresenter = () => {
         boardProps={gameLogic.boardProps}
         previousPlayer={gameLogic.history[gameLogic.history.length - 1].player}
         currentMove={gameLogic.history.length}
-        handleResign={gameLogic.handleResign}
+        handleResign={handleResign}
         isPaused={gameLogic.history.length % 2 !== 1}
         isBlinking={gameLogic.timeLeft.self <= 60 / 6}
       />

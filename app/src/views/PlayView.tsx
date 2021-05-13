@@ -1,9 +1,15 @@
 import React from 'react';
-import { Avatar, Grid, List, Typography } from '@material-ui/core';
+import {
+  Avatar,
+  CircularProgress,
+  Grid,
+  List,
+  Typography,
+} from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 import AiIcon from '/aiicon.svg';
-import { User } from '../types/User';
+import { green } from '@material-ui/core/colors';
 import { Graph } from '../components/profile/Graph';
 import { Tile } from '../components/play/Tile';
 import { VerticalButtonGroup } from '../components/common/VerticalButtonGroup';
@@ -24,6 +30,17 @@ const useStyles = makeStyles((theme: Theme) =>
     padding: {
       padding: '5px',
     },
+    buttonWrapper: {
+      position: 'relative',
+    },
+    buttonProgress: {
+      color: green[500],
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      marginTop: -12,
+      marginLeft: -12,
+    },
   })
 );
 
@@ -33,7 +50,8 @@ interface Props {
   profile: Profile;
   liveGame: boolean;
   greeting: string | undefined;
-  isLoading: boolean;
+  isLoadingProfile: boolean;
+  isLoadingPuzzle: boolean;
   handleReplay: (a: string) => void;
   onClickStartPuzzle: () => void;
 }
@@ -73,14 +91,17 @@ export const PlayView = (props: Props) => {
             </Typography>
           </Grid>
         </Grid>
-
-        <Grid item xs>
+        <Grid item xs className={classes.buttonWrapper}>
           <Button
             onClick={props.onClickStartPuzzle}
             text={buttonMainText}
             subText={buttonSubText}
             icon={AiIcon}
+            disabled={props.isLoadingPuzzle}
           />
+          {props.isLoadingPuzzle && (
+            <CircularProgress size={24} className={classes.buttonProgress} />
+          )}
         </Grid>
 
         <Graph
@@ -88,28 +109,27 @@ export const PlayView = (props: Props) => {
           username={props.username}
           rank={props.profile.rank}
           delta={props.profile.rankDelta}
-          isLoading={props.isLoading}
+          isLoading={props.isLoadingProfile}
         />
         <Grid item xs>
           <Grid container direction="row" spacing={2}>
             <Tile
-              isLoading={props.isLoading}
+              isLoading={props.isLoadingProfile}
               text={props.profile.wins}
               subText="Wins"
             />
             <Tile
-              isLoading={props.isLoading}
+              isLoading={props.isLoadingProfile}
               text={props.profile.losses}
               subText="Losses"
             />
             <Tile
-              isLoading={props.isLoading}
+              isLoading={props.isLoadingProfile}
               text={props.profile.draws}
               subText="Draws"
             />
           </Grid>
         </Grid>
-
         <Grid item xs>
           <Grid container direction="column">
             <Grid item xs>
@@ -124,7 +144,7 @@ export const PlayView = (props: Props) => {
             <Grid item xs>
               <List>
                 <VerticalButtonGroup>
-                  {props.isLoading ? (
+                  {props.isLoadingProfile ? (
                     <ThreeRowButtonSkeleton />
                   ) : (
                     reversed(props.profile.recentMatches)

@@ -1,8 +1,10 @@
-import { Box, Typography } from '@material-ui/core';
+import React from 'react';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { AccessTime as AccessTimeIcon } from '@material-ui/icons';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import React from 'react';
+
+import { padStart } from '../../util/stringManipulation';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,6 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '22px',
       width: '95px',
 
+      boxSizing: 'content-box',
       overflow: 'hidden',
       display: 'flex',
       justifyContent: 'center',
@@ -43,6 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '22px',
       width: '95px',
 
+      boxSizing: 'content-box',
       overflow: 'hidden',
       display: 'flex',
       justifyContent: 'center',
@@ -119,16 +123,23 @@ export const Pill = (props: Props) => {
           : classes.timerActive
       }
     >
-      <Box className={classes.container}>
+      <Grid
+        container
+        className={classes.container}
+        justify="center"
+        alignItems="center"
+        alignContent="center"
+      >
         <AccessTimeIcon color="action" />
         <Typography
           ref={props.timeRef}
           color="textPrimary"
           className={clsx(classes.text, classes.timerText)}
         >
-          {(props.time - (props.time % 60)) / 60}:{props.time % 60}
+          {padStart(`${Math.floor(props.time / 60)}`, 2, '0')}:
+          {padStart(`${props.time % 60}`, 2, '0')}
         </Typography>
-      </Box>
+      </Grid>
     </Box>
   );
 };

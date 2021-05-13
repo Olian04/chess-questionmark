@@ -29,16 +29,19 @@ export const PlayPresenter = () => {
 
   const [greeting, setGreeting] = useState<string>();
   const [liveGame, setLiveGame] = useState(false);
+  const [isLoadingPuzzle, setIsLoadingPuzzle] = useState(false);
 
   const history = useHistory();
 
   const initBoard = useRecoilCallback(({ snapshot, set }) => async () => {
+    setIsLoadingPuzzle(true);
     const userID = await snapshot.getPromise(currentUserIDState);
     if (userID === null) {
       throw new Error(`Unexpected null userID at board initialization`);
     }
+
     const game = await snapshot.getPromise(requestGame);
-    if (game.state === 'ended' && game.winner === 'N/A') {
+    if (game.state !== 'playing' && game.winner === 'N/A') {
       const fenString = await fetchRandomPuzzle();
 
       const timeLeft = 15 * 60;
@@ -55,13 +58,15 @@ export const PlayPresenter = () => {
 
       await set(requestGame, newGame);
       await createLiveGame(newGame);
+      setIsLoadingPuzzle(false);
     }
     history.push('/puzzle');
   });
 
   const checkCurrentGame = useRecoilCallback(({ snapshot }) => async () => {
     const game = await snapshot.getPromise(requestGame);
-    if (game.state !== 'ended') {
+    setLiveGame(false);
+    if (game.state === 'playing') {
       setLiveGame(true);
     }
   });
@@ -107,7 +112,8 @@ export const PlayPresenter = () => {
       email={user.email}
       profile={profile}
       liveGame={liveGame}
-      isLoading={profileStatus !== 'success'}
+      isLoadingPuzzle={isLoadingPuzzle}
+      isLoadingProfile={profileStatus !== 'success'}
       greeting={greeting}
       handleReplay={handleReplay}
       onClickStartPuzzle={initBoard}

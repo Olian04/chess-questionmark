@@ -6,12 +6,13 @@ import {
 } from '../services/firebase/realtimeDB';
 import { LiveGame } from '../types/live/LiveGame';
 import { RandomGame } from '../types/RandomGame';
+import { User } from '../types/User';
 import { currentUserIDState, userState } from './user';
 
 export const fallbackGameState: LiveGame = {
   turn: 'playerOne',
   winner: 'N/A',
-  state: 'ended',
+  state: 'N/A',
   history: [],
   playerOne: '',
   playerTwo: '',
@@ -59,7 +60,11 @@ export const requestGame = atom<LiveGame>({
   default: selector<LiveGame>({
     key: 'REQUEST_GAME_SELECTOR',
     get: async ({ get }) => {
-      const game = await fetchGame(get);
+      const userID = await get(currentUserIDState);
+      if (!userID) {
+        throw new Error('RUN!');
+      }
+      const game = await fetchGame(userID);
       return game;
     },
     set: ({ set }, newGame) => {
@@ -73,8 +78,7 @@ export const randomGameState = atom<RandomGame>({
   default: fallbackRandomGameState,
 });
 
-const fetchGame = async (get: GetRecoilValue) => {
-  const user = await get(userState);
-  const maybeGame = await getLiveGameByUserID(user.id);
+const fetchGame = async (userID: string) => {
+  const maybeGame = await getLiveGameByUserID(userID);
   return maybeGame ?? fallbackGameState;
 };

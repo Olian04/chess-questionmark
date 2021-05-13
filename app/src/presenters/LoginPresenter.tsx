@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilCallback, useRecoilState } from 'recoil';
+import { useFirebaseUser } from '../hooks/use-firebase-user';
 import { fetchRandomGame } from '../services/firebase/storage';
 import { randomGameState } from '../state/game';
 import { LoginView } from '../views/LoginView';
@@ -9,6 +10,13 @@ export const LoginPresenter = () => {
   const history = useHistory();
 
   const [game, setGame] = useRecoilState(randomGameState);
+
+  const firebaseUser = useFirebaseUser();
+  useEffect(() => {
+    if (firebaseUser) {
+      history.push('/play');
+    }
+  }, [firebaseUser]);
 
   const handleSignUp = () => {
     history.push('/login/sign-up');

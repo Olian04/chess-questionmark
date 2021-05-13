@@ -11,11 +11,19 @@ import { userCollection } from '../services/firebase/storage';
 import { snackbarState } from '../state/snackbar';
 import { fetchCountryCode } from '../services/ipdata';
 import { getGravatarUrl } from '../services/gravatar';
+import { useFirebaseUser } from '../hooks/use-firebase-user';
 
 export const SignInPresenter = () => {
   const setSnackbar = useSetRecoilState(snackbarState);
   const loginStatus = useRecoilValue(loginStatusState);
   const history = useHistory();
+
+  const firebaseUser = useFirebaseUser();
+  useEffect(() => {
+    if (firebaseUser) {
+      history.push('/play');
+    }
+  }, [firebaseUser]);
 
   useEffect(() => {
     if (loginStatus === 'fail') {

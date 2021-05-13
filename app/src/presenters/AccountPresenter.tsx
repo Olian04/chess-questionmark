@@ -23,7 +23,7 @@ import { SignupSchema } from '../util/signupSchema';
 import { ValidationError } from 'yup';
 import { UserCredentials } from '../types/UserCredentials';
 import { snackbarState } from '../state/snackbar';
-import { capitalize } from '../util/stringManimpulation';
+import { capitalize } from '../util/stringManipulation';
 
 export const AccountPresenter = () => {
   const setSnackbar = useSetRecoilState(snackbarState);

@@ -21,12 +21,20 @@ import { getGravatarUrl } from '../services/gravatar';
 import { UserCredentials } from '../types/UserCredentials';
 import { UserExtras } from '../types/UserExtras';
 import { SignUpView } from '../views/SignUpView';
+import { useFirebaseUser } from '../hooks/use-firebase-user';
 
 const nonApplicable = 'N/A';
 
 export const SignUpPresenter = () => {
   const loginStatus = useRecoilValue(loginStatusState);
   const history = useHistory();
+
+  const firebaseUser = useFirebaseUser();
+  useEffect(() => {
+    if (firebaseUser) {
+      history.push('/play');
+    }
+  }, [firebaseUser]);
 
   const signUp = useRecoilCallback(
     ({ set, reset }) =>

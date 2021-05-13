@@ -64,15 +64,8 @@ export const ThreeRowButtonSkeleton = () => {
 
 export const ThreeRowButton = (props: Props) => {
   const classes = useStyles();
-  const {
-    name,
-    rank,
-    delta,
-    avatar,
-    className,
-    handleClick,
-    ...innerProps
-  } = props;
+  const { name, rank, delta, avatar, className, handleClick, ...innerProps } =
+    props;
   return (
     <>
       {!name && <ThreeRowButtonSkeleton />}
@@ -98,11 +91,11 @@ export const ThreeRowButton = (props: Props) => {
                 </Typography>
               </Grid>
             ) : null}
-            {delta ? (
+            {delta !== undefined ? (
               <Grid item container alignItems="flex-start" xs>
                 <Typography variant="caption" color="textPrimary">
-                  <span style={{ color: delta > 0 ? '#99FF99' : '#DF5049' }}>
-                    {delta === 0 ? '' : delta > 0 ? '+' : ''}
+                  <span style={{ color: delta >= 0 ? '#99FF99' : '#DF5049' }}>
+                    {delta > 0 ? '+' : ''}
                     {delta}
                   </span>
                 </Typography>

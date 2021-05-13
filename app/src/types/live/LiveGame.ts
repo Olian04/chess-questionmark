@@ -5,7 +5,7 @@ export interface LiveGame {
   playerOne: string;
   playerTwo: string; // User id for AI player is: AI
   turn: 'playerOne' | 'playerTwo';
-  state: 'playing' | 'ended';
+  state: 'playing' | 'ended' | 'N/A';
   winner: 'playerOne' | 'playerTwo' | 'N/A';
   timeLeft: number;
 }
