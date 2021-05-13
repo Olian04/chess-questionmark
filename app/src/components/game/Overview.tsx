@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       paddingTop: '0.5em',
-      height: theme.measurements.playerbar.height,
+      height: theme.measurements.navbar.height,
       display: 'flex',
       flexDirection: 'column',
     },
