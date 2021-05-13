@@ -40,6 +40,7 @@ export const migrateGameByUserID = async (userID: string) => {
       if (liveGame.winner === 'Draw') {
         profileCollection.updateRaw(userID, {
           draws: profile.draws + 1,
+          rank: profile.rank + material,
           recentMatches: [...profile.recentMatches, id],
         });
       } else {
