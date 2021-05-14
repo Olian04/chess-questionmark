@@ -161,7 +161,9 @@ export const UpdateFieldModal = (props: Props) => {
           <MaterialButton onClick={props.onDiscard}>Cancel</MaterialButton>
           <MaterialButton
             disabled={props.dialogs.some(
-              (d) => Boolean(fieldValues[d.fieldName]) === false
+              (d) =>
+                fieldValues[d.fieldName] !== d.defaultValue &&
+                Boolean(fieldValues[d.fieldName]) === false
             )}
             onClick={() => {
               if (isError.some((v) => v === true)) return;
@@ -254,7 +256,9 @@ export const UpdateFieldModal = (props: Props) => {
               <MaterialButton onClick={props.onDiscard}>Cancel</MaterialButton>
               <MaterialButton
                 disabled={props.dialogs.some(
-                  (d) => Boolean(fieldValues[d.fieldName]) === false
+                  (d) =>
+                    fieldValues[d.fieldName] !== d.defaultValue &&
+                    Boolean(fieldValues[d.fieldName]) === false
                 )}
                 onClick={() => {
                   if (isError.some((v) => v === true)) return;
