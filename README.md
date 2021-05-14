@@ -1,35 +1,41 @@
 # Chess?
 
-## Grading Criteria Defense
+## Production
 
-### Architecture/code
+Visit either:
 
-* No visible bugs,  no stacktrace in console. 
-* Application state separated from all other concerns
-* No views with different roles mixed.
-* One file per View. 
-* None of the four main concerns mixed
-* At least one third-party component.
+* <https://kth.codes> (DNS License lasts untill May 2022)
+* <https://iprog-tw3.web.app>
 
-### Usability/User experience/ improve usability
+Known limitation:
 
-* Clear target group, clear benefits for the user.  Application functionality is easy to discover through exploration
-* Efficient task accomplishment. 
-* Very good feedback on user actions
-* Very good visibility of system status
-* User feels in control.
-* Documented user consultation, at least 30 min at prototyping stage and 30 min at formative evaluation stage, with  creative improvements from user feedback
-* Very good user satisfaction
+* Limited DB reads/writes due to limitation put on the firebase free tier.
 
-### Web APIs
+## Development
 
-* Remote data is used from a single source, creatively for the use case
-* Good system status shown when waiting for API requests and the user can choose to perform other actions
-* Application state persisted at server, for each user  with well-defined access rights (authorization suitable for use case). 
-* Persisted data increases usability (e.g. efficiency user doesn’t need to enter data again, users sees comparisons with other users’ averages etc)
+### Prerequisite
 
-### Group cooperation
+* Node 14.13+
+* Npm 7.9+ (npm comes bundled with Node)
 
-* Good balance of work in the group
-* Role separation in the group (per component or per concern: views, interaction, model…)
-* Work amount and roles well documented in self-reflections
+### Build for dev
+
+1. Clone down this repository
+2. Navigate to the `app` folder
+3. Install dependencies using `npm install`
+4. Run dev server using `npm run dev`
+5. If your OS didn't open a browser tab for you, then open a browser and navigate to `localhost:3000`
+
+### Build for prod
+
+__Extra prerequisite:__
+
+* Firebase CLI
+* Firebase account
+
+1. Clone down this repository
+2. Navigate to the `app` folder
+3. Install dependencies using `npm install`
+4. Update `/app/src/services/firebase/config.ts` with your own firebase configuration
+5. Sign into the firebase cli using `firebase login` and follow the wizard
+6. Build and deploy by running `npm run deploy`
