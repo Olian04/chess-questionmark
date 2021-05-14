@@ -1,24 +1,13 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  useRecoilCallback,
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from 'recoil';
-import { useFirebaseUser } from '../hooks/use-firebase-user';
+import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { useChangePassword } from '../hooks/use-change-password';
 import { useChangeEmail } from '../hooks/use-change-email';
 import { signOut } from '../services/firebase/auth';
 import { userCollection } from '../services/firebase/storage';
 import { loginStatusState } from '../state/authentication';
-import {
-  userState,
-  userExtraData,
-  userFirebaseState,
-  currentUserIDState,
-} from '../state/user';
+import { userState, userExtraData, currentUserIDState } from '../state/user';
 import { AccountView } from '../views/AccountView ';
 import { SignupSchema } from '../util/signupSchema';
 import { ValidationError } from 'yup';
@@ -29,10 +18,8 @@ import { capitalize } from '../util/stringManipulation';
 export const AccountPresenter = () => {
   const setSnackbar = useSetRecoilState(snackbarState);
   const history = useHistory();
-  const firebaseUser = useFirebaseUser();
   const user = useRecoilValue(userState);
   const setUserExtraData = useSetRecoilState(userExtraData({ id: user.id }));
-  const setUserFirebaseState = useSetRecoilState(userFirebaseState);
 
   const changePassword = useChangePassword();
   const changeEmail = useChangeEmail();
