@@ -67,15 +67,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type FieldValues = {
-  name?: string;
-  email?: string;
-  phone?: string;
-  team?: string;
-  avatar?: string;
-  password?: string;
-  newPassword?: string;
-};
+export interface FieldValues {
+  name: string;
+  email: string;
+  phone: string;
+  team: string;
+  avatar: string;
+  password: string;
+  newPassword: string;
+}
 
 export interface DialogProps {
   fieldType: 'text' | 'password';

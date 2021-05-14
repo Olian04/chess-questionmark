@@ -15,43 +15,63 @@ import { UserCredentials } from '../types/UserCredentials';
 import { snackbarState } from '../state/snackbar';
 import { capitalize } from '../util/stringManipulation';
 import { UserExtras } from '../types/UserExtras';
+import { FieldValues } from '../components/settings/UpdateFieldModal';
 
 export const AccountPresenter = () => {
   const setSnackbar = useSetRecoilState(snackbarState);
   const history = useHistory();
   const user = useRecoilValue(userState);
-  const setUserExtraData = useSetRecoilState(userExtraData({ id: user.id }));
 
   const changePassword = useChangePassword();
   const changeEmail = useChangeEmail();
 
-  const updateUser = async (key: string, value: string) => {
-    try {
-      setUserExtraData((curr) => {
-        if (curr === null) {
-          return curr;
+  const updateUser = useRecoilCallback(
+    ({ set, snapshot }) =>
+      async (partialUser: Partial<UserExtras>) => {
+        const userID = await snapshot.getPromise(currentUserIDState);
+        if (userID === null) {
+          setSnackbar({
+            open: true,
+            message: `An error occurred when updating`,
+            severity: 'error',
+            bottom: 25,
+          });
+          return;
         }
-        curr[key as keyof UserExtras] = value;
-        return curr;
-      });
-      await userCollection.update(user.id, {
-        [key]: value,
-      });
-      setSnackbar({
-        open: true,
-        message: `${capitalize(key)} updated`,
-        severity: 'success',
-        bottom: 25,
-      });
-    } catch (err) {
-      setSnackbar({
-        open: true,
-        message: `An error occurred when updating ${key}`,
-        severity: 'error',
-        bottom: 25,
-      });
-    }
-  };
+
+        const curr = await snapshot.getPromise(userExtraData({ id: userID }));
+        if (curr === null) {
+          setSnackbar({
+            open: true,
+            message: `An error occurred when updating`,
+            severity: 'error',
+            bottom: 25,
+          });
+          return;
+        }
+
+        try {
+          set(userExtraData({ id: user.id }), {
+            ...curr,
+            ...partialUser,
+          });
+          await userCollection.update(user.id, partialUser);
+          setSnackbar({
+            open: true,
+            message: `Successfully updated`,
+            severity: 'success',
+            bottom: 25,
+          });
+        } catch (err) {
+          setSnackbar({
+            open: true,
+            message: `An error occurred when updating`,
+            severity: 'error',
+            bottom: 25,
+          });
+        }
+      }
+  );
 
   const updateEmail = async (email: string, password: string) => {
     const isSuccess = await changeEmail(email, password);
@@ -91,11 +111,6 @@ export const AccountPresenter = () => {
     }
   };
 
-  const updateAvatar = (value: string) => updateUser('avatar', value);
-  const updateName = (value: string) => updateUser('name', value);
-  const updatePhone = (value: string) => updateUser('phone', value);
-  const updateTeam = (value: string) => updateUser('team', value);
-
   const logoutUser = useRecoilCallback(({ set, reset }) => async () => {
     await signOut();
     set(loginStatusState, 'idle');
@@ -103,6 +118,22 @@ export const AccountPresenter = () => {
 
     history.push('/');
   });
+
+  const handleOnChange = (values: Partial<FieldValues>) => {
+    if (values.password && values.newPassword && values.email) {
+      updatePassword(
+        {
+          password: values.password,
+          email: values.email,
+        },
+        values.newPassword
+      );
+    } else if (values.password && values.email) {
+      updateEmail(values.email, values.password);
+    } else {
+      updateUser(values);
+    }
+  };
 
   const validatePassword = (newPassword: string) => {
     try {
@@ -122,12 +153,7 @@ export const AccountPresenter = () => {
     <AccountView
       user={user}
       onClickLogout={logoutUser}
-      onChangeEmail={updateEmail}
-      onChangePassword={updatePassword}
-      onChangeAvatar={updateAvatar}
-      onChangeName={updateName}
-      onChangePhone={updatePhone}
-      onChangeTeam={updateTeam}
+      onChange={handleOnChange}
       validateNewPassword={validatePassword}
     />
   );

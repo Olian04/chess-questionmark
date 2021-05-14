@@ -8,6 +8,7 @@ import { SectionHeading } from '../components/settings/SectionHeading';
 import {
   UpdateFieldModal,
   DialogProps,
+  FieldValues,
 } from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
 import { User } from '../types/User';
@@ -32,12 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   user: User;
   onClickLogout: () => void;
-  onChangeTeam: (newTeam: string) => void;
-  onChangeName: (newName: string) => void;
-  onChangeEmail: (newEmail: string, password: string) => void;
-  onChangePhone: (newPhone: string) => void;
-  onChangeAvatar: (newAvatar: string) => void;
-  onChangePassword: (cred: UserCredentials, newPassword: string) => void;
+  onChange: (fields: Partial<FieldValues>) => void;
   validateNewPassword: (newPassword: string) => string | null;
 }
 
@@ -57,34 +53,7 @@ export const AccountView = (props: Props) => {
         dialogs={modal.dialogs as any}
         onDiscard={() => setModal((curr) => ({ ...curr, open: false }))}
         onSave={(fieldValues) => {
-          if (fieldValues.name) {
-            props.onChangeName(fieldValues.name);
-          }
-          if (fieldValues.avatar) {
-            props.onChangeAvatar(fieldValues.avatar);
-          }
-          if (fieldValues.email && fieldValues.password) {
-            props.onChangeEmail(fieldValues.email, fieldValues.password);
-          }
-          if (fieldValues.phone) {
-            props.onChangePhone(fieldValues.phone);
-          }
-          if (fieldValues.team) {
-            props.onChangeTeam(fieldValues.team);
-          }
-          if (
-            fieldValues.newPassword &&
-            fieldValues.password &&
-            fieldValues.email
-          ) {
-            props.onChangePassword(
-              {
-                password: fieldValues.password,
-                email: fieldValues.email,
-              },
-              fieldValues.newPassword
-            );
-          }
+          props.onChange(fieldValues);
           setModal((curr) => ({ ...curr, open: false }));
         }}
       />
