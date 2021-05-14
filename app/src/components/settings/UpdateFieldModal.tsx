@@ -18,6 +18,18 @@ import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    container: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 30,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      pointerEvents: 'none',
+    },
     backdrop: {
       position: 'absolute',
       top: 0,
@@ -25,10 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
       right: 0,
       bottom: 0,
       backgroundColor: 'rgba(0,0,0,0.3)',
-      zIndex: 30,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
+      zIndex: 10,
     },
     fill: {
       top: 0,
@@ -37,6 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
       bottom: 0,
       position: 'relative',
       margin: theme.spacing(1),
+      pointerEvents: 'none',
     },
     modal: {
       backgroundColor: theme.palette.background.paper,
@@ -45,11 +55,11 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: theme.spacing(2),
       paddingBottom: theme.spacing(2),
       borderRadius: theme.shape.borderRadius,
+      pointerEvents: 'auto',
     },
     visible: {
       visible: 'visible',
       opacity: 1,
-      pointerEvents: 'auto',
     },
     hidden: {
       visible: 'hidden',
@@ -165,79 +175,94 @@ export const UpdateFieldModal = (props: Props) => {
    * filling the whole view, but only the mobileframe
    */
   return (
-    <Box
-      className={clsx(
-        classes.backdrop,
-        props.open ? classes.visible : classes.hidden
-      )}
-      onClick={props.onDiscard}
-    >
-      <Box className={classes.fill}>
-        <Box className={classes.modal}>
-          {props.dialogs.map((dialog, i) => (
-            <div key={i}>
-              {dialog.title ? (
-                <DialogTitle id="form-dialog-title">{dialog.title}</DialogTitle>
-              ) : null}
-              <DialogContent>
-                {dialog.description ? (
-                  <DialogContentText>{dialog.description}</DialogContentText>
+    <>
+      <Box
+        className={clsx(
+          classes.container,
+          props.open ? classes.visible : classes.hidden
+        )}
+      >
+        <Box className={classes.fill}>
+          <Box
+            className={clsx(
+              classes.modal,
+              props.open ? classes.visible : classes.hidden
+            )}
+          >
+            {props.dialogs.map((dialog, i) => (
+              <div key={i}>
+                {dialog.title ? (
+                  <DialogTitle id="form-dialog-title">
+                    {dialog.title}
+                  </DialogTitle>
                 ) : null}
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  label={dialog.hint}
-                  variant="outlined"
-                  color="secondary"
-                  type={dialog.fieldType}
-                  fullWidth
-                  error={isError[i]}
-                  helperText={helperText[i]}
-                  defaultValue={dialog.defaultValue}
-                  onChange={(ev) => {
-                    const value = ev.target.value;
-                    const validationError =
-                      dialog.validate && dialog.validate(value);
-                    if (typeof validationError === 'string') {
+                <DialogContent>
+                  {dialog.description ? (
+                    <DialogContentText>{dialog.description}</DialogContentText>
+                  ) : null}
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    label={dialog.hint}
+                    variant="outlined"
+                    color="secondary"
+                    type={dialog.fieldType}
+                    fullWidth
+                    error={isError[i]}
+                    helperText={helperText[i]}
+                    defaultValue={dialog.defaultValue}
+                    onChange={(ev) => {
+                      const value = ev.target.value;
+                      const validationError =
+                        dialog.validate && dialog.validate(value);
+                      if (typeof validationError === 'string') {
+                        setIsError((curr) => {
+                          curr[i] = true;
+                          return curr;
+                        });
+                        setHelperText((curr) => {
+                          curr[i] = validationError;
+                          return curr;
+                        });
+                      }
+                      setFieldValues({
+                        ...fieldValues,
+                        [dialog.fieldName]: value,
+                      });
                       setIsError((curr) => {
-                        curr[i] = true;
+                        curr[i] = false;
                         return curr;
                       });
                       setHelperText((curr) => {
-                        curr[i] = validationError;
+                        delete curr[i];
                         return curr;
                       });
-                    }
-                    setFieldValues({
-                      ...fieldValues,
-                      [dialog.fieldName]: value,
-                    });
-                    setIsError((curr) => {
-                      curr[i] = false;
-                      return curr;
-                    });
-                    setHelperText((curr) => {
-                      delete curr[i];
-                      return curr;
-                    });
-                  }}
-                />
-              </DialogContent>
-            </div>
-          ))}
-          <DialogActions>
-            <MaterialButton onClick={props.onDiscard}>Cancel</MaterialButton>
-            <MaterialButton
-              onClick={() => {
-                if (isError.some((v) => v === true)) return;
-                props.onSave(fieldValues);
-              }}
-            >
-              Save
-            </MaterialButton>
-          </DialogActions>
+                    }}
+                  />
+                </DialogContent>
+              </div>
+            ))}
+            <DialogActions>
+              <MaterialButton onClick={props.onDiscard}>Cancel</MaterialButton>
+              <MaterialButton
+                onClick={() => {
+                  if (isError.some((v) => v === true)) return;
+                  props.onSave(fieldValues);
+                }}
+              >
+                Save
+              </MaterialButton>
+            </DialogActions>
+          </Box>
         </Box>
       </Box>
-    </Box>
+      <Box
+        onClick={props.onDiscard}
+        className={clsx(
+          classes.backdrop,
+          props.open ? classes.visible : classes.hidden
+        )}
+      />
+    </>
   );
 };

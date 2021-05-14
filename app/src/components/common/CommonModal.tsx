@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
       bottom: 0,
       position: 'relative',
       margin: theme.spacing(1),
+      pointerEvents: 'none',
     },
     modal: {
       backgroundColor: theme.palette.background.paper,
@@ -105,7 +106,12 @@ export const CommonModal = (props: Props) => {
         )}
       >
         <Box className={classes.fill}>
-          <Box className={classes.modal}>
+          <Box
+            className={clsx(
+              classes.modal,
+              props.modal.open ? classes.visible : classes.hidden
+            )}
+          >
             <DialogTitle disableTypography>
               <Typography color="textPrimary" variant="h6">
                 {props.modal.title}
