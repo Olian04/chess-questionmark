@@ -37,9 +37,8 @@ export const PuzzlePresenter = () => {
     previousFENStrings,
     playerColor: playerIsWhite ? 'white' : 'black',
     timerLength: gameState.timeLeft,
-    diffculty:
-      userProfile.rank /
-      (userProfile.losses + userProfile.wins + userProfile.draws),
+    difficulty:
+      userProfile.rank,
     timerIncreaseOnMove,
   });
 
@@ -60,7 +59,7 @@ export const PuzzlePresenter = () => {
         winner:
           gameLogic.boardProps.orientation === gameLogic.boardProps.winner
             ? 'playerOne'
-            : 'playerTwo',
+            : (gameLogic.boardProps.winner === 'draw' ? 'Draw' : 'playerTwo'),
         state: 'ended',
       });
       await migrateGameByUserID(userID);
@@ -108,7 +107,7 @@ export const PuzzlePresenter = () => {
   );
 
   useEffect(() => {
-    if (['black', 'white'].includes(gameLogic.boardProps.winner)) {
+    if (['black', 'white', 'draw'].includes(gameLogic.boardProps.winner)) {
       endGame();
     }
   }, [gameLogic.boardProps.winner]);
@@ -162,6 +161,7 @@ export const PuzzlePresenter = () => {
   return (
     <>
       <EndOfGame
+        draw={gameLogic.boardProps.winner === 'draw'}
         winner={gameLogic.boardProps.winner === 'white' && playerIsWhite}
         cause={gameLogic.endCause}
         onClick={() => {
