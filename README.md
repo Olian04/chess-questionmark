@@ -9,7 +9,7 @@ Visit either:
 
 Known limitation:
 
-* Limited DB reads/writes due to limitation put on the firebase free tier.
+* Limited daily DB reads/writes due to limitation put on the firebase free tier.
 
 ## Development
 
