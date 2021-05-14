@@ -28,11 +28,8 @@ export const AccountPresenter = () => {
   const updateUser = async (key: string, value: string) => {
     try {
       setUserExtraData((curr) => {
-        if (curr === null) {
-          return curr;
-        }
-        curr[key as keyof UserExtras] = value;
-        return curr;
+        if (!curr) return curr;
+        return { ...curr, [key]: value };
       });
       await userCollection.update(user.id, {
         [key]: value,

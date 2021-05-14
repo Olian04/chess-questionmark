@@ -1,5 +1,10 @@
-import React from 'react';
-import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Switch,
+  useLocation,
+} from 'react-router-dom';
 import {
   Avatar,
   Box,
@@ -26,6 +31,11 @@ import clsx from 'clsx';
 import { SnackbarPresenter } from './presenters/SnackbarPresenter';
 import { CommonModalPresenter } from './presenters/CommonModalPresenter';
 import LogoIcon from '/favicon.svg';
+import lock from '/lock.svg';
+import battery from '/battery.svg';
+import cellular from '/cellular.svg';
+import wifi from '/wifi.svg';
+import { format } from 'date-fns';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,17 +83,57 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'contain',
       boxSizing: 'content-box',
-      padding: 10,
+      padding: 15,
       // transform: 'rotate(-35deg) skew(20deg, 5deg)',
     },
     browserContainer: {
       borderRadius: 40,
-      width: '100%',
-      height: 'calc(100% - 16px)',
+      height: 'calc(100% - 6px)',
       overflowY: 'auto',
       position: 'relative',
       scrollbarWidth: 'none', // only mozilla
       backgroundColor: theme.palette.background.default,
+      maskImage: 'url(/mask.svg)',
+      maskSize: 'cover',
+      maskRepeat: 'no-repeat',
+    },
+    searchbar: {
+      width: '100%',
+      minHeight: 43,
+      display: 'flex',
+      flexDirection: 'column',
+      boxSizing: 'content-box',
+      backgroundColor: '#35373A',
+      position: 'relative',
+      zIndex: 30,
+      paddingBottom: theme.spacing(0.5),
+    },
+    statusbar: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      paddingTop: theme.spacing(0.7),
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(2),
+      paddingBottom: theme.spacing(0.5),
+      fontSize: '0.8em',
+      color: theme.palette.text.primary,
+    },
+    adressbar: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+    },
+    adress: {
+      display: 'flex',
+      color: '#83E576',
+      fontSize: '0.7em',
+    },
+    notifications: {
+      display: 'flex',
+      justifyContent: 'space-around',
+      height: '1em',
+      paddingTop: theme.spacing(0.5),
     },
     mobileContainer: {
       position: 'relative',
@@ -133,6 +183,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const AppContainer = () => {
   const classes = useStyles();
+
   if (isMobile) {
     return (
       <Box className={classes.mobileContainer}>
@@ -153,6 +204,22 @@ export const AppContainer = () => {
         >
           <Box className={classes.browserWrapper}>
             <Box className={classes.browserContainer}>
+              <Box className={classes.searchbar}>
+                <Box className={classes.statusbar}>
+                  {format(new Date(), 'HH:mm')}
+                  <Box className={classes.notifications}>
+                    <img src={cellular} />
+                    <img src={wifi} />
+                    <img src={battery} />
+                  </Box>
+                </Box>
+                <Box className={classes.adressbar}>
+                  <Box className={classes.adress}>
+                    <img src={lock} style={{ marginRight: 4 }} />
+                    kth.codes
+                  </Box>
+                </Box>
+              </Box>
               <App />
             </Box>
           </Box>

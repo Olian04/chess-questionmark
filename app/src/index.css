@@ -30,7 +30,7 @@
 
 html,
 body,
-#root  {
+#root {
   position: relative;
   height: 100%;
   width: 100%;
@@ -42,7 +42,6 @@ body,
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#iphone {
+  fill: '#fff';
 }
