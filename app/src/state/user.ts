@@ -7,6 +7,7 @@ import {
   profileCollection,
 } from '../services/firebase/storage';
 import { UserExtras } from '../types/UserExtras';
+import { sleep } from '../util/async';
 
 const notApplicable = 'N/A';
 
@@ -74,10 +75,16 @@ export const userExtraData = atomFamily<UserExtras | null, userExtraDataParam>({
     key: 'USER_DATA/DEFAULT',
     get:
       ({ id, onSignUp }) =>
-      () => {
+      async () => {
         if (onSignUp) {
           return null;
         }
+
+        // Fixes a race condition on account creation
+        while (!(await userCollection.has(id))) {
+          await sleep(100);
+        }
+
         return userCollection.get(id);
       },
   }),
