@@ -1,0 +1,25 @@
+We got feedback from multiple users which highlighted a few issues:
+	It was hard to tell what color they were playing as, it was confusing to sometimes be black.
+		Solution: Make the user interact with the notification.
+	
+	Some non-buttons looked like buttons which was confusing.
+		Solution: Remove the button-like design pattern.
+	
+	It was not intuitive that the match history had clickable replays.
+		Solution: Change the title from rechent matches to replays.
+	
+	It was not intuitive what the rank meant, no sure if it is relative to other users.
+		Solution: Change the text from rank to points.
+	
+	Can not click on the board, only allowed to drag pieces.
+		Solution: Make it possible to move pieces by clicking.
+		
+	Unclear when the king is in danger.
+		Solution: Highlight the king square with red if it is in danger.
+	
+	It was very difficult to beat the AI.
+		Solution: Make stockfish skill level scale based on user rating.
+	
+Also some bugs that were fixed:
+	Logging in could go to a blank screen.
+	Stockfish would sometimes stop responding with no user feedback.
