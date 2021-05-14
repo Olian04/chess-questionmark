@@ -259,6 +259,14 @@ export const useChessLogic = (conf: Config): API => {
         updateHighlight('piece', square);
         updateHighlight('moves', squaresToHighlight);
         return;
+      } else {
+        const p = game.get(square);
+        if (p && p.color && p.color === game.turn()) {
+          setPieceSquare(square);
+          updateHighlight('piece', square);
+          updateHighlight('moves', []);
+          return;
+        }
       }
 
       const move = game.move({
@@ -267,11 +275,10 @@ export const useChessLogic = (conf: Config): API => {
         promotion: 'q',
       });
 
-      setPieceSquare('' as Square);
-      updateHighlight('piece', '');
-      updateHighlight('moves', []);
-
       if (move === null) {
+        setPieceSquare('' as Square);
+        updateHighlight('piece', '');
+        updateHighlight('moves', []);
         return;
       }
 
