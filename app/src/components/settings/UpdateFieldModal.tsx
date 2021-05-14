@@ -101,6 +101,7 @@ export const UpdateFieldModal = (props: Props) => {
   const [fieldValues, setFieldValues] = useState<Partial<FieldValues>>({});
   const [isError, setIsError] = useState<boolean[]>([]);
   const [helperText, setHelperText] = useState<string[]>([]);
+  const [hasChanges, setHasChanges] = useState(false);
 
   if (isMobile) {
     return (
@@ -110,7 +111,7 @@ export const UpdateFieldModal = (props: Props) => {
         aria-labelledby="form-dialog-title"
       >
         {props.dialogs.map((dialog, i) => (
-          <div key={i}>
+          <div key={dialog.title}>
             {dialog.title ? (
               <DialogTitle id="form-dialog-title">{dialog.title}</DialogTitle>
             ) : null}
@@ -143,6 +144,7 @@ export const UpdateFieldModal = (props: Props) => {
                       return curr;
                     });
                   }
+                  setHasChanges(true);
                   setFieldValues({ ...fieldValues, [dialog.fieldName]: value });
                   setIsError((curr) => {
                     curr[i] = false;
@@ -160,11 +162,7 @@ export const UpdateFieldModal = (props: Props) => {
         <DialogActions>
           <MaterialButton onClick={props.onDiscard}>Cancel</MaterialButton>
           <MaterialButton
-            disabled={props.dialogs.some(
-              (d) =>
-                fieldValues[d.fieldName] !== d.defaultValue &&
-                Boolean(fieldValues[d.fieldName]) === false
-            )}
+            disabled={!hasChanges}
             onClick={() => {
               if (isError.some((v) => v === true)) return;
               props.onSave(fieldValues);
@@ -235,6 +233,7 @@ export const UpdateFieldModal = (props: Props) => {
                           return curr;
                         });
                       }
+                      setHasChanges(true);
                       setFieldValues({
                         ...fieldValues,
                         [dialog.fieldName]: value,
@@ -255,11 +254,7 @@ export const UpdateFieldModal = (props: Props) => {
             <DialogActions>
               <MaterialButton onClick={props.onDiscard}>Cancel</MaterialButton>
               <MaterialButton
-                disabled={props.dialogs.some(
-                  (d) =>
-                    fieldValues[d.fieldName] !== d.defaultValue &&
-                    Boolean(fieldValues[d.fieldName]) === false
-                )}
+                disabled={!hasChanges}
                 onClick={() => {
                   if (isError.some((v) => v === true)) return;
                   props.onSave(fieldValues);
