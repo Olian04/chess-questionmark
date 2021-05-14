@@ -190,7 +190,7 @@ export const UpdateFieldModal = (props: Props) => {
             )}
           >
             {props.dialogs.map((dialog, i) => (
-              <div key={i}>
+              <div key={dialog.title}>
                 {dialog.title ? (
                   <DialogTitle id="form-dialog-title">
                     {dialog.title}
