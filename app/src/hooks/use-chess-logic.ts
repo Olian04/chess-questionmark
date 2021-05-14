@@ -347,6 +347,7 @@ export const useChessLogic = (conf: Config): API => {
           game.move({ from: match[1], to: match[2], promotion: match[3] });
           setPosition(game.fen());
           updateHighlight('history', game.history({ verbose: true }));
+          updateHighlight('piece', '');
           setDraggable(true);
           let drawReason = checkDraw();
           if (game.in_checkmate()) {
