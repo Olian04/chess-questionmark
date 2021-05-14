@@ -31,6 +31,7 @@ export const SignInPresenter = () => {
         open: true,
         severity: 'error',
         message: 'Login failed',
+        bottom: 25,
       });
     }
   }, [loginStatus]);

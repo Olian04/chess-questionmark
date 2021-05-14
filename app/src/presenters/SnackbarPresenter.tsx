@@ -30,6 +30,7 @@ export const SnackbarPresenter = () => {
       open={snackbar.open ?? false}
       message={snackbar.message ?? 'Something went wrong'}
       severity={snackbar.severity}
+      bottom={snackbar.bottom ?? '16.8%'}
       onClose={handleOnClose}
     />
   );

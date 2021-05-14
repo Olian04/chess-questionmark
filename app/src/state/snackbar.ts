@@ -9,6 +9,7 @@ export const snackbarState = atom<Partial<ISnackbar>>({
     severity: 'info',
     duration: defaultDuration,
     message: '',
+    bottom: '16.8%',
   },
 });
 
@@ -22,6 +23,7 @@ export const openSnackbar = selector({
         duration: defaultDuration,
         message: snackbar.message,
         severity: snackbar.severity,
+        bottom: snackbar.bottom,
       };
 
     return snackbar;

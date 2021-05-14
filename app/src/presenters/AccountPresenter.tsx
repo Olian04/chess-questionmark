@@ -9,6 +9,7 @@ import {
 import { useFirebaseUser } from '../hooks/use-firebase-user';
 
 import { useChangePassword } from '../hooks/use-change-password';
+import { useChangeEmail } from '../hooks/use-change-email';
 import { signOut } from '../services/firebase/auth';
 import { userCollection } from '../services/firebase/storage';
 import { loginStatusState } from '../state/authentication';
@@ -34,6 +35,7 @@ export const AccountPresenter = () => {
   const setUserFirebaseState = useSetRecoilState(userFirebaseState);
 
   const changePassword = useChangePassword();
+  const changeEmail = useChangeEmail();
 
   const updateUser = async (key: string, value: string) => {
     try {
@@ -48,19 +50,35 @@ export const AccountPresenter = () => {
         open: true,
         message: `${capitalize(key)} updated`,
         severity: 'success',
+        bottom: 25,
       });
     } catch (err) {
       setSnackbar({
         open: true,
         message: `An error occurred when updating ${key}`,
         severity: 'error',
+        bottom: 25,
       });
     }
   };
 
-  const updateEmail = (value: string) => {
-    firebaseUser?.updateEmail(value).catch((e: Error) => console.log(e));
-    setUserFirebaseState({ email: value });
+  const updateEmail = async (email: string, password: string) => {
+    const isSuccess = await changeEmail(email, password);
+    if (isSuccess) {
+      setSnackbar({
+        open: true,
+        message: 'Email updated',
+        severity: 'success',
+        bottom: 25,
+      });
+    } else {
+      setSnackbar({
+        open: true,
+        message: 'Failed to update email',
+        severity: 'error',
+        bottom: 25,
+      });
+    }
   };
 
   const updatePassword = async (cred: UserCredentials, newPassword: string) => {
@@ -70,12 +88,14 @@ export const AccountPresenter = () => {
         open: true,
         message: 'Password updated',
         severity: 'success',
+        bottom: 25,
       });
     } else {
       setSnackbar({
         open: true,
         message: 'Failed to update password',
         severity: 'error',
+        bottom: 25,
       });
     }
   };

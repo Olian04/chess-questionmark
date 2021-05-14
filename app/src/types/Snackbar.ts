@@ -3,4 +3,5 @@ export interface ISnackbar {
   severity: 'info' | 'success' | 'warning' | 'error';
   duration: number;
   message: string;
+  bottom: string | number;
 }

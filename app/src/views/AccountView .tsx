@@ -34,7 +34,7 @@ interface Props {
   onClickLogout: () => void;
   onChangeTeam: (newTeam: string) => void;
   onChangeName: (newName: string) => void;
-  onChangeEmail: (newEmail: string) => void;
+  onChangeEmail: (newEmail: string, password: string) => void;
   onChangePhone: (newPhone: string) => void;
   onChangeAvatar: (newAvatar: string) => void;
   onChangePassword: (cred: UserCredentials, newPassword: string) => void;
@@ -63,8 +63,8 @@ export const AccountView = (props: Props) => {
           if (fieldValues.avatar) {
             props.onChangeAvatar(fieldValues.avatar);
           }
-          if (fieldValues.email) {
-            props.onChangeEmail(fieldValues.email);
+          if (fieldValues.email && fieldValues.password) {
+            props.onChangeEmail(fieldValues.email, fieldValues.password);
           }
           if (fieldValues.phone) {
             props.onChangePhone(fieldValues.phone);
@@ -157,6 +157,11 @@ export const AccountView = (props: Props) => {
                         description:
                           'Change the email address associated with your account. Note that this change will update your login credentials.',
                         hint: 'Email Address',
+                      },
+                      {
+                        fieldType: 'password',
+                        fieldName: 'password',
+                        hint: 'Password',
                       },
                     ],
                   })

@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     open: {
       opacity: 1,
-      bottom: '16.8%',
       zIndex: 20,
     },
     closed: {
@@ -53,6 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props extends Pick<AlertProps, 'severity' | 'onClose'> {
   open: boolean;
   message: string;
+  bottom: string | number;
 }
 
 export const Snackbar = (props: Props) => {
@@ -71,6 +71,7 @@ export const Snackbar = (props: Props) => {
             classes.snackbar,
             props.open ? classes.open : classes.closed
           )}
+          style={{ bottom: props.open ? props.bottom : 0 }}
         >
           <Alert onClose={props.onClose} severity={props.severity}>
             {props.message}
