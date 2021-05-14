@@ -13,7 +13,8 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'left',
       backgroundColor: theme.palette.background.paper,
       color: theme.palette.primary.contrastText,
-      padding: theme.spacing(1),
+      padding: theme.spacing(2),
+      maxHeight: 160,
       '&:focus': {
         color: theme.palette.secondary.contrastText,
       },
@@ -41,7 +42,9 @@ export const Button = (props: Props) => {
       >
         <Grid container>
           <Grid xs={8} item>
-            <Typography variant="h5">{text}</Typography>
+            <Typography variant="h5">
+              <b>{text}</b>
+            </Typography>
             <Typography variant="subtitle2">{subText}</Typography>
           </Grid>
           <Grid xs={4} item>
