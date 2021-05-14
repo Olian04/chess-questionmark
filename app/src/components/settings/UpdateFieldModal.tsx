@@ -164,6 +164,11 @@ export const UpdateFieldModal = (props: Props) => {
             onClick={() => {
               setHasChanges(false);
               props.onDiscard();
+
+              // Reset for the next time this modal is reused
+              setFieldValues({});
+              setIsError([]);
+              setHelperText([]);
             }}
           >
             Cancel
@@ -259,12 +264,28 @@ export const UpdateFieldModal = (props: Props) => {
               </div>
             ))}
             <DialogActions>
-              <MaterialButton onClick={props.onDiscard}>Cancel</MaterialButton>
+              <MaterialButton
+                onClick={() => {
+                  props.onDiscard();
+
+                  // Reset for the next time this modal is reused
+                  setFieldValues({});
+                  setIsError([]);
+                  setHelperText([]);
+                }}
+              >
+                Cancel
+              </MaterialButton>
               <MaterialButton
                 disabled={!hasChanges}
                 onClick={() => {
                   if (isError.some((v) => v === true)) return;
                   props.onSave(fieldValues);
+
+                  // Reset for the next time this modal is reused
+                  setFieldValues({});
+                  setIsError([]);
+                  setHelperText([]);
                 }}
               >
                 Save
@@ -277,6 +298,11 @@ export const UpdateFieldModal = (props: Props) => {
         onClick={() => {
           setHasChanges(false);
           props.onDiscard();
+
+          // Reset for the next time this modal is reused
+          setFieldValues({});
+          setIsError([]);
+          setHelperText([]);
         }}
         className={clsx(
           classes.backdrop,
