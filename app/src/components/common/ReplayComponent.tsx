@@ -39,7 +39,6 @@ export const ReplayComponent = (props: Props) => {
         transitionDuration={400}
         draggable={false}
         size={0.6}
-        winner={''}
       />
     </Box>
   );

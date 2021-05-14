@@ -124,7 +124,6 @@ export const ReplayView = (props: Props) => {
             transitionDuration={400}
             draggable={false}
             size={0.8}
-            winner={''}
           />
           <Box>
             <Box display="flex" justifyContent="center">
