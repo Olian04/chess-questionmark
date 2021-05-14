@@ -14,6 +14,7 @@ import { ValidationError } from 'yup';
 import { UserCredentials } from '../types/UserCredentials';
 import { snackbarState } from '../state/snackbar';
 import { capitalize } from '../util/stringManipulation';
+import { UserExtras } from '../types/UserExtras';
 
 export const AccountPresenter = () => {
   const setSnackbar = useSetRecoilState(snackbarState);
@@ -26,9 +27,12 @@ export const AccountPresenter = () => {
 
   const updateUser = async (key: string, value: string) => {
     try {
-      setUserExtraData({
-        ...user,
-        [key]: value,
+      setUserExtraData((curr) => {
+        if (curr === null) {
+          return curr;
+        }
+        curr[key as keyof UserExtras] = value;
+        return curr;
       });
       await userCollection.update(user.id, {
         [key]: value,
