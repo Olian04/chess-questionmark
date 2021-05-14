@@ -11,6 +11,7 @@ import { Box, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 
 interface Props {
+  draw: boolean;
   winner: boolean;
   cause: string;
   open: boolean;
@@ -59,7 +60,7 @@ export const EndOfGame = (props: Props) => {
       <Dialog open={props.open} onClose={props.onClick}>
         <DialogContent>
           <DialogContentText>
-            {(props.winner ? 'You won' : 'You lost') +
+            {(props.draw ? 'Draw' : props.winner ? 'You won' : 'You lost') +
               ' due to ' +
               props.cause +
               '.'}

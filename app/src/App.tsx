@@ -1,6 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
-import { Box, Container, Grid, Typography } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Container,
+  Grid,
+  SvgIcon,
+  Typography,
+} from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { NavigationBar } from './components/navigation/NavigationBar';
 import { LoginRoute } from './routes/LoginRoute';
@@ -18,6 +25,7 @@ import { isMobile } from 'react-device-detect';
 import clsx from 'clsx';
 import { SnackbarPresenter } from './presenters/SnackbarPresenter';
 import { CommonModalPresenter } from './presenters/CommonModalPresenter';
+import LogoIcon from '/favicon.svg';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -176,7 +184,7 @@ export const AppContainer = () => {
               </Typography>
             </Box>
 
-            <Typography variant="h1">😤</Typography>
+            <img src={LogoIcon} alt="Page Logo" width="100px" />
           </Box>
         </Grid>
       </Grid>

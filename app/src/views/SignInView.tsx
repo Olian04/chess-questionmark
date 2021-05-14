@@ -97,9 +97,10 @@ export const SignInView = (props: Props) => {
                         label="Email"
                         autoFocus
                         onChange={formProps.handleChange}
-                        error={formProps.errors.email ? true : false}
+                        onBlur={formProps.handleBlur}
+                        error={formProps.errors.email && formProps.touched.email ? true : false}
                         helperText={
-                          formProps.errors.email ? formProps.errors.email : ''
+                          formProps.errors.email && formProps.touched.email ? formProps.errors.email : ''
                         }
                       />
                     </Grid>
@@ -114,9 +115,10 @@ export const SignInView = (props: Props) => {
                         id="password"
                         autoComplete="current-password"
                         onChange={formProps.handleChange}
-                        error={formProps.errors.password ? true : false}
+                        onBlur={formProps.handleBlur}
+                        error={formProps.errors.password && formProps.touched.password ? true : false}
                         helperText={
-                          formProps.errors.password
+                          formProps.errors.password && formProps.touched.password
                             ? formProps.errors.password
                             : ''
                         }

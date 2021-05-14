@@ -1,4 +1,3 @@
-import firebase from 'firebase';
 import { app } from '.';
 import 'firebase/firestore';
 import { Profile } from '../../types/Profile';
@@ -9,8 +8,9 @@ import {
 } from '../../types/storage/StorageGame';
 import { User } from '../../types/User';
 import { RandomGame } from '../../types/RandomGame';
-import { fallbackRandomGameState } from '../../state/game';
 import { defaultProfileState } from '../../state/user';
+import { randomIntegerBetween } from '../../util/math';
+import { fallbackRandomGameState } from '../../state/game';
 
 const db = app.firestore();
 
@@ -60,25 +60,26 @@ const getMatches = async (recentMatches: string[]) => {
 };
 
 export const fetchRandomGame = async (): Promise<RandomGame> => {
-  const collection = db.collection('games');
-  const games = await collection.get();
-  const random = Math.floor(Math.random() * games.size);
-  let game = fallbackRandomGameState;
-  let count = 0;
-  games.forEach((document) => {
-    const maybeGame = document.data();
-    if (maybeGame.history.length >= 6 && random < count) {
-      game = maybeGame as RandomGame;
-    }
-    count++;
-  });
+  const handpickedGames = [
+    '0qoNTSxynGmxxgO5OXXz',
+    '0vVigDQnHzqH93cQy7tS',
+    '16iNcCt8R6dJSLVSn29q',
+    '5DkA7LGogmMx8fGzIkTO',
+    '6QSowXYytXYel0c8Dlp1',
+  ];
+
+  const doc = db
+    .collection('games')
+    .doc(handpickedGames[randomIntegerBetween(0, handpickedGames.length - 1)]);
+
+  const game = await (await doc.get()).data();
   const countries = ['US', 'SE', 'NO', 'CA', 'FR', 'PL', 'RU'];
   return {
-    history: game.history,
+    history: game?.history ?? fallbackRandomGameState,
     player: {
       name: 'anonymous',
-      rank: 2000 - Math.floor(Math.random() * 600),
-      countryCode: countries[Math.floor(Math.random() * countries.length)],
+      rank: 2000 - randomIntegerBetween(0, 600),
+      countryCode: countries[randomIntegerBetween(0, countries.length - 1)],
     },
   };
 };
