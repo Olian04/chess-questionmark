@@ -22,7 +22,7 @@ const defaultUserState = {
 };
 
 export const defaultProfileState = {
-  rank: 1500,
+  rank: 500,
   rankDelta: 'N/A' as number | 'N/A',
   wins: 0,
   losses: 0,
