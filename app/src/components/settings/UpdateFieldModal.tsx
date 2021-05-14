@@ -8,8 +8,6 @@ import {
   DialogContentText,
   TextField,
   Box,
-  Button,
-  Typography,
 } from '@material-ui/core';
 
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
@@ -102,12 +100,14 @@ export const UpdateFieldModal = (props: Props) => {
   const [isError, setIsError] = useState<boolean[]>([]);
   const [helperText, setHelperText] = useState<string[]>([]);
   const [hasChanges, setHasChanges] = useState(false);
-
   if (isMobile) {
     return (
       <Dialog
         open={props.open}
-        onClose={props.onDiscard}
+        onClose={() => {
+          setHasChanges(false);
+          props.onDiscard();
+        }}
         aria-labelledby="form-dialog-title"
       >
         {props.dialogs.map((dialog, i) => (
@@ -160,7 +160,14 @@ export const UpdateFieldModal = (props: Props) => {
           </div>
         ))}
         <DialogActions>
-          <MaterialButton onClick={props.onDiscard}>Cancel</MaterialButton>
+          <MaterialButton
+            onClick={() => {
+              setHasChanges(false);
+              props.onDiscard();
+            }}
+          >
+            Cancel
+          </MaterialButton>
           <MaterialButton
             disabled={!hasChanges}
             onClick={() => {
@@ -267,7 +274,10 @@ export const UpdateFieldModal = (props: Props) => {
         </Box>
       </Box>
       <Box
-        onClick={props.onDiscard}
+        onClick={() => {
+          setHasChanges(false);
+          props.onDiscard();
+        }}
         className={clsx(
           classes.backdrop,
           props.open ? classes.visible : classes.hidden
