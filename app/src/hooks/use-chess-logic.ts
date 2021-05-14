@@ -1,12 +1,7 @@
-import { useState, useEffect, Dispatch } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { GameView } from '../views/GameView';
+import { useState, useEffect } from 'react';
 import { Chess, Square, Move as ChessMove } from 'chess.js';
-import { useHistory } from 'react-router-dom';
-import { EndOfGame } from '../components/game/EndOfGame';
 import { stockfishEngine } from '../lib/stockfish/engine';
 import { BoardProps } from '../types/BoardProps';
-import { SetStateAction } from 'react';
 
 interface Config {
   initialFEN: string;
@@ -33,14 +28,52 @@ interface API {
   endCause: string;
 }
 
-interface SquareStylingProps {
-  pieceSquare: Square;
+interface Highlights {
   checkSquare: Square;
-  history: Array<{ from: Square; to: Square }>;
+  pieceSquare: Square;
+  history: ChessMove[];
+  legalMoves: Square[];
 }
 
 type Player = 'white' | 'black';
 type Winner = Player | 'draw' | 'N/A';
+
+const highlightMoves = (legalMoves: Square[]) => {
+  return [...legalMoves].reduce((a, b) => {
+    return {
+      ...a,
+      ...{
+        [b]: {
+          background:
+            'radial-gradient(circle, cornFlowerBlue 36%, transparent 40%)',
+          borderRadius: '50%',
+        },
+      },
+    };
+  }, {})
+};
+
+const squareStyling = ({checkSquare, pieceSquare, history, legalMoves}: Highlights) => {
+  const sourceSquare = history.length && history[history.length - 1].from;
+  const targetSquare = history.length && history[history.length - 1].to;
+  const moves = highlightMoves(legalMoves);
+
+  return {
+    [checkSquare]: { backgroundColor: 'red' },
+    [pieceSquare]: { backgroundColor: 'cornFlowerBlue' },
+    ...(history.length && {
+      [sourceSquare]: {
+        backgroundColor: 'cornFlowerBlue',
+      },
+    }),
+    ...(history.length && {
+      [targetSquare]: {
+        backgroundColor: 'cornFlowerBlue',
+      },
+    }),
+    ...moves,
+  };
+};
 
 export const useChessLogic = (conf: Config): API => {
   const [player] = useState<Player>(conf.playerColor);
@@ -53,11 +86,16 @@ export const useChessLogic = (conf: Config): API => {
   const [dropSquareStyle, setDropSquareStyle] = useState({});
   const [squareStyles, setSquareStyles] = useState({});
   const [pieceSquare, setPieceSquare] = useState('' as Square);
-  const [checkSquare, setCheckSquare] = useState('' as Square);
-  const [history, setHistory] = useState([] as ChessMove[]);
   const [draggable, setDraggable] = useState(true);
   const [winner, setWinner] = useState('N/A' as Winner);
   const [endCause, setEndCause] = useState('N/A');
+
+  const [highlights, setHightlights] = useState({
+    checkSquare: '' as Square,
+    pieceSquare: '' as Square,
+    history: [] as ChessMove[],
+    legalMoves: [] as Square[]
+  } as Highlights);
 
   const [apiHistory, setApiHistory] = useState<Move[]>(
     conf?.previousFENStrings?.map((fen, i) => ({
@@ -68,28 +106,41 @@ export const useChessLogic = (conf: Config): API => {
 
   const [game] = useState(new Chess(position));
 
-  const squareStyling = ({
-    pieceSquare,
-    checkSquare,
-    history,
-  }: SquareStylingProps) => {
-    const sourceSquare = history.length && history[history.length - 1].from;
-    const targetSquare = history.length && history[history.length - 1].to;
-
-    return {
-      [checkSquare]: { backgroundColor: 'red' },
-      [pieceSquare]: { backgroundColor: 'cornFlowerBlue' },
-      ...(history.length && {
-        [sourceSquare]: {
-          backgroundColor: 'cornFlowerBlue',
-        },
-      }),
-      ...(history.length && {
-        [targetSquare]: {
-          backgroundColor: 'cornFlowerBlue',
-        },
-      }),
-    };
+  const updateHighlight = (type: string, arg: any) => {
+    switch(type) {
+      case 'check':
+        setHightlights((h) => {
+          return {
+            ...h,
+            checkSquare: arg,
+          }
+        });
+        break;
+      case 'piece':
+        setHightlights((h) => {
+          return {
+            ...h,
+            pieceSquare: arg,
+          }
+        });
+        break;
+      case 'history':
+        setHightlights((h) => {
+          return {
+            ...h,
+            history: arg,
+          }
+        });
+        break;
+      case 'moves':
+        setHightlights((h) => {
+          return {
+            ...h,
+            legalMoves: arg,
+          }
+        });
+        break;
+    }
   };
 
   const getAllSquares = () => {
@@ -108,7 +159,8 @@ export const useChessLogic = (conf: Config): API => {
       const p = pos as Square;
       const piece = game.get(p);
       if (piece !== null && piece.type === 'k' && piece.color === t) {
-        setCheckSquare(p);
+        updateHighlight('check' , p);
+        break;
       }
     }
   };
@@ -142,7 +194,8 @@ export const useChessLogic = (conf: Config): API => {
 
   const handleTurnSwap = () => {
     setPosition(game.fen());
-    setHistory(game.history({ verbose: true }));
+    updateHighlight('moves', []);
+    updateHighlight('history', game.history({ verbose: true }));
     setDraggable(false);
     let drawReason = checkDraw();
     if (game.in_checkmate()) {
@@ -153,11 +206,9 @@ export const useChessLogic = (conf: Config): API => {
       setWinner('draw');
     } else if (game.in_check()) {
       checkKing();
-    } else if (checkSquare !== ('' as Square)) {
-      setCheckSquare('' as Square);
+    } else {
+      updateHighlight('check', '');
     }
-    setSquareStyles(squareStyling({ pieceSquare, checkSquare, history }));
-    boardProps.removeHighlightSquare();
     setApiHistory((h) => [
       ...h,
       {
@@ -169,38 +220,6 @@ export const useChessLogic = (conf: Config): API => {
   };
 
   const boardProps = {
-    removeHighlightSquare: () => {
-      setSquareStyles(squareStyling({ pieceSquare, checkSquare, history }));
-    },
-
-    highlightSquare: (sourceSquare: Square, squaresToHighlight: Square[]) => {
-      const highlightStyles = [sourceSquare, ...squaresToHighlight].reduce(
-        (a, b) => {
-          return {
-            ...a,
-            ...{
-              [b]: {
-                background:
-                  'radial-gradient(circle, cornFlowerBlue 36%, transparent 40%)',
-                borderRadius: '50%',
-              },
-            },
-            ...squareStyling({
-              history: history,
-              checkSquare: checkSquare,
-              pieceSquare: pieceSquare,
-            }),
-          };
-        },
-        {}
-      );
-
-      setSquareStyles(({ squareStyles }: { squareStyles: Object }) => ({
-        ...squareStyles,
-        ...highlightStyles,
-      }));
-    },
-
     onDrop: ({
       sourceSquare,
       targetSquare,
@@ -220,46 +239,42 @@ export const useChessLogic = (conf: Config): API => {
       handleTurnSwap();
     },
 
-    onMouseOverSquare: (square: Square) => {
-      if (!isPlayerTurn()) return;
-
-      const moves = game.moves({
-        square: square,
-        verbose: true,
-      });
-
-      if (moves.length === 0) return;
-
-      let squaresToHighlight: Square[] = [];
-      for (var i = 0; i < moves.length; i++) {
-        squaresToHighlight.push(moves[i].to);
-      }
-
-      boardProps.highlightSquare(square, squaresToHighlight);
-    },
-
-    onMouseOutSquare: () => {
-      boardProps.removeHighlightSquare();
-    },
-
     onDragOverSquare: () => {
       setDropSquareStyle({ backgroundColor: 'cornFlowerBlue' });
     },
 
     onSquareClick: (square: Square) => {
       if (!isPlayerTurn()) return;
+      const moves = game.moves({
+        square: square,
+        verbose: true,
+      });
+
+      if (moves.length !== 0) {
+        let squaresToHighlight: Square[] = [];
+        for (var i = 0; i < moves.length; i++) {
+          squaresToHighlight.push(moves[i].to);
+        }
+        setPieceSquare(square);
+        updateHighlight('piece', square);
+        updateHighlight('moves', squaresToHighlight);
+        return;
+      }
+
       const move = game.move({
         from: pieceSquare,
         to: square,
         promotion: 'q',
       });
 
+      setPieceSquare('' as Square);
+      updateHighlight('piece', '');
+      updateHighlight('moves', []);
+
       if (move === null) {
-        setPieceSquare(square);
         return;
       }
 
-      setPieceSquare('' as Square);
       handleTurnSwap();
     },
   };
@@ -324,7 +339,7 @@ export const useChessLogic = (conf: Config): API => {
         if (match) {
           game.move({ from: match[1], to: match[2], promotion: match[3] });
           setPosition(game.fen());
-          setHistory(game.history({ verbose: true }));
+          updateHighlight('history', game.history({ verbose: true }));
           setDraggable(true);
           let drawReason = checkDraw();
           if (game.in_checkmate()) {
@@ -335,11 +350,9 @@ export const useChessLogic = (conf: Config): API => {
             setWinner('draw');
           } else if (game.in_check()) {
             checkKing();
-          } else if (checkSquare !== ('' as Square)) {
-            setCheckSquare('' as Square);
+          } else {
+            updateHighlight('check', '');
           }
-          setSquareStyles(squareStyling({ pieceSquare, checkSquare, history }));
-          boardProps.removeHighlightSquare();
           prepareMove();
           setApiHistory((h) => [
             ...h,
@@ -419,35 +432,13 @@ export const useChessLogic = (conf: Config): API => {
     );
   };
 
-  const runTopTimer = () => {
-    let t = topTimeLeft;
-    setIntervalID(
-      setInterval(() => {
-        if (t <= 0) {
-          gameTimeout('black');
-          return;
-        }
-        setTopTimeLeft(--t);
-      }, 1000)
-    );
-  };
-
-  const stopTopTimer = () => {
-    clearInterval(intervalID);
-    setTopTimeLeft(
-      Math.min(topTimeLeft + conf.timerIncreaseOnMove, conf.timerLength)
-    );
-  };
-
   useEffect(() => {
     if (!apiHistory.length) return;
     const lastState = apiHistory[apiHistory.length - 1];
     if (lastState.player === 'ai') {
-      //stopTopTimer();
       runBotTimer();
     } else {
       stopBotTimer();
-      //runTopTimer();
     }
   }, [apiHistory.length]);
 
@@ -460,6 +451,10 @@ export const useChessLogic = (conf: Config): API => {
   useEffect(() => {
     if (game.turn() === conf.playerColor[0]) runBotTimer();
   }, []);
+
+  useEffect(() => {
+    setSquareStyles(squareStyling(highlights));
+  }, [highlights]);
 
   return {
     history: apiHistory,
