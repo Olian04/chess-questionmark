@@ -24,6 +24,7 @@ import { PlayView } from '../views/PlayView';
 export const PlayPresenter = () => {
   const user = useRecoilValue(userState);
   const profile = useRecoilValue(profileState);
+  const gamestate = useRecoilValue(requestGame);
   const setProfile = useSetRecoilState(profileData(user.id));
   const [profileStatus, setProfileStatus] = useRecoilState(profileStatusState);
 
@@ -63,14 +64,6 @@ export const PlayPresenter = () => {
     history.push('/puzzle');
   });
 
-  const checkCurrentGame = useRecoilCallback(({ snapshot }) => async () => {
-    const game = await snapshot.getPromise(requestGame);
-    setLiveGame(false);
-    if (game.state === 'playing') {
-      setLiveGame(true);
-    }
-  });
-
   const hydrateProfile = () => {
     if (user) {
       setProfileStatus('pending');
@@ -103,7 +96,11 @@ export const PlayPresenter = () => {
   }, [user?.id]);
 
   useEffect(() => {
-    checkCurrentGame();
+    if (gamestate && gamestate.state && gamestate.state === 'playing') {
+      setLiveGame(true);
+    } else {
+      setLiveGame(false);
+    }
   }, []);
 
   return (
