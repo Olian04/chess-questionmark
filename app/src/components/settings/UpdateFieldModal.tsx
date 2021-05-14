@@ -166,6 +166,11 @@ export const UpdateFieldModal = (props: Props) => {
             onClick={() => {
               if (isError.some((v) => v === true)) return;
               props.onSave(fieldValues);
+
+              // Reset for the next time this modal is reused
+              setFieldValues({});
+              setIsError([]);
+              setHelperText([]);
             }}
           >
             Save
