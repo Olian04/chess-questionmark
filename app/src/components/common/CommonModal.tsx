@@ -15,6 +15,18 @@ import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    container: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 30,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      pointerEvents: 'none',
+    },
     backdrop: {
       position: 'absolute',
       top: 0,
@@ -22,10 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
       right: 0,
       bottom: 0,
       backgroundColor: 'rgba(0,0,0,0.3)',
-      zIndex: 30,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
+      zIndex: 10,
     },
     fill: {
       top: 0,
@@ -42,11 +51,11 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: theme.spacing(2),
       paddingBottom: theme.spacing(2),
       borderRadius: theme.shape.borderRadius,
+      pointerEvents: 'auto',
     },
     visible: {
       visible: 'visible',
       opacity: 1,
-      pointerEvents: 'auto',
     },
     hidden: {
       visible: 'hidden',
@@ -88,34 +97,42 @@ export const CommonModal = (props: Props) => {
    * filling the whole view, but only the mobileframe
    */
   return (
-    <Box
-      className={clsx(
-        classes.backdrop,
-        props.modal.open ? classes.visible : classes.hidden
-      )}
-      onClick={props.handleClose}
-    >
-      <Box className={classes.fill}>
-        <Box className={classes.modal}>
-          <DialogTitle onClick={props.handleClose} disableTypography>
-            <Typography color="textPrimary" variant="h6">
-              {props.modal.title}
-            </Typography>
-          </DialogTitle>
-          <DialogContent dividers>
-            {props.modal.content?.map((message, i) => (
-              <Typography gutterBottom key={i} color="textPrimary">
-                {message}
+    <>
+      <Box
+        className={clsx(
+          classes.container,
+          props.modal.open ? classes.visible : classes.hidden
+        )}
+      >
+        <Box className={classes.fill}>
+          <Box className={classes.modal}>
+            <DialogTitle disableTypography>
+              <Typography color="textPrimary" variant="h6">
+                {props.modal.title}
               </Typography>
-            ))}
-          </DialogContent>
-          <DialogActions>
-            <Button autoFocus onClick={props.handleClose}>
-              Close
-            </Button>
-          </DialogActions>
+            </DialogTitle>
+            <DialogContent dividers>
+              {props.modal.content?.map((message, i) => (
+                <Typography gutterBottom key={i} color="textPrimary">
+                  {message}
+                </Typography>
+              ))}
+            </DialogContent>
+            <DialogActions>
+              <Button autoFocus onClick={props.handleClose}>
+                Close
+              </Button>
+            </DialogActions>
+          </Box>
         </Box>
       </Box>
-    </Box>
+      <Box
+        onClick={props.handleClose}
+        className={clsx(
+          classes.backdrop,
+          props.modal.open ? classes.visible : classes.hidden
+        )}
+      />
+    </>
   );
 };
