@@ -37,8 +37,7 @@ export const PuzzlePresenter = () => {
     previousFENStrings,
     playerColor: playerIsWhite ? 'white' : 'black',
     timerLength: gameState.timeLeft,
-    difficulty:
-      userProfile.rank,
+    difficulty: userProfile.rank,
     timerIncreaseOnMove,
   });
 
@@ -59,7 +58,9 @@ export const PuzzlePresenter = () => {
         winner:
           gameLogic.boardProps.orientation === gameLogic.boardProps.winner
             ? 'playerOne'
-            : (gameLogic.boardProps.winner === 'draw' ? 'Draw' : 'playerTwo'),
+            : gameLogic.boardProps.winner === 'draw'
+            ? 'Draw'
+            : 'playerTwo',
         state: 'ended',
       });
       await migrateGameByUserID(userID);
@@ -100,7 +101,8 @@ export const PuzzlePresenter = () => {
 
         const newGameState = await getLiveGameByUserID(userID);
         if (newGameState === null) {
-          throw new Error(`This should never happen... Run for your lives!!`);
+          // This should never happen... Run for your lives!!
+          return;
         }
         set(requestGame, newGameState);
       }
