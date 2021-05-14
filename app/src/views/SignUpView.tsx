@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
     link: {
       color: theme.palette.secondary.main,
       '&:hover, &:focus': {
-        PointerEvent: 'cursor',
+        cursor: 'pointer',
       },
     },
   })
@@ -74,9 +74,6 @@ interface Props {
 export const SignUpView = (props: Props) => {
   const classes = useStyles();
 
-  
- 
-
   const handleCheckbox = (
     formik: any,
     event: React.ChangeEvent<HTMLInputElement>,
@@ -85,8 +82,6 @@ export const SignUpView = (props: Props) => {
     props.onSetChecked(checked);
     formik.handleChange(event);
   };
-
-  
 
   return (
     <>
@@ -216,38 +211,44 @@ export const SignUpView = (props: Props) => {
                               : false
                           }
                         >
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={props.checked}
-                                onChange={(event, checked) =>
-                                  handleCheckbox(formikProps, event, checked)
-                                }
-                                onBlur={formikProps.handleBlur}
-                                value={formikProps.values.agreeOnTerms}
-                                name="agreeOnTerms"
-                              />
-                            }
-                            label={
-                              <Typography>
-                                I agree to the{' '}
-                                <span
-                                  onClick={() => props.onHandleModal('terms')}
-                                  className={classes.link}
-                                >
-                                  Terms
-                                </span>
-                                {' and '}
-                                <span
-                                  onClick={() => props.onHandleModal('policy')}
-                                  className={classes.link}
-                                >
-                                  Privacy Policy
-                                </span>
-                              </Typography>
-                            }
-                          />
+                          <Box display="flex">
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={props.checked}
+                                  onChange={(event, checked) => {
+                                    handleCheckbox(formikProps, event, checked);
+                                  }}
+                                  onBlur={formikProps.handleBlur}
+                                  value={formikProps.values.agreeOnTerms}
+                                  name="agreeOnTerms"
+                                />
+                              }
+                              label={<></>}
+                            />
+                            <Typography>
+                              I agree to the{' '}
+                              <span
+                                onClick={() => {
+                                  props.onHandleModal('terms');
+                                }}
+                                className={classes.link}
+                              >
+                                Terms
+                              </span>
+                              {' and '}
+                              <span
+                                onClick={() => {
+                                  props.onHandleModal('policy');
+                                }}
+                                className={classes.link}
+                              >
+                                Privacy Policy
+                              </span>
+                            </Typography>
+                          </Box>
                         </FormControl>
+
                         <FormHelperText
                           error={
                             formikProps.errors.agreeOnTerms &&
