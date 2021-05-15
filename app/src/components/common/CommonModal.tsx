@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -10,7 +9,6 @@ import {
 import React from 'react';
 import { isMobile } from 'react-device-detect';
 import { IModal } from '../../types/modal';
-import clsx from 'clsx';
 import { ContainedModal } from '../mobileframe/ContainedModal';
 
 interface Props {

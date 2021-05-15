@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -9,63 +9,9 @@ import {
   TextField,
   Box,
 } from '@material-ui/core';
-
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { isMobile } from 'react-device-detect';
-import clsx from 'clsx';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      zIndex: 30,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      pointerEvents: 'none',
-    },
-    backdrop: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0,0,0,0.3)',
-      zIndex: 10,
-    },
-    fill: {
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      position: 'relative',
-      margin: theme.spacing(1),
-      pointerEvents: 'none',
-    },
-    modal: {
-      backgroundColor: theme.palette.background.paper,
-      paddingLeft: theme.spacing(0.5),
-      paddingRight: theme.spacing(0.5),
-      paddingTop: theme.spacing(2),
-      paddingBottom: theme.spacing(2),
-      borderRadius: theme.shape.borderRadius,
-      pointerEvents: 'auto',
-    },
-    visible: {
-      visible: 'visible',
-      opacity: 1,
-    },
-    hidden: {
-      visible: 'hidden',
-      opacity: 0,
-      pointerEvents: 'none',
-    },
-  })
-);
+import { ContainedUpdateModal } from '../mobileframe/ContainedUpdateModal';
 
 export interface FieldValues {
   name: string;
@@ -94,12 +40,132 @@ interface Props {
   onDiscard: () => void;
 }
 
+interface ExtraProps extends Props {
+  fieldValues: Partial<FieldValues>;
+  setFieldValues: Dispatch<SetStateAction<Partial<FieldValues>>>;
+  isError: boolean[];
+  setIsError: Dispatch<SetStateAction<boolean[]>>;
+  helperText: string[];
+  setHelperText: Dispatch<SetStateAction<string[]>>;
+  hasChanges: boolean;
+  setHasChanges: Dispatch<SetStateAction<boolean>>;
+}
+
+const ModalContent = (props: ExtraProps) => {
+  return (
+    <>
+      {props.dialogs.map((dialog, i) => (
+        <div key={dialog.title}>
+          {dialog.title ? (
+            <DialogTitle id="form-dialog-title">{dialog.title}</DialogTitle>
+          ) : null}
+          <DialogContent>
+            {dialog.description ? (
+              <DialogContentText>{dialog.description}</DialogContentText>
+            ) : null}
+            <TextField
+              autoFocus
+              margin="dense"
+              label={dialog.hint}
+              variant="outlined"
+              color="secondary"
+              type={dialog.fieldType}
+              fullWidth
+              error={props.isError[i]}
+              helperText={props.helperText[i]}
+              defaultValue={dialog.defaultValue}
+              onChange={(ev) => {
+                const value = ev.target.value;
+                const validationError =
+                  dialog.validate && dialog.validate(value);
+                if (typeof validationError === 'string') {
+                  props.setIsError((curr) => {
+                    curr[i] = true;
+                    return curr;
+                  });
+                  props.setHelperText((curr) => {
+                    curr[i] = validationError;
+                    return curr;
+                  });
+                }
+                props.setHasChanges(true);
+                props.setFieldValues({
+                  ...props.fieldValues,
+                  [dialog.fieldName]: value,
+                });
+                props.setIsError((curr) => {
+                  curr[i] = false;
+                  return curr;
+                });
+                props.setHelperText((curr) => {
+                  delete curr[i];
+                  return curr;
+                });
+              }}
+            />
+          </DialogContent>
+        </div>
+      ))}
+      <DialogActions>
+        <MaterialButton
+          onClick={() => {
+            props.setHasChanges(false);
+            props.onDiscard();
+
+            // Reset for the next time this modal is reused
+            props.setFieldValues({});
+            props.setIsError([]);
+            props.setHelperText([]);
+          }}
+        >
+          Cancel
+        </MaterialButton>
+        <MaterialButton
+          disabled={!props.hasChanges}
+          onClick={() => {
+            if (props.isError.some((v) => v === true)) return;
+            props.onSave(props.fieldValues);
+
+            // Reset for the next time this modal is reused
+            props.setFieldValues({});
+            props.setIsError([]);
+            props.setHelperText([]);
+          }}
+        >
+          Save
+        </MaterialButton>
+      </DialogActions>
+    </>
+  );
+};
+
 export const UpdateFieldModal = (props: Props) => {
-  const classes = useStyles();
   const [fieldValues, setFieldValues] = useState<Partial<FieldValues>>({});
   const [isError, setIsError] = useState<boolean[]>([]);
   const [helperText, setHelperText] = useState<string[]>([]);
   const [hasChanges, setHasChanges] = useState(false);
+
+  const handleMobileDiscard = () => {
+    setHasChanges(false);
+    props.onDiscard();
+
+    // Reset for the next time this modal is reused
+    setFieldValues({});
+    setIsError([]);
+    setHelperText([]);
+  };
+
+  const extraProps = {
+    fieldValues,
+    setFieldValues,
+    isError,
+    setIsError,
+    helperText,
+    setHelperText,
+    setHasChanges,
+    hasChanges,
+  };
+
   if (isMobile) {
     return (
       <Dialog
@@ -110,84 +176,7 @@ export const UpdateFieldModal = (props: Props) => {
         }}
         aria-labelledby="form-dialog-title"
       >
-        {props.dialogs.map((dialog, i) => (
-          <div key={dialog.title}>
-            {dialog.title ? (
-              <DialogTitle id="form-dialog-title">{dialog.title}</DialogTitle>
-            ) : null}
-            <DialogContent>
-              {dialog.description ? (
-                <DialogContentText>{dialog.description}</DialogContentText>
-              ) : null}
-              <TextField
-                autoFocus
-                margin="dense"
-                label={dialog.hint}
-                variant="outlined"
-                color="secondary"
-                type={dialog.fieldType}
-                fullWidth
-                error={isError[i]}
-                helperText={helperText[i]}
-                defaultValue={dialog.defaultValue}
-                onChange={(ev) => {
-                  const value = ev.target.value;
-                  const validationError =
-                    dialog.validate && dialog.validate(value);
-                  if (typeof validationError === 'string') {
-                    setIsError((curr) => {
-                      curr[i] = true;
-                      return curr;
-                    });
-                    setHelperText((curr) => {
-                      curr[i] = validationError;
-                      return curr;
-                    });
-                  }
-                  setHasChanges(true);
-                  setFieldValues({ ...fieldValues, [dialog.fieldName]: value });
-                  setIsError((curr) => {
-                    curr[i] = false;
-                    return curr;
-                  });
-                  setHelperText((curr) => {
-                    delete curr[i];
-                    return curr;
-                  });
-                }}
-              />
-            </DialogContent>
-          </div>
-        ))}
-        <DialogActions>
-          <MaterialButton
-            onClick={() => {
-              setHasChanges(false);
-              props.onDiscard();
-
-              // Reset for the next time this modal is reused
-              setFieldValues({});
-              setIsError([]);
-              setHelperText([]);
-            }}
-          >
-            Cancel
-          </MaterialButton>
-          <MaterialButton
-            disabled={!hasChanges}
-            onClick={() => {
-              if (isError.some((v) => v === true)) return;
-              props.onSave(fieldValues);
-
-              // Reset for the next time this modal is reused
-              setFieldValues({});
-              setIsError([]);
-              setHelperText([]);
-            }}
-          >
-            Save
-          </MaterialButton>
-        </DialogActions>
+        <ModalContent {...props} {...extraProps} />
       </Dialog>
     );
   }
@@ -195,120 +184,8 @@ export const UpdateFieldModal = (props: Props) => {
    * filling the whole view, but only the mobileframe
    */
   return (
-    <>
-      <Box
-        className={clsx(
-          classes.container,
-          props.open ? classes.visible : classes.hidden
-        )}
-      >
-        <Box className={classes.fill}>
-          <Box
-            className={clsx(
-              classes.modal,
-              props.open ? classes.visible : classes.hidden
-            )}
-          >
-            {props.dialogs.map((dialog, i) => (
-              <div key={dialog.title}>
-                {dialog.title ? (
-                  <DialogTitle id="form-dialog-title">
-                    {dialog.title}
-                  </DialogTitle>
-                ) : null}
-                <DialogContent>
-                  {dialog.description ? (
-                    <DialogContentText>{dialog.description}</DialogContentText>
-                  ) : null}
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    label={dialog.hint}
-                    variant="outlined"
-                    color="secondary"
-                    type={dialog.fieldType}
-                    fullWidth
-                    error={isError[i]}
-                    helperText={helperText[i]}
-                    defaultValue={dialog.defaultValue}
-                    onChange={(ev) => {
-                      const value = ev.target.value;
-                      const validationError =
-                        dialog.validate && dialog.validate(value);
-                      if (typeof validationError === 'string') {
-                        setIsError((curr) => {
-                          curr[i] = true;
-                          return curr;
-                        });
-                        setHelperText((curr) => {
-                          curr[i] = validationError;
-                          return curr;
-                        });
-                      }
-                      setHasChanges(true);
-                      setFieldValues({
-                        ...fieldValues,
-                        [dialog.fieldName]: value,
-                      });
-                      setIsError((curr) => {
-                        curr[i] = false;
-                        return curr;
-                      });
-                      setHelperText((curr) => {
-                        delete curr[i];
-                        return curr;
-                      });
-                    }}
-                  />
-                </DialogContent>
-              </div>
-            ))}
-            <DialogActions>
-              <MaterialButton
-                onClick={() => {
-                  props.onDiscard();
-
-                  // Reset for the next time this modal is reused
-                  setFieldValues({});
-                  setIsError([]);
-                  setHelperText([]);
-                }}
-              >
-                Cancel
-              </MaterialButton>
-              <MaterialButton
-                disabled={!hasChanges}
-                onClick={() => {
-                  if (isError.some((v) => v === true)) return;
-                  props.onSave(fieldValues);
-
-                  // Reset for the next time this modal is reused
-                  setFieldValues({});
-                  setIsError([]);
-                  setHelperText([]);
-                }}
-              >
-                Save
-              </MaterialButton>
-            </DialogActions>
-          </Box>
-        </Box>
-      </Box>
-      <Box
-        onClick={() => {
-          setHasChanges(false);
-          props.onDiscard();
-
-          // Reset for the next time this modal is reused
-          setFieldValues({});
-          setIsError([]);
-          setHelperText([]);
-        }}
-        className={clsx(
-          classes.backdrop,
-          props.open ? classes.visible : classes.hidden
-        )}
-      />
-    </>
+    <ContainedUpdateModal open={props.open} onClose={handleMobileDiscard}>
+      <ModalContent {...props} {...extraProps} />
+    </ContainedUpdateModal>
   );
 };
