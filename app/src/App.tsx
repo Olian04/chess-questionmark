@@ -27,15 +27,10 @@ import { RecoilRoute } from './providers/stateProvider';
 import { BackgroundCircle } from './components/common/BackgroundCircle';
 import { LoadingView } from './views/LoadingView';
 import { isMobile } from 'react-device-detect';
-import clsx from 'clsx';
 import { SnackbarPresenter } from './presenters/SnackbarPresenter';
 import { CommonModalPresenter } from './presenters/CommonModalPresenter';
-import LogoIcon from '/favicon.svg';
-import lock from '/lock.svg';
-import battery from '/battery.svg';
-import cellular from '/cellular.svg';
-import wifi from '/wifi.svg';
-import { format } from 'date-fns';
+import { Frame } from './components/mobileframe/Frame';
+import { WelcomeCard } from './components/mobileframe/WelcomeCard';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -194,66 +189,10 @@ export const AppContainer = () => {
   return (
     <Container className={classes.center}>
       <Grid container direction="row-reverse" justify="space-evenly">
-        <Grid
-          container
-          item
-          xs={12}
-          lg={4}
-          alignItems="center"
-          direction="column"
-        >
-          <Box className={classes.browserWrapper}>
-            <Box className={classes.browserContainer}>
-              <Box className={classes.searchbar}>
-                <Box className={classes.statusbar}>
-                  {format(new Date(), 'HH:mm')}
-                  <Box className={classes.notifications}>
-                    <img src={cellular} />
-                    <img src={wifi} />
-                    <img src={battery} />
-                  </Box>
-                </Box>
-                <Box className={classes.adressbar}>
-                  <Box className={classes.adress}>
-                    <img src={lock} style={{ marginRight: 4 }} />
-                    kth.codes
-                  </Box>
-                </Box>
-              </Box>
-              <App />
-            </Box>
-          </Box>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          lg={8}
-          className={classes.leftContainer}
-          alignItems="center"
-        >
-          <Box className={clsx(classes.info, classes.row)}>
-            <Box>
-              <Typography
-                variant="h2"
-                align="left"
-                gutterBottom
-                color="textPrimary"
-              >
-                Welcome to <span className={classes.highlight}>chess?</span>
-              </Typography>
-              <Typography variant="h6" align="left" color="textPrimary">
-                <span className={classes.highlight}>chess?</span> is definitely
-                best viewed on a mobile phone.
-              </Typography>
-              <Typography variant="subtitle2" align="left" color="textPrimary">
-                Try it out on your mobile, or here. The experience will be the
-                same.
-              </Typography>
-            </Box>
-
-            <img src={LogoIcon} alt="Page Logo" width="100px" />
-          </Box>
-        </Grid>
+        <Frame>
+          <App />
+        </Frame>
+        <WelcomeCard />
       </Grid>
     </Container>
   );
