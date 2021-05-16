@@ -7,6 +7,7 @@ import lock from '/lock.svg';
 import battery from '/battery.svg';
 import cellular from '/cellular.svg';
 import wifi from '/wifi.svg';
+import { useSearchbar } from '../../hooks/use-searchbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -82,13 +83,15 @@ interface Props {
 
 export const Frame = (props: Props) => {
   const classes = useStyles();
+  const [time, href] = useSearchbar();
+
   return (
     <Grid container item xs={12} lg={4} alignItems="center" direction="column">
       <Box className={classes.browserWrapper}>
         <Box className={classes.browserContainer}>
           <Box className={classes.searchbar}>
             <Box className={classes.statusbar}>
-              {format(new Date(), 'HH:mm')}
+              {time}
               <Box className={classes.notifications}>
                 <img src={cellular} />
                 <img src={wifi} />
@@ -98,7 +101,7 @@ export const Frame = (props: Props) => {
             <Box className={classes.adressbar}>
               <Box className={classes.adress}>
                 <img src={lock} style={{ marginRight: 4 }} />
-                kth.codes
+                {href}
               </Box>
             </Box>
           </Box>

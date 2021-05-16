@@ -42,16 +42,14 @@ interface Props {
 const getTick = (name: string, match: StorageGameLocal) =>
   match.material * (match.winner.name === name ? 1 : -1);
 
-const startRank = 1500;
-
 export const Graph = (props: Props) => {
   const classes = useStyles();
 
-  const delta = props.delta === 'N/A' ? 0 : props.delta;
   const rankHistory = [
-    startRank,
+    500,
     ...props.recentMatches.map((match) => getTick(props.username, match)),
   ];
+  if (rankHistory.length === 1) rankHistory.push(props.rank);
   const rankUpdates = rankHistory.map((match, i) =>
     rankHistory.slice(0, i + 1).reduce((a, b) => a + b)
   );

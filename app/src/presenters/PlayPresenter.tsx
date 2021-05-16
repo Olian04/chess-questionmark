@@ -45,7 +45,7 @@ export const PlayPresenter = () => {
     if (game.state !== 'playing' && game.winner === 'N/A') {
       const fenString = await fetchRandomPuzzle();
 
-      const timeLeft = 5 * 60;
+      const timeLeft = 2 * 60;
 
       const newGame: LiveGame = {
         turn: 'playerOne',
