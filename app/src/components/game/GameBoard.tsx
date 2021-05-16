@@ -21,7 +21,6 @@ export const GameBoard = (props: Props) => {
 
   const difference = navHeight + 2 * playerBarHeight;
 
-  const { cursor } = useContext(MouseContext);
   return (
     <Box display="flex" justifyContent="center">
       <Chessboard
