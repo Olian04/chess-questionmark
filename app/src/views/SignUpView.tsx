@@ -52,7 +52,8 @@ const useStyles = makeStyles((theme: Theme) =>
     link: {
       color: theme.palette.secondary.main,
       '&:hover, &:focus': {
-        cursor: isBrowser ? 'none' : 'pointer',
+        //cursor: isBrowser ? 'none' : 'pointer',
+        cursor: 'pointer',
       },
     },
   })
