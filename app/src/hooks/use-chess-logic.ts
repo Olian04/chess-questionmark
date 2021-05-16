@@ -38,6 +38,11 @@ interface Highlights {
 type Player = 'white' | 'black';
 type Winner = Player | 'draw' | 'N/A';
 
+const PREVIOUS_MOVE_COLOR = 'cornFlowerBlue';
+const SELECTED_PIECE_COLOR = 'cornFlowerBlue';
+const KING_DANGER_COLOR = 'red';
+const DRAG_OVER_COLOR = 'cornFlowerBlue';
+
 const highlightMoves = (legalMoves: Square[]) => {
   return [...legalMoves].reduce((a, b) => {
     return {
@@ -59,16 +64,16 @@ const squareStyling = ({checkSquare, pieceSquare, history, legalMoves}: Highligh
   const moves = highlightMoves(legalMoves);
 
   return {
-    [checkSquare]: { backgroundColor: 'red' },
-    [pieceSquare]: { backgroundColor: 'cornFlowerBlue' },
+    [checkSquare]: { backgroundColor: KING_DANGER_COLOR },
+    [pieceSquare]: { backgroundColor: SELECTED_PIECE_COLOR },
     ...(history.length && {
       [sourceSquare]: {
-        backgroundColor: 'cornFlowerBlue',
+        backgroundColor: PREVIOUS_MOVE_COLOR,
       },
     }),
     ...(history.length && {
       [targetSquare]: {
-        backgroundColor: 'cornFlowerBlue',
+        backgroundColor: PREVIOUS_MOVE_COLOR,
       },
     }),
     ...moves,
@@ -83,12 +88,14 @@ export const useChessLogic = (conf: Config): API => {
   const [intervalID, setIntervalID] = useState(0);
 
   const [position, setPosition] = useState(conf.initialFEN);
-  const [dropSquareStyle, setDropSquareStyle] = useState({});
+  // const [dropSquareStyle, setDropSquareStyle] = useState({});
   const [squareStyles, setSquareStyles] = useState({});
   const [pieceSquare, setPieceSquare] = useState('' as Square);
   const [draggable, setDraggable] = useState(true);
   const [winner, setWinner] = useState('N/A' as Winner);
   const [endCause, setEndCause] = useState('N/A');
+
+  const dropSquareStyle = { backgroundColor: DRAG_OVER_COLOR };
 
   const [highlights, setHightlights] = useState({
     checkSquare: '' as Square,
@@ -237,10 +244,6 @@ export const useChessLogic = (conf: Config): API => {
       if (move === null) return;
 
       handleTurnSwap();
-    },
-
-    onDragOverSquare: () => {
-      setDropSquareStyle({ backgroundColor: 'cornFlowerBlue' });
     },
 
     onSquareClick: (square: Square) => {
