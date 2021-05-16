@@ -1,7 +1,6 @@
-import React, { createContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useRef } from 'react';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
-import { isBrowser, isMobile } from 'react-device-detect';
+import { isBrowser } from 'react-device-detect';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,6 +30,7 @@ export const MouseContext = createContext({
   onMouseMove: (e: any) => {},
   onMouseEnter: (e: any) => {},
   onMouseLeave: (e: any) => {},
+  cursor: () => {},
 });
 
 export const CursorProvider = ({ children }: Props) => {
@@ -55,6 +55,9 @@ export const CursorProvider = ({ children }: Props) => {
       mouseRef.current.style.opacity = '1';
     }
   };
+  const cursor = () => {
+    return isBrowser ? 'none' : 'auto';
+  };
 
   const mouseRef = useRef<HTMLDivElement>(null);
   return (
@@ -63,6 +66,7 @@ export const CursorProvider = ({ children }: Props) => {
         onMouseMove,
         onMouseLeave,
         onMouseEnter,
+        cursor,
       }}
     >
       {children}

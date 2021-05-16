@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Chessboard, { Props as cbjsxProps } from 'chessboardjsx';
 import { useTheme } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 
-import { EndOfGame } from './EndOfGame';
-import { isMobile } from 'react-device-detect';
+import { isBrowser, isMobile } from 'react-device-detect';
+import { MouseContext } from '../../providers/CursorProvider';
 
 interface Props extends cbjsxProps {
   size?: number;
@@ -21,12 +21,14 @@ export const GameBoard = (props: Props) => {
 
   const difference = navHeight + 2 * playerBarHeight;
 
+  const { cursor } = useContext(MouseContext);
   return (
     <Box display="flex" justifyContent="center">
       <Chessboard
         {...props}
         boardStyle={{
           boxShadow: theme.shadows[10],
+          cursor: isBrowser ? 'none' : 'pointer',
         }}
         calcWidth={({ screenHeight, screenWidth }) => {
           if (isMobile) {
