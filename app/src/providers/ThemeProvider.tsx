@@ -150,6 +150,7 @@ export const ThemeProvider = (props: Props) => {
     document.body.style.backgroundColor = theme.palette.background.default;
   }, [theme]);
 
+  /*
   if (isBrowser && theme.overrides) {
     theme.overrides.MuiButtonBase = {
       ...theme.overrides.MuiButtonBase,
@@ -166,6 +167,7 @@ export const ThemeProvider = (props: Props) => {
       },
     };
   }
+  */
 
   return (
     <MaterialThemeProvider theme={theme}>

@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
       maskImage: 'url(/mask.svg)',
       maskSize: 'cover',
       maskRepeat: 'no-repeat',
-      cursor: 'none !important',
+      //cursor: 'none !important',
     },
     searchbar: {
       width: '100%',

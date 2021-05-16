@@ -85,9 +85,10 @@ export const App = () => {
     <Container className={classes.center}>
       <Grid container direction="row-reverse" justify="space-evenly">
         <Frame>
-          <CursorProvider>
+          {/*<CursorProvider>
             <AppContent />
-          </CursorProvider>
+          </CursorProvider>*/}
+          <AppContent />
         </Frame>
         <WelcomeCard />
       </Grid>
@@ -98,9 +99,9 @@ export const App = () => {
 //DRY compliant
 export const AppContent = () => {
   const classes = useStyles();
-  const mouseContext = useContext(MouseContext);
+  //const mouseContext = useContext(MouseContext);
   return (
-    <main {...mouseContext} style={{ height: 'calc(100% - 43px)' }}>
+    <main /*{...mouseContext}*/ style={{ height: 'calc(100% - 43px)' }}>
       <SnackbarPresenter />
       <CommonModalPresenter />
       <Router>

@@ -38,7 +38,9 @@ export const CursorProvider = ({ children }: Props) => {
 
   const onMouseMove = (event: any) => {
     const { pageX: x, pageY: y } = event;
+
     if (mouseRef.current && isBrowser) {
+      console.log(x, y);
       mouseRef.current.style.transform = `translate(${x - 12.5}px,${
         y - 12.5
       }px)`;

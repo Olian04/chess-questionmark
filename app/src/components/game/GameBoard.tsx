@@ -26,7 +26,7 @@ export const GameBoard = (props: Props) => {
         {...props}
         boardStyle={{
           boxShadow: theme.shadows[10],
-          cursor: isBrowser ? 'none' : 'pointer',
+          //cursor: isBrowser ? 'none' : 'pointer',
         }}
         calcWidth={({ screenHeight, screenWidth }) => {
           if (isMobile) {
