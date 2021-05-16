@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
+      alignItems: 'center',
     },
   })
 );
@@ -34,13 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export const WelcomeCard = () => {
   const classes = useStyles();
   return (
-    <Grid
-      item
-      xs={12}
-      lg={8}
-      className={classes.leftContainer}
-      alignItems="center"
-    >
+    <Grid item xs={12} lg={8} className={classes.leftContainer}>
       <Box className={clsx(classes.info, classes.row)}>
         <Box>
           <Typography

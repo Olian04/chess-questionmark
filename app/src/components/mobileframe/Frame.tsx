@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { Grid, Box } from '@material-ui/core';
 import { format } from 'date-fns';
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
       maskImage: 'url(/mask.svg)',
       maskSize: 'cover',
       maskRepeat: 'no-repeat',
+      cursor: 'none !important',
     },
     searchbar: {
       width: '100%',
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
       boxSizing: 'content-box',
       backgroundColor: '#35373A',
       position: 'relative',
-      zIndex: 30,
+      zIndex: 1300,
       paddingBottom: theme.spacing(0.5),
     },
     statusbar: {

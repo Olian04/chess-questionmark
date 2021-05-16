@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 /** Suggestion for keeping strictmode and still be able to use
  * components that apparently use findDOMNode
  * See https://stackoverflow.com/questions/61220424/material-ui-drawer-finddomnode-is-deprecated-in-strictmode */
@@ -41,6 +41,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
 
 import { colorThemeState } from '../state/colorTheme';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
+import { isBrowser } from 'react-device-detect';
 
 const darkTheme = createMuiTheme({
   breakpoints: {
@@ -151,6 +152,23 @@ export const ThemeProvider = (props: Props) => {
   useEffect(() => {
     document.body.style.backgroundColor = theme.palette.background.default;
   }, [theme]);
+
+  if (isBrowser && theme.overrides) {
+    theme.overrides.MuiButtonBase = {
+      ...theme.overrides.MuiButtonBase,
+      root: {
+        ...theme.overrides.MuiButtonBase?.root,
+        cursor: 'none',
+      },
+    };
+    theme.overrides.MuiInputBase = {
+      ...theme.overrides.MuiInputBase,
+      input: {
+        ...theme.overrides.MuiInputBase?.input,
+        cursor: 'none',
+      },
+    };
+  }
 
   return (
     <MaterialThemeProvider theme={theme}>

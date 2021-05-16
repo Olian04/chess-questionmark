@@ -1,18 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Redirect,
-  Switch,
-  useLocation,
-} from 'react-router-dom';
-import {
-  Avatar,
-  Box,
-  Container,
-  Grid,
-  SvgIcon,
-  Typography,
-} from '@material-ui/core';
+import React, { useContext } from 'react';
+import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
+import { Box, Container, Grid } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { NavigationBar } from './components/navigation/NavigationBar';
 import { LoginRoute } from './routes/LoginRoute';
@@ -31,6 +19,7 @@ import { SnackbarPresenter } from './presenters/SnackbarPresenter';
 import { CommonModalPresenter } from './presenters/CommonModalPresenter';
 import { Frame } from './components/mobileframe/Frame';
 import { WelcomeCard } from './components/mobileframe/WelcomeCard';
+import { CursorProvider, MouseContext } from './providers/CursorProvider';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -82,13 +71,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const AppContainer = () => {
+export const App = () => {
   const classes = useStyles();
 
   if (isMobile) {
     return (
       <Box className={classes.mobileContainer}>
-        <App />
+        <AppContent />
       </Box>
     );
   }
@@ -96,7 +85,9 @@ export const AppContainer = () => {
     <Container className={classes.center}>
       <Grid container direction="row-reverse" justify="space-evenly">
         <Frame>
-          <App />
+          <CursorProvider>
+            <AppContent />
+          </CursorProvider>
         </Frame>
         <WelcomeCard />
       </Grid>
@@ -104,10 +95,11 @@ export const AppContainer = () => {
   );
 };
 
-export const App = () => {
+export const AppContent = () => {
   const classes = useStyles();
+  const mouseContext = useContext(MouseContext);
   return (
-    <>
+    <main {...mouseContext} style={{ height: 'calc(100% - 43px)' }}>
       <SnackbarPresenter />
       <CommonModalPresenter />
       <Router>
@@ -116,7 +108,7 @@ export const App = () => {
             <Switch>
               <RecoilRoute path="/login">
                 <Box className={classes.fillContainer}>
-                  <Box maxWidth="sm">
+                  <Box maxWidth="sm" style={{ height: '100%' }}>
                     <React.Suspense
                       fallback={<LoadingView message="Fetching state" />}
                     >
@@ -198,6 +190,6 @@ export const App = () => {
         </Box>
         <BackgroundCircle />
       </Router>
-    </>
+    </main>
   );
 };

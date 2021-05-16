@@ -24,8 +24,7 @@ import { LinkButton } from '../components/common/LinkButton';
 import { StyledLink } from '../components/common/CustomLink';
 import { UserExtras } from '../types/UserExtras';
 import { UserCredentials } from '../types/UserCredentials';
-import { CommonModal } from '../components/common/CommonModal';
-import { modalState } from '../state/modal';
+import { isBrowser } from 'react-device-detect';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
     link: {
       color: theme.palette.secondary.main,
       '&:hover, &:focus': {
-        cursor: 'pointer',
+        cursor: isBrowser ? 'none' : 'pointer',
       },
     },
   })

@@ -1,51 +1,72 @@
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useEffect, useRef, useState } from 'react';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
+import { Box } from '@material-ui/core';
+import { isBrowser, isMobile } from 'react-device-detect';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     cursor: {
+      left: 0,
+      top: 0,
+      position: 'fixed',
       backgroundColor: 'rgba(62, 52, 69, 0.4)',
-      border: '1px solid rgba(0,0,0,0.5)',
+      border: '1px solid rgba(255,255,255,0.5)',
       backgroundBlendMode: 'color-dodge',
-      width: 20,
-      height: 20,
-      borderRadius: 10,
-      zIndex: 50,
-      position: 'relative',
+      width: 25,
+      height: 25,
+      borderRadius: 12.5,
+      zIndex: 1500,
+      opacity: 0,
+      pointerEvents: 'none',
+      willChange: 'transform',
     },
   })
 );
 
 interface Props {
-  children: JSX.Element[] | JSX.Element;
+  children: JSX.Element | JSX.Element[];
 }
+
+export const MouseContext = createContext({
+  onMouseMove: (e: any) => {},
+  onMouseEnter: (e: any) => {},
+  onMouseLeave: (e: any) => {},
+});
 
 export const CursorProvider = ({ children }: Props) => {
   const classes = useStyles();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const onMouseMove = (event: any) => {
     const { pageX: x, pageY: y } = event;
-    setMousePosition({ x, y });
+    if (mouseRef.current && isBrowser) {
+      mouseRef.current.style.transform = `translate(${x - 12.5}px,${
+        y - 12.5
+      }px)`;
+    }
   };
 
-  useEffect(() => {
-    document.addEventListener('mousemove', onMouseMove);
+  const onMouseLeave = (event: any) => {
+    if (mouseRef.current && isBrowser) {
+      mouseRef.current.style.opacity = '0';
+    }
+  };
+  const onMouseEnter = (event: any) => {
+    if (mouseRef.current && isBrowser) {
+      mouseRef.current.style.opacity = '1';
+    }
+  };
 
-    return () => {
-      document.removeEventListener('mousemove', onMouseMove);
-    };
-  }, []);
-
-  const { x, y } = mousePosition;
-  console.log(x, y);
+  const mouseRef = useRef<HTMLDivElement>(null);
   return (
-    <>
-      <div
-        className={classes.cursor}
-        style={{ left: `${x}px`, top: `${y}px` }}
-      />
+    <MouseContext.Provider
+      value={{
+        onMouseMove,
+        onMouseLeave,
+        onMouseEnter,
+      }}
+    >
       {children}
-    </>
+      <div ref={mouseRef} className={classes.cursor} />
+    </MouseContext.Provider>
   );
 };
