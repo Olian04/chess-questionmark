@@ -13,7 +13,6 @@ import { SignupSchema } from '../util/signupSchema';
 import { ValidationError } from 'yup';
 import { UserCredentials } from '../types/UserCredentials';
 import { snackbarState } from '../state/snackbar';
-import { capitalize } from '../util/stringManipulation';
 import { UserExtras } from '../types/UserExtras';
 import { FieldValues } from '../components/settings/UpdateFieldModal';
 

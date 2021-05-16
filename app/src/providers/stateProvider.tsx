@@ -1,6 +1,6 @@
-import React, { ReactComponentElement, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { Redirect, Route as BaseRoute, RouteProps } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { useAuthState } from '../hooks/use-auth-state';
 import { currentUserIDState, userFirebaseState } from '../state/user';
 import { LoadingView } from '../views/LoadingView';
@@ -52,12 +52,6 @@ export const RecoilRoute = (props: RecoilRouteProps) => {
    */
   if (guarded && (!user || error)) return ShowRoute(<Redirect to="/login" />);
   /* When a route is not guarded, we show the requested route */
-
-  /* FAILS DURING SIGNUP 
-  if (user && !loading && !error && baseProps.path?.includes('login')) {
-    return ShowRoute(<Redirect to="/play" />);
-  }
-  */
 
   /** If a route is guarded and firebase auth returns a user,
    * we persist the user and shows the requested route

@@ -1,3 +1,4 @@
+/*@cristian-ignore*/
 import React, { useEffect, useState } from 'react';
 import BaseChart from 'chart.js/auto';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';

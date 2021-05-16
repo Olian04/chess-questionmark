@@ -7,7 +7,6 @@ import {
   Button as MaterialButton,
   DialogContentText,
   TextField,
-  Box,
 } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
 
@@ -50,7 +49,7 @@ interface ExtraProps extends Props {
   hasChanges: boolean;
   setHasChanges: Dispatch<SetStateAction<boolean>>;
 }
-
+//DRY compliant
 const ModalContent = (props: ExtraProps) => {
   return (
     <>

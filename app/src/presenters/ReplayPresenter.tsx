@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { getMaterialCostFromFen } from '../services/chess';
 import { getStorageGameByID } from '../services/firebase/storage';
-import { profileState, profileData, userState } from '../state/user';
+import { profileData, userState } from '../state/user';
 import { LoadingView } from '../views/LoadingView';
 import { ReplayView } from '../views/ReplayView';
 

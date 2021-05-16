@@ -16,6 +16,7 @@ interface Props {
   modal: IModal;
 }
 
+// Dry compliant
 const ModalContent = (props: Props) => {
   return (
     <>

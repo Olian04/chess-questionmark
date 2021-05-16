@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, List, ListItem } from '@material-ui/core';
+import { Box, List, ListItem } from '@material-ui/core';
 
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { PillBar } from './PillBar';

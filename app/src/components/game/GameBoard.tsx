@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Chessboard, { Props as cbjsxProps } from 'chessboardjsx';
 import { useTheme } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 
 import { isBrowser, isMobile } from 'react-device-detect';
-import { MouseContext } from '../../providers/CursorProvider';
 
 interface Props extends cbjsxProps {
   size?: number;

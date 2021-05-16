@@ -12,7 +12,6 @@ import { AccountRoute } from './routes/AccountRoute';
 import { AboutRoute } from './routes/AboutRoute';
 import { PlayRoute } from './routes/PlayRoute';
 import { RecoilRoute } from './providers/stateProvider';
-import { BackgroundCircle } from './components/common/BackgroundCircle';
 import { LoadingView } from './views/LoadingView';
 import { isMobile } from 'react-device-detect';
 import { SnackbarPresenter } from './presenters/SnackbarPresenter';
@@ -20,6 +19,7 @@ import { CommonModalPresenter } from './presenters/CommonModalPresenter';
 import { Frame } from './components/mobileframe/Frame';
 import { WelcomeCard } from './components/mobileframe/WelcomeCard';
 import { CursorProvider, MouseContext } from './providers/CursorProvider';
+import { BackgroundCirclePresenter } from './presenters/BackgroundCirclePresenter';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -95,6 +95,7 @@ export const App = () => {
   );
 };
 
+//DRY compliant
 export const AppContent = () => {
   const classes = useStyles();
   const mouseContext = useContext(MouseContext);
@@ -188,7 +189,7 @@ export const AppContent = () => {
             </Switch>
           </Box>
         </Box>
-        <BackgroundCircle />
+        <BackgroundCirclePresenter />
       </Router>
     </main>
   );

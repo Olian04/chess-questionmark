@@ -2,8 +2,6 @@ import React from 'react';
 import { Grid, Typography, Box } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
-// should go for chart.js in the future
-import graphSvg from '/graph.svg';
 import { Chart } from './Chart';
 import { StorageGameLocal } from '../../types/storage/StorageGame';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -74,18 +72,7 @@ export const Graph = (props: Props) => {
               height="10px"
             />
           ) : (
-            <b className={classes.stroke}>
-              {props.rank}{' '}
-              <span
-                style={{
-                  color: delta > 0 ? '#99FF99' : '#DF5049',
-                  display: delta === 0 ? 'none' : 'block',
-                }}
-              >
-                {delta > 0 ? '+' : '-'}
-                {delta}
-              </span>
-            </b>
+            <b className={classes.stroke}>{props.rank}</b>
           )}
         </Typography>
       </Box>

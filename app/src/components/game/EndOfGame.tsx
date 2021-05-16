@@ -53,22 +53,31 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+// DRY compliant
+const EndOfGameContent = (props: Props) => {
+  return (
+    <>
+      <DialogContent>
+        <DialogContentText>
+          {(props.draw ? 'Draw' : props.winner ? 'You won' : 'You lost') +
+            ' due to ' +
+            props.cause +
+            '.'}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onClick}>Return!</Button>
+      </DialogActions>
+    </>
+  );
+};
+
 export const EndOfGame = (props: Props) => {
   const classes = useStyles();
   if (isMobile) {
     return (
       <Dialog open={props.open} onClose={props.onClick}>
-        <DialogContent>
-          <DialogContentText>
-            {(props.draw ? 'Draw' : props.winner ? 'You won' : 'You lost') +
-              ' due to ' +
-              props.cause +
-              '.'}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onClick}>Return!</Button>
-        </DialogActions>
+        <EndOfGameContent {...props} />
       </Dialog>
     );
   }
@@ -84,13 +93,7 @@ export const EndOfGame = (props: Props) => {
       onClick={props.onClick}
     >
       <Box className={classes.modal}>
-        <Typography variant="body1">
-          {(props.winner ? 'You won' : 'You lost') +
-            ' due to ' +
-            props.cause +
-            '.'}
-        </Typography>
-        <Button onClick={props.onClick}>Return!</Button>
+        <EndOfGameContent {...props} />
       </Box>
     </Box>
   );

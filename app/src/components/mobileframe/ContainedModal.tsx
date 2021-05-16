@@ -1,15 +1,7 @@
 import React from 'react';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
-import {
-  Box,
-  DialogTitle,
-  Typography,
-  DialogContent,
-  DialogActions,
-  Button,
-} from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import clsx from 'clsx';
-import { IModal } from '../../types/modal';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

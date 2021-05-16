@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
   Checkbox,
@@ -15,7 +15,6 @@ import {
 import { Formik } from 'formik';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
-import { useSetRecoilState } from 'recoil';
 
 import { SignupSchema } from '../util/signupSchema';
 import { RoundedTextField } from '../components/common/RoundedTextField';

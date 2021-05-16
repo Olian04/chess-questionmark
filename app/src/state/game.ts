@@ -1,12 +1,8 @@
 import { getTime } from 'date-fns';
-import { selector, atom, GetRecoilValue } from 'recoil';
-import {
-  createLiveGame,
-  getLiveGameByUserID,
-} from '../services/firebase/realtimeDB';
+import { selector, atom } from 'recoil';
+import { getLiveGameByUserID } from '../services/firebase/realtimeDB';
 import { LiveGame } from '../types/live/LiveGame';
 import { RandomGame } from '../types/RandomGame';
-import { User } from '../types/User';
 import { currentUserIDState, userState } from './user';
 
 export const fallbackGameState: LiveGame = {

@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography, Box, Avatar } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { Pill } from './Pill';
+import { getFlag } from '../../services/ipdata';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -65,7 +66,7 @@ export const PlayerBar = (props: Props) => {
             {props.countryCode ? (
               <img
                 style={{ paddingLeft: '5px' }}
-                src={`https://ipdata.co/flags/${props.countryCode.toLowerCase()}.png`}
+                src={getFlag(props.countryCode)}
                 height="10px"
               />
             ) : null}

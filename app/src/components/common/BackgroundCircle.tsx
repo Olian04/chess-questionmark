@@ -2,8 +2,7 @@ import { Box } from '@material-ui/core';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { backgroundCircleState } from '../../state/backgroundCircle';
+import { IBackgroundCircle } from '../../types/BackgroundCircle';
 
 const circleDiameter = 80;
 
@@ -43,7 +42,6 @@ const useStyles = makeStyles((theme: Theme) =>
     bottom: {
       transform: 'translate(0%, 70%)',
     },
-    middle: {},
     hidden: {
       display: 'none',
       visible: 'hidden',
@@ -51,15 +49,15 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-export const BackgroundCircle = () => {
+interface Props {
+  side: IBackgroundCircle;
+}
+export const BackgroundCircle = (props: Props) => {
   const classes = useStyles();
-
-  const side = useRecoilValue(backgroundCircleState);
 
   return (
     <Box className={classes.container}>
-      <div className={clsx(classes.root, classes[side])} />
+      <div className={clsx(classes.root, classes[props.side])} />
     </Box>
   );
 };

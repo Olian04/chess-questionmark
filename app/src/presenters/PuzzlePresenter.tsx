@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
 import { GameView } from '../views/GameView';
-import { fallbackGameState, requestGame } from '../state/game';
+import { requestGame } from '../state/game';
 import { useHistory } from 'react-router-dom';
 import { currentUserIDState, profileState, userState } from '../state/user';
 import { EndOfGame } from '../components/game/EndOfGame';

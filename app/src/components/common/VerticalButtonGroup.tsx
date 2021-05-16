@@ -1,11 +1,6 @@
 import React from 'react';
 import { ButtonGroup, ButtonGroupProps } from '@material-ui/core';
-import {
-  Theme,
-  makeStyles,
-  createStyles,
-  styled,
-} from '@material-ui/core/styles';
+import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -2,7 +2,7 @@ import { useRecoilCallback } from 'recoil';
 import { useFirebaseUser } from './use-firebase-user';
 import firebase from 'firebase';
 import { loginCredentialsState } from '../state/authentication';
-import { userFirebaseState, userState } from '../state/user';
+import { userFirebaseState } from '../state/user';
 
 export const useChangeEmail = () => {
   const firebaseUser = useFirebaseUser();

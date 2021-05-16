@@ -1,7 +1,6 @@
 import { atom, atomFamily, selector, selectorFamily } from 'recoil';
 import { Profile } from '../types/Profile';
 import { User } from '../types/User';
-import { getCurrentUser } from '../services/firebase/auth';
 import {
   userCollection,
   profileCollection,

@@ -7,5 +7,9 @@ export const fetchCountryCode = async () => {
     const data = await res.json();
     return data.country_code;
   }
-  return 'NO'; // fallback is that everyone is norwegian. Sad life.
+  return 'SE';
+};
+
+export const getFlag = (countryCode: string) => {
+  return `https://ipdata.co/flags/${countryCode.toLowerCase()}.png`;
 };

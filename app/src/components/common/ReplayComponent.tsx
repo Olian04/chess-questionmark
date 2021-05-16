@@ -1,7 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
+import { getFlag } from '../../services/ipdata';
 import { GameBoard } from '../game/GameBoard';
-import { PlayerBar } from '../game/PlayerBar';
 
 interface Props {
   fen: string;
@@ -27,10 +27,7 @@ export const ReplayComponent = (props: Props) => {
           {props.player.name} · {props.player.rating}
         </Typography>
         <Box display="flex" justifyContent="center" alignItems="center">
-          <img
-            src={`https://ipdata.co/flags/${props.player.countryCode.toLowerCase()}.png`}
-            height="10px"
-          />
+          <img src={getFlag(props.player.countryCode)} height="10px" />
         </Box>
       </Box>
 

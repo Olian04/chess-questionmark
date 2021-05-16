@@ -6,7 +6,6 @@ import { BoardProps } from '../types/BoardProps';
 import { PlayerBar } from '../components/game/PlayerBar';
 import { GameBoard } from '../components/game/GameBoard';
 import { Overview } from '../components/game/Overview';
-import { isMobile } from 'react-device-detect';
 import { User } from '../types/User';
 
 const useStyles = makeStyles((theme: Theme) =>

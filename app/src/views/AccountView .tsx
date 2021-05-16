@@ -12,7 +12,6 @@ import {
 } from '../components/settings/UpdateFieldModal';
 import { TwoRowButton } from '../components/settings/TwoRowButton';
 import { User } from '../types/User';
-import { UserCredentials } from '../types/UserCredentials';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

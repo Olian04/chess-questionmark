@@ -1,7 +1,4 @@
 import React, { useEffect } from 'react';
-/** Suggestion for keeping strictmode and still be able to use
- * components that apparently use findDOMNode
- * See https://stackoverflow.com/questions/61220424/material-ui-drawer-finddomnode-is-deprecated-in-strictmode */
 import {
   createMuiTheme,
   ThemeProvider as MaterialThemeProvider,
