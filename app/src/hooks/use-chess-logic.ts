@@ -36,9 +36,13 @@ interface Highlights {
 }
 
 type Player = 'white' | 'black';
+type Turn = 'w' | 'b';
 type Winner = Player | 'draw' | 'N/A';
 
-const PREVIOUS_MOVE_COLOR = 'cornFlowerBlue';
+const PREVIOUS_MOVE_COLOR = {
+  'w': 'cornFlowerBlue',
+  'b': 'cornFlowerBlue',
+};
 const SELECTED_PIECE_COLOR = 'cornFlowerBlue';
 const KING_DANGER_COLOR = 'red';
 const DRAG_OVER_COLOR = 'cornFlowerBlue';
@@ -58,7 +62,7 @@ const highlightMoves = (legalMoves: Square[]) => {
   }, {})
 };
 
-const squareStyling = ({checkSquare, pieceSquare, history, legalMoves}: Highlights) => {
+const squareStyling = (turn: Turn, {checkSquare, pieceSquare, history, legalMoves}: Highlights) => {
   const sourceSquare = history.length && history[history.length - 1].from;
   const targetSquare = history.length && history[history.length - 1].to;
   const moves = highlightMoves(legalMoves);
@@ -68,12 +72,12 @@ const squareStyling = ({checkSquare, pieceSquare, history, legalMoves}: Highligh
     [pieceSquare]: { backgroundColor: SELECTED_PIECE_COLOR },
     ...(history.length && {
       [sourceSquare]: {
-        backgroundColor: PREVIOUS_MOVE_COLOR,
+        backgroundColor: PREVIOUS_MOVE_COLOR[turn],
       },
     }),
     ...(history.length && {
       [targetSquare]: {
-        backgroundColor: PREVIOUS_MOVE_COLOR,
+        backgroundColor: PREVIOUS_MOVE_COLOR[turn],
       },
     }),
     ...moves,
@@ -464,7 +468,7 @@ export const useChessLogic = (conf: Config): API => {
   }, []);
 
   useEffect(() => {
-    setSquareStyles(squareStyling(highlights));
+    setSquareStyles(squareStyling(game.turn(), highlights));
   }, [highlights]);
 
   return {
