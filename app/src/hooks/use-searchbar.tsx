@@ -12,9 +12,8 @@ export const useSearchbar = () => {
       setHref(
         window.location.host +
           window.location.pathname.split(/(\/.*?)(?:\/|$)/i)[1]
-      ),
-        5000;
-    });
+      );
+    }, 500);
     return () => clearInterval(timer);
   }, []);
   return [time, href];
