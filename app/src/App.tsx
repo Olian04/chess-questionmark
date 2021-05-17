@@ -101,7 +101,7 @@ export const AppContent = () => {
   const classes = useStyles();
   //const mouseContext = useContext(MouseContext);
   return (
-    <main /*{...mouseContext}*/ style={{ height: 'calc(100% - 46px)' }}>
+    <main /*{...mouseContext}*/ style={{ height: 'calc(100% - 55px)' }}>
       <SnackbarPresenter />
       <CommonModalPresenter />
       <Router>
