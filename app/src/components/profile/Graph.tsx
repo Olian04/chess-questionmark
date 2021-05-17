@@ -49,7 +49,7 @@ export const Graph = (props: Props) => {
     500,
     ...props.recentMatches.map((match) => getTick(props.username, match)),
   ];
-  if (rankHistory.length === 1) rankHistory.push(props.rank);
+  // if (rankHistory.length === 1) rankHistory.push(props.rank);
   const rankUpdates = rankHistory.map((match, i) =>
     rankHistory.slice(0, i + 1).reduce((a, b) => a + b)
   );

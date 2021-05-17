@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
     },
     container: {
-      height: 'calc(100% - 60px)',
+      height: 'calc(100% - 55px)',
       top: -5,
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3),
@@ -101,7 +101,7 @@ export const AppContent = () => {
   const classes = useStyles();
   //const mouseContext = useContext(MouseContext);
   return (
-    <main /*{...mouseContext}*/ style={{ height: 'calc(100% - 43px)' }}>
+    <main /*{...mouseContext}*/ style={{ height: 'calc(100% - 46px)' }}>
       <SnackbarPresenter />
       <CommonModalPresenter />
       <Router>
