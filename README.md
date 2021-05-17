@@ -10,6 +10,7 @@ Visit either:
 Known limitation:
 
 * Limited daily DB reads/writes due to limitation put on the firebase free tier.
+* There an issue caused by the browser cache in regards to the random puzzle api. The api is a REST API and always uses the same REST endpoint. This means that the browser will cache any requests sent to the API and reuse their responses for rapid successive requests. This is in accordance with the REST spec, however it might cause unintended behaviour if you requests multiple puzzles within a short amount of time (for example if you resign for a match instantly, and then start a new match straight away). This issue could have been solved by appending a random NONCE string to each request, however since that might be interpreted as a brute force attack on the API, we decided against this.
 
 ## Development
 
