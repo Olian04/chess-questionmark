@@ -12,6 +12,7 @@ import { GameBoard } from '../components/game/GameBoard';
 import { Overview } from '../components/game/Overview';
 import { Graph } from '../components/replay/Graph';
 import { User } from '../types/User';
+import { isBrowser } from 'react-device-detect';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,14 +47,14 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 0,
       left: 0,
       width: '100%',
-      marginTop: '15px',
     },
     graph: {
       position: 'absolute',
       zIndex: 0,
       top: 0,
       left: 0,
-      height: '60px',
+      /*@cristian-ignore*/
+      height: isBrowser ? '60px' : '75px',
       width: '100%',
       transform: 'translateY(-25%)',
     },
