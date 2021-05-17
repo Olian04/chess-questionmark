@@ -144,7 +144,7 @@ export const UpdateFieldModal = (props: Props) => {
   const [helperText, setHelperText] = useState<string[]>([]);
   const [hasChanges, setHasChanges] = useState(false);
 
-  const handleMobileDiscard = () => {
+  const handleDiscard = () => {
     setHasChanges(false);
     props.onDiscard();
 
@@ -169,10 +169,7 @@ export const UpdateFieldModal = (props: Props) => {
     return (
       <Dialog
         open={props.open}
-        onClose={() => {
-          setHasChanges(false);
-          props.onDiscard();
-        }}
+        onClose={handleDiscard}
         aria-labelledby="form-dialog-title"
       >
         <ModalContent {...props} {...extraProps} />
@@ -183,7 +180,7 @@ export const UpdateFieldModal = (props: Props) => {
    * filling the whole view, but only the mobileframe
    */
   return (
-    <ContainedUpdateModal open={props.open} onClose={handleMobileDiscard}>
+    <ContainedUpdateModal open={props.open} onClose={handleDiscard}>
       <ModalContent {...props} {...extraProps} />
     </ContainedUpdateModal>
   );

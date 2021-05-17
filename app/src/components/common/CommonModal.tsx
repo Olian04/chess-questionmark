@@ -16,24 +16,32 @@ interface Props {
   modal: IModal;
 }
 
+const ModalTitle = (props: Props) => {
+  return (
+    <DialogTitle onClick={props.handleClose}>{props.modal.title}</DialogTitle>
+  );
+};
+
+const ModalAction = (props: Props) => {
+  return (
+    <DialogActions>
+      <Button autoFocus onClick={props.handleClose}>
+        Close
+      </Button>
+    </DialogActions>
+  );
+};
+
 // Dry compliant
 const ModalContent = (props: Props) => {
   return (
-    <>
-      <DialogTitle onClick={props.handleClose}>{props.modal.title}</DialogTitle>
-      <DialogContent dividers>
-        {props.modal.content?.map((message, i) => (
-          <Typography gutterBottom key={i}>
-            {message}
-          </Typography>
-        ))}
-      </DialogContent>
-      <DialogActions>
-        <Button autoFocus onClick={props.handleClose}>
-          Close
-        </Button>
-      </DialogActions>
-    </>
+    <DialogContent dividers>
+      {props.modal.content?.map((message, i) => (
+        <Typography gutterBottom key={i}>
+          {message}
+        </Typography>
+      ))}
+    </DialogContent>
   );
 };
 
@@ -41,7 +49,9 @@ export const CommonModal = (props: Props) => {
   if (isMobile) {
     return (
       <Dialog onClose={props.handleClose} open={props.modal.open}>
+        <ModalTitle {...props} />
         <ModalContent {...props} />
+        <ModalAction {...props} />
       </Dialog>
     );
   }
@@ -50,7 +60,9 @@ export const CommonModal = (props: Props) => {
    */
   return (
     <ContainedModal open={props.modal.open} onClose={props.handleClose}>
+      <ModalTitle {...props} />
       <ModalContent {...props} />
+      <ModalAction {...props} />
     </ContainedModal>
   );
 };

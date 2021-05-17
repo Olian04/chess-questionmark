@@ -44,6 +44,12 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingBottom: theme.spacing(2),
       borderRadius: theme.shape.borderRadius,
       pointerEvents: 'auto',
+      position: 'relative',
+    },
+    content: {
+      position: 'relative',
+      maxHeight: 650 * 0.4,
+      overflowY: 'auto',
     },
     visible: {
       visible: 'visible',
@@ -58,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-  children: JSX.Element;
+  children: JSX.Element[];
   open: boolean;
   onClose: () => void;
 }
@@ -80,7 +86,9 @@ export const ContainedModal = (props: Props) => {
               props.open ? classes.visible : classes.hidden
             )}
           >
-            {props.children}
+            {props.children[0]}
+            <Box className={classes.content}>{props.children[1]}</Box>
+            {props.children[2]}
           </Box>
         </Box>
       </Box>
