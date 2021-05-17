@@ -1,7 +1,6 @@
 import React from 'react';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import { Grid, Box } from '@material-ui/core';
-import { format } from 'date-fns';
 
 import lock from '/lock.svg';
 import battery from '/battery.svg';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Slider, Button, Box } from '@material-ui/core';
+import { Slider, Button, Box, ButtonGroup } from '@material-ui/core';
 import {
   Theme,
   makeStyles,
@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 0,
       left: 0,
       width: '100%',
+      marginTop: '15px',
     },
     graph: {
       position: 'absolute',
@@ -57,6 +58,12 @@ const useStyles = makeStyles((theme: Theme) =>
       height: isBrowser ? '60px' : '75px',
       width: '100%',
       transform: 'translateY(-25%)',
+    },
+    disabled: {
+      backgroundColor: theme.palette.primary.dark,
+    },
+    enabled: {
+      backgroundColor: theme.palette.primary.main,
     },
   })
 );
@@ -127,28 +134,37 @@ export const ReplayView = (props: Props) => {
             size={0.8}
           />
           <Box>
-            <Box display="flex" justifyContent="center">
-              <Button
-                disabled={props.start}
-                variant="outlined"
-                onClick={props.onPrevious}
-              >
-                <SkipPrevious fontSize="large" color="action" />
-              </Button>
-              <Button variant="outlined" onClick={props.onPlay}>
-                {!props.playing ? (
-                  <PlayArrow fontSize="large" color="action" />
-                ) : (
-                  <Pause fontSize="large" color="action" />
-                )}
-              </Button>
-              <Button
-                disabled={props.end}
-                variant="outlined"
-                onClick={props.onNext}
-              >
-                <SkipNext fontSize="large" color="action" />
-              </Button>
+            <Box display="flex" justifyContent="center" margin={3}>
+              <ButtonGroup disableFocusRipple>
+                <Button
+                  className={props.start ? classes.disabled : classes.enabled}
+                  disabled={props.start}
+                  variant={'contained'}
+                  onClick={props.onPrevious}
+                >
+                  <SkipPrevious fontSize="large" color="action" />
+                </Button>
+                <Button
+                  className={props.end ? classes.disabled : classes.enabled}
+                  disabled={props.end}
+                  variant={'contained'}
+                  onClick={props.onPlay}
+                >
+                  {!props.playing ? (
+                    <PlayArrow fontSize="large" color="action" />
+                  ) : (
+                    <Pause fontSize="large" color="action" />
+                  )}
+                </Button>
+                <Button
+                  className={props.end ? classes.disabled : classes.enabled}
+                  disabled={props.end}
+                  variant={'contained'}
+                  onClick={props.onNext}
+                >
+                  <SkipNext fontSize="large" color="action" />
+                </Button>
+              </ButtonGroup>
             </Box>
             <Box className={classes.wrapper}>
               <ReplaySlider
