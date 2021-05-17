@@ -105,36 +105,41 @@ const ModalContent = (props: ExtraProps) => {
           </DialogContent>
         </div>
       ))}
-      <DialogActions>
-        <MaterialButton
-          onClick={() => {
-            props.setHasChanges(false);
-            props.onDiscard();
-
-            // Reset for the next time this modal is reused
-            props.setFieldValues({});
-            props.setIsError([]);
-            props.setHelperText([]);
-          }}
-        >
-          Cancel
-        </MaterialButton>
-        <MaterialButton
-          disabled={!props.hasChanges}
-          onClick={() => {
-            if (props.isError.some((v) => v === true)) return;
-            props.onSave(props.fieldValues);
-
-            // Reset for the next time this modal is reused
-            props.setFieldValues({});
-            props.setIsError([]);
-            props.setHelperText([]);
-          }}
-        >
-          Save
-        </MaterialButton>
-      </DialogActions>
     </>
+  );
+};
+
+const ModalAction = (props: ExtraProps) => {
+  return (
+    <DialogActions>
+      <MaterialButton
+        onClick={() => {
+          props.setHasChanges(false);
+          props.onDiscard();
+
+          // Reset for the next time this modal is reused
+          props.setFieldValues({});
+          props.setIsError([]);
+          props.setHelperText([]);
+        }}
+      >
+        Cancel
+      </MaterialButton>
+      <MaterialButton
+        disabled={!props.hasChanges}
+        onClick={() => {
+          if (props.isError.some((v) => v === true)) return;
+          props.onSave(props.fieldValues);
+
+          // Reset for the next time this modal is reused
+          props.setFieldValues({});
+          props.setIsError([]);
+          props.setHelperText([]);
+        }}
+      >
+        Save
+      </MaterialButton>
+    </DialogActions>
   );
 };
 
@@ -168,11 +173,13 @@ export const UpdateFieldModal = (props: Props) => {
   if (isMobile) {
     return (
       <Dialog
+        style={{ marginTop: 55 }}
         open={props.open}
         onClose={handleDiscard}
         aria-labelledby="form-dialog-title"
       >
         <ModalContent {...props} {...extraProps} />
+        <ModalAction {...props} {...extraProps} />
       </Dialog>
     );
   }
@@ -182,6 +189,7 @@ export const UpdateFieldModal = (props: Props) => {
   return (
     <ContainedUpdateModal open={props.open} onClose={handleDiscard}>
       <ModalContent {...props} {...extraProps} />
+      <ModalAction {...props} {...extraProps} />
     </ContainedUpdateModal>
   );
 };

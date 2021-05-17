@@ -48,7 +48,11 @@ const ModalContent = (props: Props) => {
 export const CommonModal = (props: Props) => {
   if (isMobile) {
     return (
-      <Dialog onClose={props.handleClose} open={props.modal.open}>
+      <Dialog
+        style={{ marginTop: 55, marginBottom: 55 }}
+        onClose={props.handleClose}
+        open={props.modal.open}
+      >
         <ModalTitle {...props} />
         <ModalContent {...props} />
         <ModalAction {...props} />
