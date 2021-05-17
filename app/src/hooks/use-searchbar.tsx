@@ -3,14 +3,15 @@ import { useEffect, useState } from 'react';
 
 export const useSearchbar = () => {
   const [time, setTime] = useState(format(new Date(), 'HH:mm'));
-  const [href, setHref] = useState(window.location.href);
+  const [href, setHref] = useState(
+    window.location.host + window.location.pathname.split(/(\/.*?)(?:\/|$)/i)[1]
+  );
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(format(new Date(), 'HH:mm'));
       setHref(
-        window.location.href.length < 40
-          ? window.location.href
-          : window.location.host
+        window.location.host +
+          window.location.pathname.split(/(\/.*?)(?:\/|$)/i)[1]
       ),
         5000;
     });

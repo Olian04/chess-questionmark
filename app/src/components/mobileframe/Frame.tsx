@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       aspectRatio: '6 / 13',
+      width: 300,
 
       backgroundImage: 'url(/iphone12maxpro.svg)',
       backgroundRepeat: 'no-repeat',

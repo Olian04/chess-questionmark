@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       position: 'relative',
-      maxHeight: 650 * 0.4,
+      maxHeight: 650 * 0.6,
       overflowY: 'auto',
     },
     visible: {
