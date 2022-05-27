@@ -4,7 +4,7 @@
 
 Visit either:
 
-* <https://kth.codes> (DNS License lasts untill May 2022)
+* ~~<https://kth.codes> (DNS License lasts untill May 2022)~~
 * <https://iprog-tw3.web.app>
 
 Known limitation:
